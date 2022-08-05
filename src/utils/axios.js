@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {apiAddress} from '../../apiAddress';
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +7,7 @@ const headers = {
 };
 
 const axiosInstance = axios.create({
-  baseURL: apiAddress,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers
 });
 
