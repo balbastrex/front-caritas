@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PROJECT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+while read line; do export "$line";
+done < <(cat ${PROJECT_PATH}/.env | grep -v "#" | grep -v "^$")
+
+docker build -t front-caritas .
+
+docker run -p 80:80 -d --rm --name frontCaritas front-caritas
+
+docker logs -f frontCaritas
