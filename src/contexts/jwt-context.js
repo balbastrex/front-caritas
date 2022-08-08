@@ -2,9 +2,9 @@ import axios from '../utils/axios';
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { authApi } from '../__fake-api__/auth-api';
-import {isValidToken, setSession} from '../utils/jwt';
+import { isValidToken, setSession } from '../utils/jwt';
 
-var ActionType;
+let ActionType;
 (function (ActionType) {
   ActionType['INITIALIZE'] = 'INITIALIZE';
   ActionType['LOGIN'] = 'LOGIN';
@@ -77,7 +77,7 @@ export const AuthProvider = (props) => {
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-          //  const user = await authApi.me(accessToken);
+
           const response = await axios.get('/api/v1/user/me');
           const { user } = response.data;
 

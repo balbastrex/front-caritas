@@ -15,6 +15,7 @@ export const AuthGuard = (props) => {
       }
 
       if (!auth.isAuthenticated) {
+        console.log('no estoy authenticated: ', auth)
         router.push({
           pathname: '/authentication/login',
           query: { returnUrl: router.asPath }

@@ -37,7 +37,7 @@ const getSections = (t) => [
     items: [
       {
         title: t('Overview'),
-        path: '/dashboard',
+        path: '/',
         icon: <HomeIcon fontSize="small" />
       },
       {
@@ -77,10 +77,10 @@ const getSections = (t) => [
     ]
   },
   {
-    title: t('Management'),
+    title: t('Mantenimiento'),
     items: [
       {
-        title: t('Customers'),
+        title: t('Economatos'),
         path: '/dashboard/customers',
         icon: <UsersIcon fontSize="small" />,
         children: [
@@ -99,7 +99,7 @@ const getSections = (t) => [
         ]
       },
       {
-        title: t('Products'),
+        title: t('Parroquias'),
         path: '/dashboard/products',
         icon: <ShoppingBagIcon fontSize="small" />,
         children: [
@@ -114,7 +114,7 @@ const getSections = (t) => [
         ]
       },
       {
-        title: t('Orders'),
+        title: t('Beneficiarios'),
         icon: <ShoppingCartIcon fontSize="small" />,
         path: '/dashboard/orders',
         children: [
@@ -129,7 +129,22 @@ const getSections = (t) => [
         ]
       },
       {
-        title: t('Invoices'),
+        title: t('Productos'),
+        path: '/dashboard/invoices',
+        icon: <ReceiptTaxIcon fontSize="small" />,
+        children: [
+          {
+            title: t('List'),
+            path: '/dashboard/invoices'
+          },
+          {
+            title: t('Details'),
+            path: '/dashboard/invoices/1'
+          }
+        ]
+      },
+      {
+        title: t('Turnos'),
         path: '/dashboard/invoices',
         icon: <ReceiptTaxIcon fontSize="small" />,
         children: [
@@ -145,7 +160,7 @@ const getSections = (t) => [
       }
     ]
   },
-  {
+  /*{
     title: t('Platforms'),
     items: [
       {
@@ -227,7 +242,7 @@ const getSections = (t) => [
         icon: <CalendarIcon fontSize="small" />
       }
     ]
-  },
+  },*/
   {
     title: t('Pages'),
     items: [
@@ -246,7 +261,7 @@ const getSections = (t) => [
           }
         ]
       },
-      {
+      /*{
         title: t('Pricing'),
         path: '/dashboard/pricing',
         icon: <CreditCardIcon fontSize="small" />
@@ -279,7 +294,7 @@ const getSections = (t) => [
             path: '/500'
           }
         ]
-      }
+      }*/
     ]
   }
 ];
