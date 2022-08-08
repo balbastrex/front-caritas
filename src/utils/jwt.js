@@ -1,5 +1,6 @@
 /* eslint-disable no-bitwise */
-import axios from 'axios';
+import axios from './axios';
+import jwtDecode from 'jwt-decode';
 
 export const JWT_SECRET = 'devias-top-secret-key';
 export const JWT_EXPIRES_IN = 3600 * 24 * 2; // 2 days
