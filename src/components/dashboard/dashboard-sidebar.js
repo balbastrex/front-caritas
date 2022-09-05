@@ -81,11 +81,22 @@ const getSections = (t) => [
     items: [
       {
         title: t('Economatos'),
+        path: '/dashboard/markets',
+        icon: <UsersIcon fontSize="small" />,
+        /*children: [
+          {
+            title: t('Listado'),
+            path: '/dashboard/markets'
+          }
+        ]*/
+      },
+      {
+        title: t('customers'),
         path: '/dashboard/customers',
         icon: <UsersIcon fontSize="small" />,
         children: [
           {
-            title: t('List'),
+            title: t('Listado'),
             path: '/dashboard/customers'
           },
           {
