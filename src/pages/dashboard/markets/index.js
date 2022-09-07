@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from '../../../store/index';
 import { AuthGuard } from '../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
 import {MarketListTable} from '../../../components/dashboard/market/market-list-table';
-import { ProjectListFilters } from '../../../components/dashboard/product/product-list-filters';
 import { Plus as PlusIcon } from '../../../icons/plus';
 import { gtm } from '../../../lib/gtm';
 import {getMarkets} from '../../../slices/market';
@@ -57,8 +56,6 @@ const applyPagination = (products, page, rowsPerPage) => products.slice(page * r
 const MarketList = () => {
   const dispatch = useDispatch();
   const { marketList } = useSelector((state) => state.market);
-  // const isMounted = useMounted();
-  // const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({

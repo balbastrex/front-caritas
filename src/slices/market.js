@@ -100,3 +100,17 @@ export function getProductByMarketId(marketId) {
     }
   };
 }
+
+export function updateMarket(market) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.put(`/api/v1/market/${market.id}`, {
+        ...market
+      })
+      dispatch(slice.actions.getMarketsListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

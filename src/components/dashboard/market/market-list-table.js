@@ -22,10 +22,11 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {ArrowRight as ArrowRightIcon} from '../../../icons/arrow-right';
+import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
 import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
 import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
-import {PencilAlt as PencilAltIcon} from '../../../icons/pencil-alt';
+import { updateMarket } from '../../../slices/market';
+import {useDispatch} from '../../../store';
 import { Scrollbar } from '../../scrollbar';
 
 const distributionType = [
@@ -49,15 +50,27 @@ export const MarketListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+  const dispatch = useDispatch();
   const [openMarket, setOpenMarket] = useState(null);
+  const [editMarket, setEditMarket] = useState(null);
 
-  const handleOpenProduct = (productId) => {
-    setOpenMarket((prevValue) => (prevValue === productId ? null : productId));
+  const handleOpenMarket = (marketId) => {
+    setOpenMarket((prevValue) => (prevValue === marketId ? null : marketId));
+    setEditMarket(markets.find(market => market.id === marketId))
   };
 
-  const handleUpdateProduct = () => {
+  const handleUpdateProduct = async (market) => {
     setOpenMarket(null);
-    toast.success('Economato actualizado');
+
+    dispatch(updateMarket(editMarket));
+
+    /*await axios.put(`/api/v1/market/${marketId}`, {
+      ...editMarket
+    }).catch(() => {
+      toast.error('Ha habido un error guardando el economato.');
+    });*/
+
+    toast.success('Economato actualizado.');
   };
 
   const handleCancelEdit = () => {
@@ -65,8 +78,18 @@ export const MarketListTable = (props) => {
   };
 
   const handleDeleteProduct = () => {
-    toast.error('Un economato no puede ser borrado');
+    toast.error('Un economato no puede ser borrado.');
   };
+
+  const onChangeMarket = (field, value) => {
+    setEditMarket({
+      ...editMarket,
+      [field]: value
+    });
+    console.log('==> field ', field)
+    console.log('==> value ', value)
+
+  }
 
   return (
     <div {...other}>
@@ -126,7 +149,7 @@ export const MarketListTable = (props) => {
                       }}
                       width="25%"
                     >
-                      <IconButton onClick={() => handleOpenProduct(market.id)}>
+                      <IconButton onClick={() => handleOpenMarket(market.id)}>
                         {open
                           ? <ChevronDownIcon fontSize="small" />
                           : <><Typography variant="subtitle2">Editar</Typography><ChevronRightIcon fontSize="small" /></>}
@@ -147,13 +170,13 @@ export const MarketListTable = (props) => {
                       </Box>
                     </TableCell>
                     <TableCell>
-                      {numeral(market.budgetBase).format(`${market.currency}0,0.00`)}
+                      {numeral(market.budgetBase).format(`${market.currency}0,0.00`)} €
                     </TableCell>
                     <TableCell>
-                      {numeral(market.budgetAdult).format(`${market.currency}0,0.00`)}
+                      {numeral(market.budgetAdult).format(`${market.currency}0,0.00`)} €
                     </TableCell>
                     <TableCell>
-                      {numeral(market.budgetChild).format(`${market.currency}0,0.00`)}
+                      {numeral(market.budgetChild).format(`${market.currency}0,0.00`)} €
                     </TableCell>
                     <TableCell>
                       <LinearProgress
@@ -257,6 +280,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Email"
                                     name="email"
+                                    onChange={(event) => onChangeMarket('email', event.target.value)}
                                   />
                                 </Grid>
                                 <Grid
@@ -405,7 +429,7 @@ export const MarketListTable = (props) => {
                           }}
                         >
                           <Button
-                            onClick={handleUpdateProduct}
+                            onClick={() => handleUpdateProduct(market)}
                             sx={{ m: 1 }}
                             type="submit"
                             variant="contained"

@@ -16,7 +16,7 @@ const ProductCreate = () => {
     <>
       <Head>
         <title>
-          Dashboard: Nuevo Economato
+          Crear Economato
         </title>
       </Head>
       <Box
@@ -29,7 +29,7 @@ const ProductCreate = () => {
         <Container maxWidth="md">
           <Box sx={{ mb: 3 }}>
             <Typography variant="h4">
-              Create a new market
+              Crear nuevo Economato
             </Typography>
             <Breadcrumbs
               separator="/"
