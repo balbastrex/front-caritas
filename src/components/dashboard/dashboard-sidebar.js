@@ -36,11 +36,11 @@ const getSections = (t) => [
     title: t('General'),
     items: [
       {
-        title: t('Overview'),
+        title: t('Dashboard'),
         path: '/',
         icon: <HomeIcon fontSize="small" />
-      },
-      {
+      }
+      /*{
         title: t('Analytics'),
         path: '/dashboard/analytics',
         icon: <ChartBarIcon fontSize="small" />
@@ -73,7 +73,7 @@ const getSections = (t) => [
         title: t('Account'),
         path: '/dashboard/account',
         icon: <UserCircleIcon fontSize="small" />
-      }
+      }*/
     ]
   },
   {
@@ -81,11 +81,16 @@ const getSections = (t) => [
     items: [
       {
         title: t('Economatos'),
+        path: '/dashboard/markets',
+        icon: <UsersIcon fontSize="small" />,
+      },
+      /*{
+        title: t('customers'),
         path: '/dashboard/customers',
         icon: <UsersIcon fontSize="small" />,
         children: [
           {
-            title: t('List'),
+            title: t('Listado'),
             path: '/dashboard/customers'
           },
           {
@@ -97,21 +102,11 @@ const getSections = (t) => [
             path: '/dashboard/customers/1/edit'
           }
         ]
-      },
+      },*/
       {
         title: t('Parroquias'),
         path: '/dashboard/products',
         icon: <ShoppingBagIcon fontSize="small" />,
-        children: [
-          {
-            title: t('List'),
-            path: '/dashboard/products'
-          },
-          {
-            title: t('Create'),
-            path: '/dashboard/products/new'
-          }
-        ]
       },
       {
         title: t('Beneficiarios'),
@@ -130,6 +125,21 @@ const getSections = (t) => [
       },
       {
         title: t('Productos'),
+        path: '/dashboard/products',
+        icon: <ReceiptTaxIcon fontSize="small" />,
+        children: [
+          {
+            title: t('List'),
+            path: '/dashboard/products'
+          },
+          {
+            title: t('Details'),
+            path: '/dashboard/invoices/1'
+          }
+        ]
+      },
+      {
+        title: t('Facturas'),
         path: '/dashboard/invoices',
         icon: <ReceiptTaxIcon fontSize="small" />,
         children: [
@@ -243,7 +253,7 @@ const getSections = (t) => [
       }
     ]
   },*/
-  {
+  /*{
     title: t('Pages'),
     items: [
       {
@@ -261,7 +271,7 @@ const getSections = (t) => [
           }
         ]
       },
-      /*{
+      {
         title: t('Pricing'),
         path: '/dashboard/pricing',
         icon: <CreditCardIcon fontSize="small" />
@@ -294,9 +304,9 @@ const getSections = (t) => [
             path: '/500'
           }
         ]
-      }*/
+      }
     ]
-  }
+  }*/
 ];
 
 export const DashboardSidebar = (props) => {
@@ -350,22 +360,17 @@ export const DashboardSidebar = (props) => {
           }}
         >
           <div>
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: 2, textAlign: 'center' }}>
               <NextLink
                 href="/"
                 passHref
               >
                 <a>
-                  <Logo
-                    sx={{
-                      height: 42,
-                      width: 42
-                    }}
-                  />
+                  <img src={'/logo.jpg'} style={{ width: '220px'}} alt='logo'/>
                 </a>
               </NextLink>
             </Box>
-            <Box sx={{ px: 2 }}>
+            {/*<Box sx={{ px: 2 }}>
               <Box
                 onClick={handleOpenOrganizationsPopover}
                 ref={organizationsRef}
@@ -404,12 +409,12 @@ export const DashboardSidebar = (props) => {
                   }}
                 />
               </Box>
-            </Box>
+            </Box>*/}
           </div>
           <Divider
             sx={{
               borderColor: '#2D3748',
-              my: 3
+              my: 1
             }}
           />
           <Box sx={{ flexGrow: 1 }}>
@@ -431,33 +436,13 @@ export const DashboardSidebar = (props) => {
               borderColor: '#2D3748'  // dark divider
             }}
           />
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2, textAlign: 'center' }}>
             <Typography
-              color="neutral.100"
-              variant="subtitle2"
+              color="secondary.main"
+              variant="subtitle1"
             >
-              {t('Need Help?')}
+              {t('ArizSoft')}
             </Typography>
-            <Typography
-              color="neutral.500"
-              variant="body2"
-            >
-              {t('Check our docs')}
-            </Typography>
-            <NextLink
-              href="/docs/welcome"
-              passHref
-            >
-              <Button
-                color="secondary"
-                component="a"
-                fullWidth
-                sx={{ mt: 2 }}
-                variant="contained"
-              >
-                {t('Documentation')}
-              </Button>
-            </NextLink>
           </Box>
         </Box>
       </Scrollbar>
