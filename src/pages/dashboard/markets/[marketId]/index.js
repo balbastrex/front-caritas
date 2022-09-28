@@ -62,7 +62,7 @@ const MarketDetails = () => {
     <>
       <Head>
         <title>
-          Economato xxx
+          Economato: {market.name}
         </title>
       </Head>
       <Box
@@ -139,35 +139,6 @@ const MarketDetails = () => {
                     />
                   </Box>
                 </div>
-              </Grid>
-              <Grid
-                item
-                sx={{ m: -1 }}
-              >
-                <NextLink
-                  href="/dashboard/customers/1/edit"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    endIcon={(
-                      <PencilAltIcon fontSize="small" />
-                    )}
-                    sx={{ m: 1 }}
-                    variant="outlined"
-                  >
-                    Edit
-                  </Button>
-                </NextLink>
-                <Button
-                  endIcon={(
-                    <ChevronDownIcon fontSize="small" />
-                  )}
-                  sx={{ m: 1 }}
-                  variant="contained"
-                >
-                  Actions
-                </Button>
               </Grid>
             </Grid>
             <Tabs

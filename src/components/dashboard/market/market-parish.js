@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { getParishByMarketId } from '../../../slices/market';
 import { useDispatch, useSelector } from '../../../store';
-import { MoreMenu } from '../../more-menu';
 import { Scrollbar } from '../../scrollbar';
 
 const applyPagination = (parishes, page, rowsPerPage) => parishes.slice(page * rowsPerPage,
@@ -51,19 +50,19 @@ export const MarketParish = ({ market }) => {
                 Id
               </TableCell>
               <TableCell>
-                Name
+                Nombre
               </TableCell>
               <TableCell>
-                City
+                Ciudad
               </TableCell>
               <TableCell>
-                Address
+                Dirección
               </TableCell>
               <TableCell>
                 Email
               </TableCell>
               <TableCell>
-                Phone
+                Teléfono
               </TableCell>
             </TableRow>
           </TableHead>
