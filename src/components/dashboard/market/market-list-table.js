@@ -64,12 +64,6 @@ export const MarketListTable = (props) => {
 
     dispatch(updateMarket(editMarket));
 
-    /*await axios.put(`/api/v1/market/${marketId}`, {
-      ...editMarket
-    }).catch(() => {
-      toast.error('Ha habido un error guardando el economato.');
-    });*/
-
     toast.success('Economato actualizado.');
   };
 
@@ -82,13 +76,13 @@ export const MarketListTable = (props) => {
   };
 
   const onChangeMarket = (field, value) => {
+    if (field === 'distributionType') {
+      console.log('value ', value)
+    }
     setEditMarket({
       ...editMarket,
       [field]: value
     });
-    console.log('==> field ', field)
-    console.log('==> value ', value)
-
   }
 
   return (
@@ -256,6 +250,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Nombre"
                                     name="name"
+                                    onChange={(event) => onChangeMarket('name', event.target.value)}
                                   />
                                 </Grid>
                                 <Grid
@@ -268,6 +263,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Dirección"
                                     name="address"
+                                    onChange={(event) => onChangeMarket('address', event.target.value)}
                                   />
                                 </Grid>
                                 <Grid
@@ -293,6 +289,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Teléfono"
                                     name="phone"
+                                    onChange={(event) => onChangeMarket('phone', event.target.value)}
                                   />
                                 </Grid>
                                 <Grid
@@ -305,6 +302,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Distribución"
                                     select
+                                    onChange={(event) => onChangeMarket('distributionType', event.target.value)}
                                   >
                                     {distributionType.map((option) => (
                                       <MenuItem
@@ -326,6 +324,7 @@ export const MarketListTable = (props) => {
                                     fullWidth
                                     label="Gasto mensual"
                                     name="expenses"
+                                    onChange={(event) => onChangeMarket('expenses', event.target.value)}
                                   />
                                 </Grid>
                               </Grid>
@@ -361,6 +360,7 @@ export const MarketListTable = (props) => {
                                       )
                                     }}
                                     type="number"
+                                    onChange={(event) => onChangeMarket('productPercentage', event.target.value)}
                                   />
                                 </Grid>
                               </Grid>
@@ -388,6 +388,7 @@ export const MarketListTable = (props) => {
                                       fullWidth
                                       label="1ª Persona"
                                       name="budgetBase"
+                                      onChange={(event) => onChangeMarket('budgetBase', event.target.value)}
                                     />
                                   </Grid>
                                   <Grid
@@ -400,6 +401,7 @@ export const MarketListTable = (props) => {
                                       fullWidth
                                       label="Adulto"
                                       name="budgetAdult"
+                                      onChange={(event) => onChangeMarket('budgetAdult', event.target.value)}
                                     />
                                   </Grid>
                                   <Grid
@@ -412,6 +414,7 @@ export const MarketListTable = (props) => {
                                       fullWidth
                                       label="Niño"
                                       name="budgetChild"
+                                      onChange={(event) => onChangeMarket('budgetChild', event.target.value)}
                                     />
                                   </Grid>
                                 </Grid>
