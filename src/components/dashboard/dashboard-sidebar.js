@@ -105,7 +105,7 @@ const getSections = (t) => [
       },*/
       {
         title: t('Parroquias'),
-        path: '/dashboard/products',
+        path: '/dashboard/parishes',
         icon: <ShoppingBagIcon fontSize="small" />,
       },
       {
