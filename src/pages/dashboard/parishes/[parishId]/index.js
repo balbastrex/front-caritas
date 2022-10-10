@@ -20,37 +20,38 @@ import { DashboardLayout } from '../../../../components/dashboard/dashboard-layo
 import {MarketBasicDetails} from '../../../../components/dashboard/market/market-basic-details';
 import {MarketParish} from '../../../../components/dashboard/market/market-parish';
 import {MarketProduct} from '../../../../components/dashboard/market/market-product';
+import {ParishBasicDetails} from '../../../../components/dashboard/parish/parish-basic-details';
+import {ParishBeneficiaries} from '../../../../components/dashboard/parish/parish-beneficiaries';
 import { gtm } from '../../../../lib/gtm';
-import { getMarketById } from '../../../../slices/market';
+import {getParishById} from '../../../../slices/parish';
 import {useDispatch, useSelector} from '../../../../store';
 import { getInitials } from '../../../../utils/get-initials';
 
 const tabs = [
-  { label: 'Detalles Economato', value: 'details' },
-  { label: 'Parroquias', value: 'parish' },
-  { label: 'Inventario', value: 'inventory' }
+  { label: 'Detalles Parroquia', value: 'details' },
+  { label: 'Beneficiarios', value: 'beneficiaries' }
 ];
 
 const MarketDetails = () => {
   const dispatch = useDispatch();
-  const { market } = useSelector((state) => state.market);
+  const { parish } = useSelector((state) => state.parish);
   const [currentTab, setCurrentTab] = useState('details');
   const router = useRouter()
-  const { marketId } = router.query
+  const { parishId } = router.query
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
 
   useEffect(() => {
-    dispatch(getMarketById(marketId));
+    dispatch(getParishById(parishId));
   }, [dispatch]);
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
   };
 
-  if (!market) {
+  if (!parish) {
     return null;
   }
 
@@ -58,7 +59,7 @@ const MarketDetails = () => {
     <>
       <Head>
         <title>
-          Economato: {market.name}
+          Parroquia: {parish.name}
         </title>
       </Head>
       <Box
@@ -72,7 +73,7 @@ const MarketDetails = () => {
           <div>
             <Box sx={{ mb: 4 }}>
               <NextLink
-                href="/dashboard/markets"
+                href="/dashboard/parishes"
                 passHref
               >
                 <Link
@@ -88,7 +89,7 @@ const MarketDetails = () => {
                     sx={{ mr: 1 }}
                   />
                   <Typography variant="subtitle2">
-                    Economatos
+                    Parroquias
                   </Typography>
                 </Link>
               </NextLink>
@@ -113,11 +114,11 @@ const MarketDetails = () => {
                     width: 64
                   }}
                 >
-                  {getInitials(market.name)}
+                  {getInitials(parish.name)}
                 </Avatar>
                 <div>
                   <Typography variant="h4">
-                    {market.name}
+                    {parish.name}
                   </Typography>
                   <Box
                     sx={{
@@ -129,7 +130,7 @@ const MarketDetails = () => {
                       id:
                     </Typography>
                     <Chip
-                      label={market.id}
+                      label={parish.id}
                       size="small"
                       sx={{ ml: 1 }}
                     />
@@ -157,9 +158,8 @@ const MarketDetails = () => {
           </div>
           <Divider />
           <Box sx={{ mt: 3 }}>
-            {currentTab === 'details' && <MarketBasicDetails market={market}/>}
-            {currentTab === 'parish' && <MarketParish market={market} />}
-            {currentTab === 'inventory' && <MarketProduct market={market} />}
+            {currentTab === 'details' && <ParishBasicDetails parish={parish}/>}
+            {currentTab === 'beneficiaries' && <ParishBeneficiaries parish={parish} />}
           </Box>
         </Container>
       </Box>
