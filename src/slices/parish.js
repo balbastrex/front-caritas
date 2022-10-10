@@ -8,6 +8,8 @@ const initialState = {
   isLoading: false,
   error: false,
   parishList: [],
+  parish: {},
+  beneficiariesParish: []
 };
 
 const slice = createSlice({
@@ -26,6 +28,15 @@ const slice = createSlice({
     getParishesListSuccess(state, action) {
       state.isLoading = false;
       state.parishList = action.payload;
+    },
+
+    getParishSuccess(state, action) {
+      state.isLoading = false;
+      state.parish = action.payload;
+    },
+    getBeneficiaryParishSuccess(state, action) {
+      state.isLoading = false;
+      state.beneficiariesParish = action.payload;
     },
   }
 });
@@ -47,13 +58,39 @@ export function getParishes() {
   };
 }
 
+export function getParishById(parishId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/parish/${parishId}`);
+      dispatch(slice.actions.getParishSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiariesByParish(parishId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/parish/${parishId}/beneficiary`);
+      dispatch(slice.actions.getBeneficiaryParishSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function updateParish(parish) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.put(`/api/v1/parish/${parish.id}`, {
+      await axios.put(`/api/v1/parish/${parish.id}`, {
         ...parish
       })
+
+      const response = await axios.get('/api/v1/parish');
       dispatch(slice.actions.getParishesListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

@@ -172,7 +172,7 @@ export const ParishListTable = (props) => {
                     </TableCell>
                     <TableCell align="right">
                       <NextLink
-                        href={`/dashboard/markets/${parish.id}`}
+                        href={`/dashboard/parishes/${parish.id}`}
                         passHref
                       >
                         <IconButton component="a">
@@ -280,6 +280,19 @@ export const ParishListTable = (props) => {
                                     label="Teléfono"
                                     name="phone"
                                     onChange={(event) => onChangeParish('phone', event.target.value)}
+                                  />
+                                </Grid>
+                                <Grid
+                                  item
+                                  md={12}
+                                  xs={12}
+                                >
+                                  <TextField
+                                    defaultValue={parish.contact}
+                                    fullWidth
+                                    label="Contacto"
+                                    name="contact"
+                                    onChange={(event) => onChangeParish('contact', event.target.value)}
                                   />
                                 </Grid>
                               </Grid>
