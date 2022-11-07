@@ -110,33 +110,13 @@ const getSections = (t) => [
       },
       {
         title: t('Beneficiarios'),
-        icon: <ShoppingCartIcon fontSize="small" />,
-        path: '/dashboard/orders',
-        children: [
-          {
-            title: t('List'),
-            path: '/dashboard/orders'
-          },
-          {
-            title: t('Details'),
-            path: '/dashboard/orders/1'
-          }
-        ]
+        icon: <UsersIcon fontSize="small" />,
+        path: '/dashboard/beneficiaries',
       },
       {
         title: t('Productos'),
-        path: '/dashboard/products',
         icon: <ReceiptTaxIcon fontSize="small" />,
-        children: [
-          {
-            title: t('List'),
-            path: '/dashboard/products'
-          },
-          {
-            title: t('Details'),
-            path: '/dashboard/invoices/1'
-          }
-        ]
+        path: '/dashboard/products',
       },
       {
         title: t('Facturas'),

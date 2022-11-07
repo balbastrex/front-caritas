@@ -271,7 +271,7 @@ const Calendar = () => {
             rerenderDelay={10}
             select={handleRangeSelect}
             selectable
-            weekends
+            weekends = {false}
           />
         </FullCalendarWrapper>
       </Box>
