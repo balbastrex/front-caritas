@@ -76,9 +76,6 @@ export const MarketListTable = (props) => {
   };
 
   const onChangeMarket = (field, value) => {
-    if (field === 'distributionType') {
-      console.log('value ', value)
-    }
     setEditMarket({
       ...editMarket,
       [field]: value
