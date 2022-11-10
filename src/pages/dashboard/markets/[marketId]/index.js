@@ -1,4 +1,4 @@
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';

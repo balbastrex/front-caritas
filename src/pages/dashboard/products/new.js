@@ -1,7 +1,8 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
-import { Box, Breadcrumbs, Container, Link, Typography } from '@mui/material';
+import { Box, Container, Link, Typography } from '@mui/material';
 import { AuthGuard } from '../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
 import { ProductCreateForm } from '../../../components/dashboard/product/product-create-form';
@@ -16,7 +17,7 @@ const ProductCreate = () => {
     <>
       <Head>
         <title>
-          Dashboard: Product Create | Material Kit Pro
+          Dashboard: Nuevo Producto
         </title>
       </Head>
       <Box
@@ -27,40 +28,28 @@ const ProductCreate = () => {
         }}
       >
         <Container maxWidth="md">
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h4">
-              Create a new product
-            </Typography>
-            <Breadcrumbs
-              separator="/"
-              sx={{ mt: 1 }}
+          <Box sx={{ mb: 4 }}>
+            <NextLink
+              href="/dashboard/products"
+              passHref
             >
-              <NextLink
-                href="/dashboard"
-                passHref
+              <Link
+                color="textPrimary"
+                component="a"
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex'
+                }}
               >
-                <Link variant="subtitle2">
-                  Dashboard
-                </Link>
-              </NextLink>
-              <NextLink
-                href="/dashboard"
-                passHref
-              >
-                <Link
-                  color="primary"
-                  variant="subtitle2"
-                >
-                  Management
-                </Link>
-              </NextLink>
-              <Typography
-                color="textSecondary"
-                variant="subtitle2"
-              >
-                Products
-              </Typography>
-            </Breadcrumbs>
+                <ArrowBackIcon
+                  fontSize="small"
+                  sx={{ mr: 1 }}
+                />
+                <Typography variant="subtitle2">
+                  Products
+                </Typography>
+              </Link>
+            </NextLink>
           </Box>
           <ProductCreateForm />
         </Container>

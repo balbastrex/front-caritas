@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import NextLink from 'next/link';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -11,74 +11,63 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  MenuItem,
   Switch,
   TextField,
   Typography
 } from '@mui/material';
-import { FileDropzone } from '../../file-dropzone';
-import { QuillEditor } from '../../quill-editor';
+import {useDispatch} from '../../../store';
+import axios from '../../../utils/axios';
 
-const categoryOptions = [
-  {
-    label: 'Healthcare',
-    value: 'healthcare'
-  },
-  {
-    label: 'Makeup',
-    value: 'makeup'
-  },
-  {
-    label: 'Dress',
-    value: 'dress'
-  },
-  {
-    label: 'Skincare',
-    value: 'skincare'
-  },
-  {
-    label: 'Jewelry',
-    value: 'jewelry'
-  },
-  {
-    label: 'Blouse',
-    value: 'blouse'
-  }
-];
-
-export const ProductCreateForm = (props) => {
+export const ProductCreateForm = ({isEdit, product}) => {
   const router = useRouter();
-  const [files, setFiles] = useState([]);
+  const dispatch = useDispatch();
+
+  const productSchema = Yup.object().shape({
+    name: Yup.string().required('Nombre es requerido'),
+    costPrice: Yup.number().required('El precio de coste es requerido'),
+    salesPrice: Yup.number().required('El precio de venta es requerido'),
+    available: Yup.bool(),
+    free: Yup.bool(),
+    stock: Yup.number(),
+    q1: Yup.number(),
+    q2: Yup.number(),
+    q3: Yup.number(),
+    q4: Yup.number(),
+    q5: Yup.number(),
+    q6: Yup.number()
+  })
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      barcode: '925487986526',
-      category: '',
-      description: '',
-      images: [],
-      name: '',
-      newPrice: 0,
-      oldPrice: 0,
-      sku: 'IYV-8745',
-      submit: null
+      name: product?.name || '',
+      costPrice: product?.costPrice || undefined,
+      salesPrice: product?.salesPrice || undefined,
+      available: product? product.available : true,
+      free: product ? product.free : false,
+      stock: product?.stock || 0,
+      q1: product?.q1 || undefined,
+      q2: product?.q2 || undefined,
+      q3: product?.q3 || undefined,
+      q4: product?.q4 || undefined,
+      q5: product?.q5 || undefined,
+      q6: product?.q6 || undefined
     },
-    validationSchema: Yup.object({
-      barcode: Yup.string().max(255),
-      category: Yup.string().max(255),
-      description: Yup.string().max(5000),
-      images: Yup.array(),
-      name: Yup.string().max(255).required(),
-      newPrice: Yup.number().min(0).required(),
-      oldPrice: Yup.number().min(0),
-      sku: Yup.string().max(255)
-    }),
+    validationSchema: productSchema,
     onSubmit: async (values, helpers) => {
       try {
+        if (isEdit) {
+          await axios.put(`/api/v1/product/${product.id}`, {...formik.values});
+          toast.success('Producto actualizado!');
+        } else {
+          await axios.post('/api/v1/product/', {...formik.values})
+          toast.success('Producto Creado!');
+        }
         // NOTE: Make API request
-        toast.success('Product created!');
         router.push('/dashboard/products').catch(console.error);
       } catch (err) {
         console.error(err);
-        toast.error('Something went wrong!');
+        toast.error(err.message);
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
@@ -86,23 +75,11 @@ export const ProductCreateForm = (props) => {
     }
   });
 
-  const handleDrop = (newFiles) => {
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-  };
-
-  const handleRemove = (file) => {
-    setFiles((prevFiles) => prevFiles.filter((_file) => _file.path !== file.path));
-  };
-
-  const handleRemoveAll = () => {
-    setFiles([]);
-  };
-
   return (
     <form
       onSubmit={formik.handleSubmit}
-      {...props}>
-      <Card>
+    >
+      <Card sx={{ mt: 3 }}>
         <CardContent>
           <Grid
             container
@@ -114,7 +91,7 @@ export const ProductCreateForm = (props) => {
               xs={12}
             >
               <Typography variant="h6">
-                Basic details
+                Detalle Producto
               </Typography>
             </Grid>
             <Grid
@@ -125,31 +102,60 @@ export const ProductCreateForm = (props) => {
               <TextField
                 error={Boolean(formik.touched.name && formik.errors.name)}
                 fullWidth
-                helperText={formik.touched.name && formik.errors.name}
-                label="Product Name"
+                label="Nombre Producto"
                 name="name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
+                type="text"
                 value={formik.values.name}
               />
-              <Typography
-                color="textSecondary"
-                sx={{
-                  mb: 2,
-                  mt: 3
-                }}
-                variant="subtitle2"
-              >
-                Description
-              </Typography>
-              <QuillEditor
-                onChange={(value) => {
-                  formik.setFieldValue('description', value);
-                }}
-                placeholder="Write something"
-                sx={{ height: 400 }}
-                value={formik.values.description}
+              <TextField
+                error={Boolean(formik.touched.costPrice && formik.errors.costPrice)}
+                fullWidth
+                label="P.C.E."
+                name="costPrice"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                sx={{ mt: 2 }}
+                type="number"
+                value={formik.values.costPrice}
               />
+              <TextField
+                error={Boolean(formik.touched.salesPrice && formik.errors.salesPrice)}
+                fullWidth
+                label="P.V.E"
+                name="salesPrice"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                sx={{ mt: 2 }}
+                type="number"
+                value={formik.values.salesPrice}
+              />
+              <TextField
+                error={Boolean(formik.touched.stock && formik.errors.stock)}
+                fullWidth
+                label="Stock"
+                name="stock"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                sx={{ mt: 2 }}
+                type="number"
+                value={formik.values.stock}
+              />
+              <Box sx={{ mt: 2 }}>
+                <FormControlLabel
+                  control={<Switch onChange={(event) => formik.setFieldValue('free', event.target.checked)}
+                                   checked={formik.values.free} />}
+                  label="Gratuito"
+                />
+              </Box>
+              <Box sx={{ mt: 2 }}>
+                <FormControlLabel
+                  control={<Switch onChange={(event) => formik.setFieldValue('available', event.target.checked)}
+                                   checked={formik.values.available} />}
+                  label="Disponible"
+                />
+              </Box>
               {Boolean(formik.touched.description && formik.errors.description) && (
                 <Box sx={{ mt: 2 }}>
                   <FormHelperText error>
@@ -173,47 +179,7 @@ export const ProductCreateForm = (props) => {
               xs={12}
             >
               <Typography variant="h6">
-                Images
-              </Typography>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-                sx={{ mt: 1 }}
-              >
-                Images will appear in the store front of your website.
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              md={8}
-              xs={12}
-            >
-              <FileDropzone
-                accept={{
-                  'image/*': []
-                }}
-                files={files}
-                onDrop={handleDrop}
-                onRemove={handleRemove}
-                onRemoveAll={handleRemoveAll}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Pricing
+                Máximos Unidad Familiar
               </Typography>
             </Grid>
             <Grid
@@ -222,101 +188,77 @@ export const ProductCreateForm = (props) => {
               xs={12}
             >
               <TextField
-                error={Boolean(formik.touched.oldPrice && formik.errors.oldPrice)}
-                fullWidth
-                label="Old price"
-                name="oldPrice"
+                error={Boolean(formik.touched.q1 && formik.errors.q1)}
+                // fullWidth
+                label="UF1"
+                name="q1"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 type="number"
-                value={formik.values.oldPrice}
+                value={formik.values.q1}
               />
               <TextField
-                error={Boolean(formik.touched.newPrice && formik.errors.newPrice)}
-                fullWidth
-                label="New Price"
-                name="newPrice"
+                error={Boolean(formik.touched.q2 && formik.errors.q2)}
+                // fullWidth
+                label="UF2"
+                name="q2"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                sx={{ mt: 2 }}
                 type="number"
-                value={formik.values.newPrice}
-              />
-              <Box sx={{ mt: 2 }}>
-                <FormControlLabel
-                  control={<Switch />}
-                  label="Keep selling when stock is empty"
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Category
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              md={8}
-              xs={12}
-            >
-              <TextField
-                error={Boolean(formik.touched.category && formik.errors.category)}
-                fullWidth
-                label="Category"
-                name="category"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                select
-                value={formik.values.category}
-              >
-                {categoryOptions.map((option) => (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                disabled
-                error={Boolean(formik.touched.barcode && formik.errors.barcode)}
-                fullWidth
-                label="Barcode"
-                name="barcode"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                sx={{ mt: 2 }}
-                value={formik.values.barcode}
+                value={formik.values.q2}
+                sx={{ ml: 2 }}
               />
               <TextField
-                disabled
-                error={Boolean(formik.touched.sku && formik.errors.sku)}
-                fullWidth
-                label="SKU"
-                name="sku"
+                error={Boolean(formik.touched.q3 && formik.errors.q3)}
+                // fullWidth
+                label="UF3"
+                name="q3"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
+                type="number"
+                value={formik.values.q3}
                 sx={{ mt: 2 }}
-                value={formik.values.sku}
+              />
+              <TextField
+                error={Boolean(formik.touched.q4 && formik.errors.q4)}
+                // fullWidth
+                label="UF4"
+                name="q4"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.q4}
+                sx={{ ml: 2, mt: 2 }}
+              />
+              <TextField
+                error={Boolean(formik.touched.q5 && formik.errors.q5)}
+                // fullWidth
+                label="UF5"
+                name="q5"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.q5}
+                sx={{ mt: 2 }}
+              />
+              <TextField
+                error={Boolean(formik.touched.q6 && formik.errors.q6)}
+                // fullWidth
+                label="UF6"
+                name="q6"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="number"
+                value={formik.values.q6}
+                sx={{ ml: 2, mt: 2 }}
               />
             </Grid>
           </Grid>
         </CardContent>
       </Card>
+
+
+
       <Box
         sx={{
           display: 'flex',
@@ -336,18 +278,25 @@ export const ProductCreateForm = (props) => {
         >
           Delete
         </Button>
-        <Button
-          sx={{ m: 1 }}
-          variant="outlined"
+        <NextLink
+          href="/dashboard/products"
+          passHref
         >
-          Cancel
-        </Button>
+          <Button
+            sx={{ m: 1 }}
+            variant="outlined"
+            component="a"
+            disabled={formik.isSubmitting}
+          >
+            Cancelar
+          </Button>
+        </NextLink>
         <Button
           sx={{ m: 1 }}
           type="submit"
           variant="contained"
         >
-          Create
+          { isEdit ? 'Actualizar' : 'Crear'}
         </Button>
       </Box>
     </form>
