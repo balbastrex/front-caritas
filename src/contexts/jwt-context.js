@@ -1,7 +1,6 @@
 import axios from '../utils/axios';
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { authApi } from '../__fake-api__/auth-api';
 import { isValidToken, setSession } from '../utils/jwt';
 
 let ActionType;
@@ -76,10 +75,7 @@ export const AuthProvider = (props) => {
         const accessToken = globalThis.localStorage.getItem('accessToken');
 
         if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken);
-
-          const response = await axios.get('/api/v1/user/me');
-          const { user } = response.data;
+          const user = setSession(accessToken);
 
           dispatch({
             type: ActionType.INITIALIZE,
@@ -113,15 +109,13 @@ export const AuthProvider = (props) => {
   }, []);
 
   const login = async (email, password) => {
-    //  const accessToken = await authApi.login({ email, password });
-    //  const user = await authApi.me(accessToken);
     const response = await axios.post('/api/v1/login', {
       email,
       password
     });
-    const { token, user } = response.data;
+    const { token } = response.data;
 
-    setSession(token);
+    const user = setSession(token);
 
     dispatch({
       type: ActionType.LOGIN,
@@ -137,10 +131,9 @@ export const AuthProvider = (props) => {
   };
 
   const register = async (email, name, password) => {
-    const accessToken = await authApi.register({ email, name, password });
-    const user = await authApi.me(accessToken);
+    const accessToken = null; //  await authApi.register({ email, name, password });
 
-    setSession(token);
+    const user = setSession(accessToken);
 
     dispatch({
       type: ActionType.REGISTER,

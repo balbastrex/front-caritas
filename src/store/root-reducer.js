@@ -15,6 +15,7 @@ import guardianshipTypeReducer from '../slices/guardianshipType';
 import educationTypeReducer from '../slices/educationType';
 import authorizationTypeReducer from '../slices/authorizationType';
 import turnReducer from '../slices/turn';
+import productReducer from '../slices/product';
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -33,4 +34,5 @@ export const rootReducer = combineReducers({
   educationtype: educationTypeReducer,
   authorizationtype: authorizationTypeReducer,
   turn: turnReducer,
+  product: productReducer,
 });
