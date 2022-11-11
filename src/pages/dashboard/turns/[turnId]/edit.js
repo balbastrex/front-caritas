@@ -7,27 +7,28 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { AuthGuard } from '../../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../../components/dashboard/dashboard-layout';
 import {ProductCreateForm} from '../../../../components/dashboard/product/product-create-form';
+import {TurnCreateForm} from '../../../../components/dashboard/turn/turn-create-form';
 import { gtm } from '../../../../lib/gtm';
-import {getProductById} from '../../../../slices/product';
+import {getTurnById} from '../../../../slices/turn';
 import {useDispatch, useSelector} from '../../../../store';
 import { getInitials } from '../../../../utils/get-initials';
 
-const ProductEdit = () => {
+const TurnEdit = () => {
   const dispatch = useDispatch();
-  const { product } = useSelector((state) => state.product);
+  const { turn } = useSelector((state) => state.turn);
   const router = useRouter()
-  const { productId } = router.query
+  const { turnId } = router.query
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
 
   useEffect(() => {
-      dispatch(getProductById(productId));
+      dispatch(getTurnById(turnId));
     },
     []);
 
-  if (!product) {
+  if (!turn) {
     return null;
   }
 
@@ -35,7 +36,7 @@ const ProductEdit = () => {
     <>
       <Head>
         <title>
-          Dashboard: Editar Producto
+          Dashboard: Editar Turno
         </title>
       </Head>
       <Box
@@ -49,7 +50,7 @@ const ProductEdit = () => {
         <Container maxWidth="md">
           <Box sx={{ mb: 4 }}>
             <NextLink
-              href="/dashboard/products"
+              href="/dashboard/turns"
               passHref
             >
               <Link
@@ -65,7 +66,7 @@ const ProductEdit = () => {
                   sx={{ mr: 1 }}
                 />
                 <Typography variant="subtitle2">
-                  Productos
+                  Turnos
                 </Typography>
               </Link>
             </NextLink>
@@ -78,21 +79,21 @@ const ProductEdit = () => {
             }}
           >
             <Avatar
-              src={product.avatar}
+              src={turn.avatar}
               sx={{
                 height: 64,
                 mr: 2,
                 width: 64
               }}
             >
-              {getInitials(product.name)}
+              {getInitials(turn.name)}
             </Avatar>
             <div>
               <Typography
                 noWrap
                 variant="h4"
               >
-                {product.name}
+                {turn.name}
               </Typography>
               <Box
                 sx={{
@@ -107,7 +108,7 @@ const ProductEdit = () => {
                   product_id:
                 </Typography>
                 <Chip
-                  label={product.id}
+                  label={turn.id}
                   size="small"
                   sx={{ ml: 1 }}
                 />
@@ -115,7 +116,7 @@ const ProductEdit = () => {
             </div>
           </Box>
           <Box mt={3}>
-            <ProductCreateForm isEdit product={product} />
+            <TurnCreateForm isEdit turn={turn} />
           </Box>
         </Container>
       </Box>
@@ -123,7 +124,7 @@ const ProductEdit = () => {
   );
 };
 
-ProductEdit.getLayout = (page) => (
+TurnEdit.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -131,4 +132,4 @@ ProductEdit.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default ProductEdit;
+export default TurnEdit;

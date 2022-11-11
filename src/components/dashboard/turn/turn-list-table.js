@@ -1,6 +1,3 @@
-import NextLink from 'next/link';
-import { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import {
   Box,
   IconButton,
@@ -10,19 +7,21 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
-import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
-import { Scrollbar } from '../../scrollbar';
-import { SeverityPill } from '../../severity-pill';
+import NextLink from 'next/link';
+import PropTypes from 'prop-types';
+import {Fragment} from 'react';
+import {ArrowRight as ArrowRightIcon} from '../../../icons/arrow-right';
+import {Scrollbar} from '../../scrollbar';
 
-export const ProductListTable = (props) => {
+export const TurnListTable = (props) => {
   const {
     onPageChange,
     onRowsPerPageChange,
     page,
-    products,
-    productsCount,
+    turns,
+    turnsCount,
     rowsPerPage,
     ...other
   } = props;
@@ -38,37 +37,13 @@ export const ProductListTable = (props) => {
                 Nombre
               </TableCell>
               <TableCell>
-                UF1
+                Descripción
               </TableCell>
               <TableCell>
-                UF2
+                Economato
               </TableCell>
               <TableCell>
-                UF3
-              </TableCell>
-              <TableCell>
-                UF4
-              </TableCell>
-              <TableCell>
-                UF5
-              </TableCell>
-              <TableCell>
-                UF6
-              </TableCell>
-              <TableCell>
-                Gratuito
-              </TableCell>
-              <TableCell>
-                Stock
-              </TableCell>
-              <TableCell>
-                Disponible
-              </TableCell>
-              <TableCell>
-                P.C.E
-              </TableCell>
-              <TableCell>
-                P.V.P
+                Nº de beneficiarios
               </TableCell>
               <TableCell align="right">
                 Actions
@@ -76,13 +51,13 @@ export const ProductListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => {
+            {turns.map((turn) => {
 
               return (
-                <Fragment key={product.id}>
+                <Fragment key={turn.id}>
                   <TableRow
                     hover
-                    key={product.id}
+                    key={turn.id}
                   >
                     <TableCell
                       padding="checkbox"
@@ -112,51 +87,28 @@ export const ProductListTable = (props) => {
                       >
                         <Box sx={{ ml: 0}}>
                           <Typography variant="subtitle1">
-                            {product.name}
+                            {turn.name}
                           </Typography>
                         </Box>
                       </Box>
                     </TableCell>
                     <TableCell>
-                      {product.q1}
+                      {turn.description}
                     </TableCell>
+                    <NextLink
+                      href={`/dashboard/markets/${turn.marketId}/edit`}
+                      passHref
+                    >
+                      <TableCell sx={{ cursor: 'pointer' }} >
+                        {turn.marketName}
+                      </TableCell>
+                    </NextLink>
                     <TableCell>
-                      {product.q2}
-                    </TableCell>
-                    <TableCell>
-                      {product.q3}
-                    </TableCell>
-                    <TableCell>
-                      {product.q4}
-                    </TableCell>
-                    <TableCell>
-                      {product.q5}
-                    </TableCell>
-                    <TableCell>
-                      {product.q6}
-                    </TableCell>
-                    <TableCell align="center">
-                      <SeverityPill color={product.free ? 'success' : 'warning'}>
-                        {product.free ? 'Sí' : 'No'}
-                      </SeverityPill>
-                    </TableCell>
-                    <TableCell>
-                      {product.stock}
-                    </TableCell>
-                    <TableCell align="center">
-                      <SeverityPill color={product.available ? 'success' : 'warning'}>
-                        {product.available ? 'Sí' : 'No'}
-                      </SeverityPill>
-                    </TableCell>
-                    <TableCell>
-                      {product.costPrice} €
-                    </TableCell>
-                    <TableCell>
-                      {product.salesPrice} €
+                      {turn.beneficiariesNumber}
                     </TableCell>
                     <TableCell align="right">
                       <NextLink
-                        href={`/dashboard/products/${product.id}/edit`}
+                        href={`/dashboard/turns/${turn.id}/edit`}
                         passHref
                       >
                         <IconButton component="a">
@@ -173,7 +125,7 @@ export const ProductListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={productsCount}
+        count={turnsCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -184,9 +136,9 @@ export const ProductListTable = (props) => {
   );
 };
 
-ProductListTable.propTypes = {
-  products: PropTypes.array.isRequired,
-  productsCount: PropTypes.number.isRequired,
+TurnListTable.propTypes = {
+  turns: PropTypes.array.isRequired,
+  turnsCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

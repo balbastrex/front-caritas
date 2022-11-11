@@ -6,9 +6,10 @@ import { Box, Container, Link, Typography } from '@mui/material';
 import { AuthGuard } from '../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
 import { ProductCreateForm } from '../../../components/dashboard/product/product-create-form';
+import {TurnCreateForm} from '../../../components/dashboard/turn/turn-create-form';
 import { gtm } from '../../../lib/gtm';
 
-const ProductCreate = () => {
+const TurnCreate = () => {
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
@@ -17,7 +18,7 @@ const ProductCreate = () => {
     <>
       <Head>
         <title>
-          Dashboard: Nuevo Producto
+          Dashboard: Nuevo Turno
         </title>
       </Head>
       <Box
@@ -46,19 +47,19 @@ const ProductCreate = () => {
                   sx={{ mr: 1 }}
                 />
                 <Typography variant="subtitle2">
-                  Productos
+                  Turnos
                 </Typography>
               </Link>
             </NextLink>
           </Box>
-          <ProductCreateForm />
+          <TurnCreateForm />
         </Container>
       </Box>
     </>
   );
 };
 
-ProductCreate.getLayout = (page) => (
+TurnCreate.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -66,4 +67,4 @@ ProductCreate.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default ProductCreate;
+export default TurnCreate;
