@@ -5,10 +5,10 @@ import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
-import {ProductListTable} from '../../../components/dashboard/product/product-list-table';
+import {TurnListTable} from '../../../components/dashboard/turn/turn-list-table';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
-import {getProducts} from '../../../slices/product';
+import {getTurnsForMarket} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store/index';
 
 const applyFilters = (products, filters) => products.filter((product) => {
@@ -53,9 +53,9 @@ const applyFilters = (products, filters) => products.filter((product) => {
 const applyPagination = (products, page, rowsPerPage) => products.slice(page * rowsPerPage,
   page * rowsPerPage + rowsPerPage);
 
-const ProductList = () => {
+const TurnList = () => {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.product);
+  const { turnList } = useSelector((state) => state.turn);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({
@@ -70,7 +70,7 @@ const ProductList = () => {
   });
 
   useEffect(() => {
-      dispatch(getProducts());
+      dispatch(getTurnsForMarket());
       }, [dispatch]);
 
   const handleFiltersChange = (filters) => {
@@ -86,14 +86,14 @@ const ProductList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredProducts = applyFilters(productList, filters);
-  const paginatedProducts = applyPagination(filteredProducts, page, rowsPerPage);
+  const filteredTurns = applyFilters(turnList, filters);
+  const paginatedTurns = applyPagination(filteredTurns, page, rowsPerPage);
 
   return (
     <>
       <Head>
         <title>
-          Listado Productos
+          Listado de Turnos
         </title>
       </Head>
       <Box
@@ -112,12 +112,12 @@ const ProductList = () => {
             >
               <Grid item>
                 <Typography variant="h4">
-                  Productos
+                  Turnos
                 </Typography>
               </Grid>
               <Grid item>
                 <NextLink
-                  href="/dashboard/products/new"
+                  href="/dashboard/turns/new"
                   passHref
                 >
                   <Button
@@ -133,12 +133,12 @@ const ProductList = () => {
           </Box>
           <Card>
             <MarketListFilters onChange={handleFiltersChange} />
-            <ProductListTable
+            <TurnListTable
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              products={paginatedProducts}
-              productsCount={filteredProducts.length}
+              turns={paginatedTurns}
+              turnsCount={filteredTurns.length}
               rowsPerPage={rowsPerPage}
             />
           </Card>
@@ -148,7 +148,7 @@ const ProductList = () => {
   );
 };
 
-ProductList.getLayout = (page) => (
+TurnList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -156,4 +156,4 @@ ProductList.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default ProductList;
+export default TurnList;

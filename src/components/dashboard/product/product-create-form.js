@@ -15,12 +15,10 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {useDispatch} from '../../../store';
 import axios from '../../../utils/axios';
 
 export const ProductCreateForm = ({isEdit, product}) => {
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const productSchema = Yup.object().shape({
     name: Yup.string().required('Nombre es requerido'),

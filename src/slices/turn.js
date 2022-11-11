@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   error: false,
   turnList: [],
+  turn: {},
 };
 
 const slice = createSlice({
@@ -27,6 +28,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.turnList = action.payload;
     },
+
+    getTurnSuccess(state, action) {
+      state.isLoading = false;
+      state.turn = action.payload;
+    },
   }
 });
 
@@ -41,6 +47,30 @@ export function getTurns() {
     try {
       const response = await axios.get('/api/v1/turn');
       dispatch(slice.actions.getTurnListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getTurnsForMarket() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/turn/market');
+      dispatch(slice.actions.getTurnListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getTurnById(turnId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/turn/${turnId}`);
+      dispatch(slice.actions.getTurnSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
