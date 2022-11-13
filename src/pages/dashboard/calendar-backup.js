@@ -19,8 +19,6 @@ import { CalendarEventDialog } from '../../components/dashboard/calendar/calenda
 import { CalendarToolbar } from '../../components/dashboard/calendar/calendar-toolbar';
 import { gtm } from '../../lib/gtm';
 import { getEvents, updateEvent } from '../../slices/calendar';
-import {getServices} from '../../slices/service';
-import {getTurns} from '../../slices/turn';
 import { useDispatch, useSelector } from '../../store';
 
 const FullCalendarWrapper = styled('div')(({ theme }) => ({
@@ -73,8 +71,7 @@ const Calendar = () => {
   const dispatch = useDispatch();
   const calendarRef = useRef(null);
   const smDown = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-  const { events } = useSelector((state) => state.service);
-  const { turnList } = useSelector((state) => state.turn);
+  const { events } = useSelector((state) => state.calendar);
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState(smDown ? 'timeGridDay' : 'dayGridMonth');
   const [dialog, setDialog] = useState({
@@ -88,9 +85,9 @@ const Calendar = () => {
   }, []);
 
   useEffect(() => {
-      dispatch(getTurns());
-      dispatch(getServices());
+      dispatch(getEvents());
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
   const handleResize = useCallback(() => {
@@ -220,13 +217,13 @@ const Calendar = () => {
     });
   };
 
-  const selectedEvent = dialog.eventId && events.find((event) => event.id === parseInt(dialog.eventId));
+  const selectedEvent = dialog.eventId && events.find((event) => event.id === dialog.eventId);
 
   return (
     <>
       <Head>
         <title>
-          Dashboard: Calendario
+          Dashboard: Calendar | Material Kit Pro
         </title>
       </Head>
       <Box
@@ -279,7 +276,6 @@ const Calendar = () => {
         </FullCalendarWrapper>
       </Box>
       <CalendarEventDialog
-        turns={turnList}
         event={selectedEvent}
         onAddComplete={handleCloseDialog}
         onClose={handleCloseDialog}

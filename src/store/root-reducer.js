@@ -16,6 +16,7 @@ import educationTypeReducer from '../slices/educationType';
 import authorizationTypeReducer from '../slices/authorizationType';
 import turnReducer from '../slices/turn';
 import productReducer from '../slices/product';
+import serviceReducer from '../slices/service';
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -35,4 +36,5 @@ export const rootReducer = combineReducers({
   authorizationtype: authorizationTypeReducer,
   turn: turnReducer,
   product: productReducer,
+  service: serviceReducer,
 });
