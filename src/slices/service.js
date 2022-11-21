@@ -27,6 +27,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.events = action.payload;
     },
+
+    updateServiceSuccess(state, action) {
+      state.isLoading = false;
+      state.events = action.payload;
+    },
   }
 });
 
@@ -44,5 +49,26 @@ export function getServices() {
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
+  };
+}
+
+export function updateService(service) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    await axios.put(`/api/v1/service/${service.id}`, service);
+  };
+}
+
+export function createService(service) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    await axios.post('/api/v1/service', service);
+  };
+}
+
+export function deleteService(serviceId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    await axios.delete(`/api/v1/service/${serviceId}`);
   };
 }

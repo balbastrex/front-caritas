@@ -1,4 +1,3 @@
-import {Label} from '@mui/icons-material';
 import {DatePicker} from '@mui/lab';
 import {
   Box,
@@ -11,14 +10,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import {format} from 'date-fns';
 import {useFormik} from 'formik';
 import PropTypes from 'prop-types';
 import {useMemo} from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import {Trash as TrashIcon} from '../../../icons/trash';
-import {createEvent, deleteEvent, updateEvent} from '../../../slices/calendar';
+import {createEvent, deleteEvent} from '../../../slices/calendar';
+import {createService, deleteService, updateService} from '../../../slices/service';
 import {useDispatch} from '../../../store';
 
 export const CalendarEventDialog = (props) => {
@@ -27,62 +26,50 @@ export const CalendarEventDialog = (props) => {
   const initialValues = useMemo(() => {
     if (event) {
       return {
-        allDay: event.allDay || false,
-        color: event.color || '',
-        description: event.description || '',
-        start: event.start ? new Date(event.start) : new Date(),
-        marketName: event.marketName || '',
-        submit: null,
         turnId: event.turnId || 0,
+        start: event.start ? new Date(event.start) : new Date(),
+        description: event.description || '',
+        submit: null,
       };
     }
 
     if (range) {
       return {
-        allDay: false,
-        color: '',
-        description: '',
-        start: new Date(range.start),
-        marketName: '',
-        submit: null,
         turnId: 0,
+        start: new Date(range.start),
+        description: 'Selecciona un turno',
+        submit: null,
       };
     }
 
     return {
-      allDay: false,
-      color: '',
-      description: '',
-      start: new Date(),
-      marketName: '',
-      submit: null,
       turnId: 0,
+      start: new Date(),
+      description: '',
+      submit: null,
     };
   }, [event, range]);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues,
     validationSchema: Yup.object({
-      allDay: Yup.bool(),
-      description: Yup.string().max(5000),
-      marketName: Yup.string().max(5000),
+      turnId: Yup.number().required('Debes seleccionar un turno'),
       start: Yup.date(),
+      description: Yup.string()
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const data = {
-          allDay: values.allDay,
-          description: values.description,
-          end: values.end.getTime(),
-          start: values.start.getTime(),
-          title: values.title
-        };
+        const eventToUpdate = {
+          id: event?.id || 0,
+          turnId: formik.values.turnId,
+          date: formik.values.start
+        }
 
         if (event) {
-          await dispatch(updateEvent(event.id, data));
-          toast.success('Event updated!');
+          await dispatch(updateService(eventToUpdate));
+          toast.success('Servicio actualizado!');
         } else {
-          await dispatch(createEvent(data));
+          await dispatch(createService(eventToUpdate));
           toast.success('Event added!');
         }
 
@@ -107,19 +94,25 @@ export const CalendarEventDialog = (props) => {
     formik.setFieldValue('start', date);
   };
 
+  const onChangeTurn = (value) => {
+    formik.setFieldValue('turnId', value);
+    const turn = turns.find(turn => turn.id === value);
+
+    if (turn) formik.setFieldValue('description', turn.description);
+  }
+
   const handleDelete = async () => {
     try {
       if (!event) {
         return;
       }
-
-      await dispatch(deleteEvent(event.id));
+      await dispatch(deleteService(event.id));
       onDeleteComplete?.();
     } catch (err) {
       console.error(err);
     }
   };
-  console.log(event?.description)
+
   return (
     <Dialog
       fullWidth
@@ -135,8 +128,8 @@ export const CalendarEventDialog = (props) => {
             variant="h5"
           >
             {event
-              ? 'Edit Event'
-              : 'Add Event'}
+              ? 'Editar Servicio'
+              : 'Añadir Servicio'}
           </Typography>
         </Box>
         <Box sx={{  }}>
@@ -154,8 +147,7 @@ export const CalendarEventDialog = (props) => {
             fullWidth
             label="Turno"
             select
-            onChange={formik.handleChange}
-            // onChange={(event) => onChangeBeneficiary('gender', event.target.value)}
+            onChange={(event) => onChangeTurn(event.target.value)}
           >
             {turns.map((turn) => (
               <MenuItem
@@ -167,13 +159,12 @@ export const CalendarEventDialog = (props) => {
             ))}
           </TextField>
           <Box sx={{ mt: 2 }}>
-            Descripción: {event?.description}
+            Descripción: {formik.values.description}
           </Box>
           <Box sx={{ mt: 2 }}>
-            {/*Fecha: {event ? format(new Date(event?.start), 'dd/MM/yyyy') : ''}*/}
             <DatePicker
               label="Día"
-              disabled
+              disabled={!!event}
               onChange={handleStartDateChange}
               renderInput={(inputProps) => (
                 <TextField

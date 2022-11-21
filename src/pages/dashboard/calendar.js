@@ -13,13 +13,14 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import { Box, useMediaQuery } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
+import toast from 'react-hot-toast';
 import { AuthGuard } from '../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout';
 import { CalendarEventDialog } from '../../components/dashboard/calendar/calendar-event-dialog';
 import { CalendarToolbar } from '../../components/dashboard/calendar/calendar-toolbar';
 import { gtm } from '../../lib/gtm';
 import { getEvents, updateEvent } from '../../slices/calendar';
-import {getServices} from '../../slices/service';
+import {getServices, updateService} from '../../slices/service';
 import {getTurns} from '../../slices/turn';
 import { useDispatch, useSelector } from '../../store';
 
@@ -162,19 +163,18 @@ const Calendar = () => {
   };
 
   const handleRangeSelect = (arg) => {
-    const calendarEl = calendarRef.current;
+    /*const calendarEl = calendarRef.current;
 
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
 
       calendarApi.unselect();
-    }
+    }*/
 
     setDialog({
       isOpen: true,
       range: {
         start: arg.start.getTime(),
-        end: arg.end.getTime()
       }
     });
   };
@@ -186,29 +186,17 @@ const Calendar = () => {
     });
   };
 
-  const handleEventResize = async (arg) => {
-    const { event } = arg;
-
-    try {
-      await dispatch(updateEvent(event.id, {
-        allDay: event.allDay,
-        start: event.start?.getTime(),
-        end: event.end?.getTime()
-      }));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const handleEventDrop = async (arg) => {
     const { event } = arg;
+    const eventToUpdate = {
+      id: parseInt(event.id),
+      turnId: event._def.extendedProps.turnId,
+      date: event.start
+    }
 
     try {
-      await dispatch(updateEvent(event.id, {
-        allDay: event.allDay,
-        start: event.start?.getTime(),
-        end: event.end?.getTime()
-      }));
+      await dispatch(updateService(eventToUpdate));
+      toast.success('Servicio actualizado!');
     } catch (err) {
       console.error(err);
     }
@@ -218,6 +206,13 @@ const Calendar = () => {
     setDialog({
       isOpen: false
     });
+  };
+
+  const handleCloseDialogAndUpdate = () => {
+    setDialog({
+      isOpen: false
+    });
+    dispatch(getServices());
   };
 
   const selectedEvent = dialog.eventId && events.find((event) => event.id === parseInt(dialog.eventId));
@@ -256,8 +251,6 @@ const Calendar = () => {
             eventClick={handleEventSelect}
             eventDisplay="block"
             eventDrop={handleEventDrop}
-            eventResizableFromStart
-            eventResize={handleEventResize}
             events={events}
             headerToolbar={false}
             height={800}
@@ -281,10 +274,10 @@ const Calendar = () => {
       <CalendarEventDialog
         turns={turnList}
         event={selectedEvent}
-        onAddComplete={handleCloseDialog}
+        onAddComplete={handleCloseDialogAndUpdate}
         onClose={handleCloseDialog}
-        onDeleteComplete={handleCloseDialog}
-        onEditComplete={handleCloseDialog}
+        onDeleteComplete={handleCloseDialogAndUpdate}
+        onEditComplete={handleCloseDialogAndUpdate}
         open={dialog.isOpen}
         range={dialog.range}
       />
