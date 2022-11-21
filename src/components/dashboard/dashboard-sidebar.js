@@ -6,6 +6,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Home as HomeIcon} from '../../icons/home';
 import {Bell as BellIcon} from '../../icons/bell';
+import {Calendar as CalendarIcon} from '../../icons/calendar';
 import {ReceiptTax as ReceiptTaxIcon} from '../../icons/receipt-tax';
 import {ShoppingBag as ShoppingBagIcon} from '../../icons/shopping-bag';
 import {Users as UsersIcon} from '../../icons/users';
@@ -119,6 +120,11 @@ const getSections = (t) => [
         title: t('Turnos'),
         path: '/dashboard/turns',
         icon: <BellIcon fontSize="small" />,
+      },
+      {
+        title: t('Calendario'),
+        path: '/dashboard/calendar',
+        icon: <CalendarIcon fontSize="small" />,
       }
     ]
   },
@@ -393,7 +399,7 @@ export const DashboardSidebar = (props) => {
               color="secondary.main"
               variant="subtitle1"
             >
-              {t('ArizSoft')}
+              {t('Gomez Avanza')}
             </Typography>
           </Box>
         </Box>

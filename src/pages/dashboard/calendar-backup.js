@@ -13,15 +13,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import { Box, useMediaQuery } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
-import toast from 'react-hot-toast';
 import { AuthGuard } from '../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout';
 import { CalendarEventDialog } from '../../components/dashboard/calendar/calendar-event-dialog';
 import { CalendarToolbar } from '../../components/dashboard/calendar/calendar-toolbar';
 import { gtm } from '../../lib/gtm';
 import { getEvents, updateEvent } from '../../slices/calendar';
-import {getServices, updateService} from '../../slices/service';
-import {getTurns} from '../../slices/turn';
 import { useDispatch, useSelector } from '../../store';
 
 const FullCalendarWrapper = styled('div')(({ theme }) => ({
@@ -74,8 +71,7 @@ const Calendar = () => {
   const dispatch = useDispatch();
   const calendarRef = useRef(null);
   const smDown = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-  const { events } = useSelector((state) => state.service);
-  const { turnList } = useSelector((state) => state.turn);
+  const { events } = useSelector((state) => state.calendar);
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState(smDown ? 'timeGridDay' : 'dayGridMonth');
   const [dialog, setDialog] = useState({
@@ -89,9 +85,9 @@ const Calendar = () => {
   }, []);
 
   useEffect(() => {
-      dispatch(getTurns());
-      dispatch(getServices());
+      dispatch(getEvents());
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
   const handleResize = useCallback(() => {
@@ -163,18 +159,19 @@ const Calendar = () => {
   };
 
   const handleRangeSelect = (arg) => {
-    /*const calendarEl = calendarRef.current;
+    const calendarEl = calendarRef.current;
 
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
 
       calendarApi.unselect();
-    }*/
+    }
 
     setDialog({
       isOpen: true,
       range: {
         start: arg.start.getTime(),
+        end: arg.end.getTime()
       }
     });
   };
@@ -186,17 +183,29 @@ const Calendar = () => {
     });
   };
 
-  const handleEventDrop = async (arg) => {
+  const handleEventResize = async (arg) => {
     const { event } = arg;
-    const eventToUpdate = {
-      id: parseInt(event.id),
-      turnId: event._def.extendedProps.turnId,
-      date: event.start
-    }
 
     try {
-      await dispatch(updateService(eventToUpdate));
-      toast.success('Servicio actualizado!');
+      await dispatch(updateEvent(event.id, {
+        allDay: event.allDay,
+        start: event.start?.getTime(),
+        end: event.end?.getTime()
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleEventDrop = async (arg) => {
+    const { event } = arg;
+
+    try {
+      await dispatch(updateEvent(event.id, {
+        allDay: event.allDay,
+        start: event.start?.getTime(),
+        end: event.end?.getTime()
+      }));
     } catch (err) {
       console.error(err);
     }
@@ -208,20 +217,13 @@ const Calendar = () => {
     });
   };
 
-  const handleCloseDialogAndUpdate = () => {
-    setDialog({
-      isOpen: false
-    });
-    dispatch(getServices());
-  };
-
-  const selectedEvent = dialog.eventId && events.find((event) => event.id === parseInt(dialog.eventId));
+  const selectedEvent = dialog.eventId && events.find((event) => event.id === dialog.eventId);
 
   return (
     <>
       <Head>
         <title>
-          Dashboard: Calendario
+          Dashboard: Calendar | Material Kit Pro
         </title>
       </Head>
       <Box
@@ -251,6 +253,8 @@ const Calendar = () => {
             eventClick={handleEventSelect}
             eventDisplay="block"
             eventDrop={handleEventDrop}
+            eventResizableFromStart
+            eventResize={handleEventResize}
             events={events}
             headerToolbar={false}
             height={800}
@@ -272,12 +276,11 @@ const Calendar = () => {
         </FullCalendarWrapper>
       </Box>
       <CalendarEventDialog
-        turns={turnList}
         event={selectedEvent}
-        onAddComplete={handleCloseDialogAndUpdate}
+        onAddComplete={handleCloseDialog}
         onClose={handleCloseDialog}
-        onDeleteComplete={handleCloseDialogAndUpdate}
-        onEditComplete={handleCloseDialogAndUpdate}
+        onDeleteComplete={handleCloseDialog}
+        onEditComplete={handleCloseDialog}
         open={dialog.isOpen}
         range={dialog.range}
       />

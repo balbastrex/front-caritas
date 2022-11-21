@@ -1,92 +1,75 @@
-import PropTypes from 'prop-types';
-import toast from 'react-hot-toast';
-import { addMinutes } from 'date-fns';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import {DatePicker} from '@mui/lab';
 import {
   Box,
   Button,
   Dialog,
   Divider,
-  FormControlLabel,
   FormHelperText,
   IconButton,
-  Switch,
+  MenuItem,
   TextField,
-  Typography
+  Typography,
 } from '@mui/material';
-import { DateTimePicker } from '@mui/lab';
-import { Trash as TrashIcon } from '../../../icons/trash';
-import { createEvent, deleteEvent, updateEvent } from '../../../slices/calendar';
-import { useDispatch } from '../../../store';
-import { useMemo } from 'react';
+import {useFormik} from 'formik';
+import PropTypes from 'prop-types';
+import {useMemo} from 'react';
+import toast from 'react-hot-toast';
+import * as Yup from 'yup';
+import {Trash as TrashIcon} from '../../../icons/trash';
+import {createEvent, deleteEvent} from '../../../slices/calendar';
+import {createService, deleteService, updateService} from '../../../slices/service';
+import {useDispatch} from '../../../store';
 
 export const CalendarEventDialog = (props) => {
-  const { event, onAddComplete, onClose, onDeleteComplete, onEditComplete, open, range } = props;
+  const { event, onAddComplete, onClose, onDeleteComplete, onEditComplete, open, range, turns } = props;
   const dispatch = useDispatch();
   const initialValues = useMemo(() => {
     if (event) {
       return {
-        allDay: event.allDay || false,
-        color: event.color || '',
-        description: event.description || '',
-        end: event.end ? new Date(event.end) : addMinutes(new Date(), 30),
+        turnId: event.turnId || 0,
         start: event.start ? new Date(event.start) : new Date(),
-        title: event.title || '',
-        submit: null
+        description: event.description || '',
+        submit: null,
       };
     }
 
     if (range) {
       return {
-        allDay: false,
-        color: '',
-        description: '',
-        end: new Date(range.end),
+        turnId: 0,
         start: new Date(range.start),
-        title: '',
-        submit: null
+        description: 'Selecciona un turno',
+        submit: null,
       };
     }
 
     return {
-      allDay: false,
-      color: '',
-      description: '',
-      end: addMinutes(new Date(), 30),
+      turnId: 0,
       start: new Date(),
-      title: '',
-      submit: null
+      description: '',
+      submit: null,
     };
   }, [event, range]);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues,
     validationSchema: Yup.object({
-      allDay: Yup.bool(),
-      description: Yup.string().max(5000),
-      end: Yup.date(),
+      turnId: Yup.number().required('Debes seleccionar un turno'),
       start: Yup.date(),
-      title: Yup
-        .string()
-        .max(255)
-        .required('Title is required')
+      description: Yup.string()
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const data = {
-          allDay: values.allDay,
-          description: values.description,
-          end: values.end.getTime(),
-          start: values.start.getTime(),
-          title: values.title
-        };
+        const eventToUpdate = {
+          id: event?.id || 0,
+          turnId: formik.values.turnId,
+          date: formik.values.start
+        }
 
         if (event) {
-          await dispatch(updateEvent(event.id, data));
-          toast.success('Event updated!');
+          await dispatch(updateService(eventToUpdate));
+          toast.success('Servicio actualizado!');
         } else {
-          await dispatch(createEvent(data));
+          await dispatch(createService(eventToUpdate));
           toast.success('Event added!');
         }
 
@@ -109,29 +92,21 @@ export const CalendarEventDialog = (props) => {
 
   const handleStartDateChange = (date) => {
     formik.setFieldValue('start', date);
-
-    // Prevent end date to be before start date
-    if (formik.values.end && date && date > formik.values.end) {
-      formik.setFieldValue('end', date);
-    }
   };
 
-  const handleEndDateChange = (date) => {
-    formik.setFieldValue('end', date);
+  const onChangeTurn = (value) => {
+    formik.setFieldValue('turnId', value);
+    const turn = turns.find(turn => turn.id === value);
 
-    // Prevent start date to be after end date
-    if (formik.values.start && date && date < formik.values.start) {
-      formik.setFieldValue('start', date);
-    }
-  };
+    if (turn) formik.setFieldValue('description', turn.description);
+  }
 
   const handleDelete = async () => {
     try {
       if (!event) {
         return;
       }
-
-      await dispatch(deleteEvent(event.id));
+      await dispatch(deleteService(event.id));
       onDeleteComplete?.();
     } catch (err) {
       console.error(err);
@@ -153,67 +128,51 @@ export const CalendarEventDialog = (props) => {
             variant="h5"
           >
             {event
-              ? 'Edit Event'
-              : 'Add Event'}
+              ? 'Editar Servicio'
+              : 'Añadir Servicio'}
+          </Typography>
+        </Box>
+        <Box sx={{  }}>
+          <Typography
+            align="center"
+            gutterBottom
+            variant="h6"
+          >
+            Economato: {event?.marketName}
           </Typography>
         </Box>
         <Box sx={{ p: 3 }}>
           <TextField
-            error={Boolean(formik.touched.title && formik.errors.title)}
+            defaultValue={formik.values.turnId}
             fullWidth
-            helperText={formik.touched.title && formik.errors.title}
-            label="Title"
-            name="title"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.title}
-          />
+            label="Turno"
+            select
+            onChange={(event) => onChangeTurn(event.target.value)}
+          >
+            {turns.map((turn) => (
+              <MenuItem
+                key={turn.id}
+                value={turn.id}
+              >
+                {turn.name}
+              </MenuItem>
+            ))}
+          </TextField>
           <Box sx={{ mt: 2 }}>
-            <TextField
-              error={Boolean(formik.touched.description && formik.errors.description)}
-              fullWidth
-              helperText={formik.touched.description && formik.errors.description}
-              label="Description"
-              name="description"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.description}
-            />
+            Descripción: {formik.values.description}
           </Box>
           <Box sx={{ mt: 2 }}>
-            <FormControlLabel
-              control={(
-                <Switch
-                  checked={formik.values.allDay}
-                  name="allDay"
-                  onChange={formik.handleChange}
-                />
-              )}
-              label="All day"
-            />
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <DateTimePicker
-              label="Start date"
+            <DatePicker
+              label="Día"
+              disabled={!!event}
               onChange={handleStartDateChange}
               renderInput={(inputProps) => (
                 <TextField
                   fullWidth
                   {...inputProps} />
               )}
+              inputFormat="dd/MM/yyyy"
               value={formik.values.start}
-            />
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <DateTimePicker
-              label="End date"
-              onChange={handleEndDateChange}
-              renderInput={(inputProps) => (
-                <TextField
-                  fullWidth
-                  {...inputProps} />
-              )}
-              value={formik.values.end}
             />
           </Box>
           {Boolean(formik.touched.end && formik.errors.end) && (
@@ -239,7 +198,7 @@ export const CalendarEventDialog = (props) => {
           )}
           <Box sx={{ flexGrow: 1 }} />
           <Button onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
           <Button
             disabled={formik.isSubmitting}
@@ -247,7 +206,7 @@ export const CalendarEventDialog = (props) => {
             type="submit"
             variant="contained"
           >
-            Confirm
+            Confirmar
           </Button>
         </Box>
       </form>
