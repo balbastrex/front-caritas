@@ -7,7 +7,6 @@ import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
 import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
-import {useMounted} from '../../../hooks/use-mounted';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
@@ -107,7 +106,6 @@ const OrderListInner = styled('div',
   }));
 
 const OrderList = () => {
-  const isMounted = useMounted();
   const dispatch = useDispatch();
   const { orderList } = useSelector((state) => state.order);
   const rootRef = useRef(null);
