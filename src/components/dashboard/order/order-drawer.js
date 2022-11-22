@@ -1,7 +1,3 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import numeral from 'numeral';
 import {
   Box,
   Button,
@@ -13,38 +9,23 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import { X as XIcon } from '../../../icons/x';
-import { PropertyList } from '../../property-list';
-import { PropertyListItem } from '../../property-list-item';
-import { Scrollbar } from '../../scrollbar';
-
-const statusOptions = [
-  {
-    label: 'Canceled',
-    value: 'canceled'
-  },
-  {
-    label: 'Complete',
-    value: 'complete'
-  },
-  {
-    label: 'Pending',
-    value: 'pending'
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected'
-  }
-];
+import {styled} from '@mui/material/styles';
+import {format} from 'date-fns';
+import NextLink from 'next/link';
+import numeral from 'numeral';
+import PropTypes from 'prop-types';
+import {X as XIcon} from '../../../icons/x';
+import {PropertyList} from '../../property-list';
+import {PropertyListItem} from '../../property-list-item';
+import {Scrollbar} from '../../scrollbar';
+import {SeverityPill} from '../../severity-pill';
+import {severityMap} from './order-list-table';
 
 const OrderPreview = (props) => {
-  const { lgUp, onApprove, onEdit, onReject, order } = props;
+  const { lgUp, onApprove, onReject, order } = props;
   const align = lgUp ? 'horizontal' : 'vertical';
 
   return (
@@ -82,294 +63,139 @@ const OrderPreview = (props) => {
           }}
         >
           <Button
-            onClick={onApprove}
+            onClick={() => onApprove(order.id)}
             size="small"
             variant="contained"
           >
-            Approve
+            Aprobar
           </Button>
           <Button
             onClick={onReject}
             size="small"
             variant="outlined"
           >
-            Reject
+            Cancelar
           </Button>
-          <Button
-            onClick={onEdit}
-            size="small"
-            startIcon={(
-              <EditIcon fontSize="small" />
-            )}
+          <NextLink
+            href={`/dashboard/orders/${order.id}/edit`}
+            passHref
           >
-            Edit
-          </Button>
+            <Button
+              size="small"
+            >
+              Editar
+            </Button>
+          </NextLink>
         </Box>
       </Box>
       <Typography
         sx={{ my: 3 }}
         variant="h6"
       >
-        Details
+        Detalles de la Venta
       </Typography>
       <PropertyList>
         <PropertyListItem
           align={align}
           disableGutters
-          label="ID"
+          label="NºVenta"
           value={order.id}
         />
         <PropertyListItem
           align={align}
           disableGutters
-          label="Number"
-          value={order.number}
-        />
-        <PropertyListItem
-          align={align}
-          disableGutters
-          label="Customer"
+          label="Beneficiario"
         >
           <Typography
             color="primary"
             variant="body2"
           >
-            {order.customer.name}
+            {order.beneficiaryName}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body2"
           >
-            {order.customer.address1}
+            {/*{order.customer.address1}*/}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body2"
           >
-            {order.customer.city}
+            {/*{order.customer.city}*/}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body2"
           >
-            {order.customer.country}
+            {/*{order.customer.country}*/}
           </Typography>
         </PropertyListItem>
         <PropertyListItem
           align={align}
           disableGutters
-          label="Date"
-          value={format(order.createdAt, 'dd/MM/yyyy HH:mm')}
+          label="Fecha"
+          value={format(order.createdAt, 'dd/MM/yyyy')}
         />
         <PropertyListItem
           align={align}
           disableGutters
-          label="Promotion Code"
-          value={order.promotionCode}
+          label="Total"
+          value={numeral(order.amount).format(`${order.amount}0,0.00`)}
         />
         <PropertyListItem
           align={align}
           disableGutters
-          label="Total Amount"
-          value={`${order.currency}${order.totalAmount}`}
-        />
-        <PropertyListItem
-          align={align}
-          disableGutters
-          label="Status"
-          value={order.status}
-        />
+          label="Estado"
+        >
+          <SeverityPill sx={{ mr: 4 }} color={severityMap[order.status] || 'warning'}>
+            {order.status}
+          </SeverityPill>
+        </PropertyListItem>
       </PropertyList>
       <Divider sx={{ my: 3 }} />
       <Typography
         sx={{ my: 3 }}
         variant="h6"
       >
-        Line items
+        Lineas de Venta
       </Typography>
       <Scrollbar>
         <Table sx={{ minWidth: 400 }}>
           <TableHead>
             <TableRow>
               <TableCell>
-                Description
+                Producto x Cantidad
               </TableCell>
               <TableCell>
-                Billing Cycle
+                Precio
               </TableCell>
               <TableCell>
-                Amount
+                Total
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {(order.items || []).map((item) => (
-              <TableRow key={item.id}>
+            {(order.orderLines || []).map((itemLine) => (
+              <TableRow key={itemLine.id}>
                 <TableCell>
-                  {item.name}
+                  {itemLine.description}
                   {' '}
                   x
                   {' '}
-                  {item.quantity}
+                  {itemLine.units}
                 </TableCell>
                 <TableCell>
-                  {item.billingCycle}
+                  {numeral(itemLine.price).format(`0,0.00`)}
                 </TableCell>
                 <TableCell>
-                  {numeral(item.unitAmount).format(`${item.currency}0,0.00`)}
+                  {numeral(itemLine.total).format(`0,0.00`)}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Scrollbar>
-    </>
-  );
-};
-
-const OrderForm = (props) => {
-  const { onCancel, onSave, order } = props;
-
-  return (
-    <>
-      <Box
-        sx={{
-          alignItems: 'center',
-          backgroundColor: (theme) => theme.palette.mode === 'dark'
-            ? 'neutral.800'
-            : 'neutral.100',
-          borderRadius: 1,
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          px: 3,
-          py: 2.5
-        }}
-      >
-        <Typography
-          variant="overline"
-          sx={{ mr: 2 }}
-          color="textSecondary"
-        >
-          Order
-        </Typography>
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            m: -1,
-            '& > button': {
-              m: 1
-            }
-          }}
-        >
-          <Button
-            color="primary"
-            onClick={onSave}
-            size="small"
-            variant="contained"
-          >
-            Save changes
-          </Button>
-          <Button
-            onClick={onCancel}
-            size="small"
-            variant="outlined"
-          >
-            Cancel
-          </Button>
-        </Box>
-      </Box>
-      <Typography
-        sx={{ my: 3 }}
-        variant="h6"
-      >
-        Details
-      </Typography>
-      <TextField
-        disabled
-        fullWidth
-        label="ID"
-        margin="normal"
-        name="id"
-        value={order.id}
-      />
-      <TextField
-        disabled
-        fullWidth
-        label="Number"
-        margin="normal"
-        name="number"
-        value={order.number}
-      />
-      <TextField
-        disabled
-        fullWidth
-        label="Customer name"
-        margin="normal"
-        name="customer_name"
-        value={order.customer.name}
-      />
-      <TextField
-        disabled
-        fullWidth
-        label="Date"
-        margin="normal"
-        name="date"
-        value={format(order.createdAt, 'dd/MM/yyyy HH:mm')}
-      />
-      <TextField
-        fullWidth
-        label="Address"
-        margin="normal"
-        name="address"
-        value={order.customer.address1}
-      />
-      <TextField
-        fullWidth
-        label="Country"
-        margin="normal"
-        name="country"
-        value={order.customer.country}
-      />
-      <TextField
-        fullWidth
-        label="State/Region"
-        margin="normal"
-        name="state_region"
-        value={order.customer.city}
-      />
-      <TextField
-        fullWidth
-        label="Total Amount"
-        margin="normal"
-        name="amount"
-        value={order.totalAmount}
-      />
-      <TextField
-        fullWidth
-        label="Status"
-        margin="normal"
-        name="status"
-        select
-        SelectProps={{ native: true }}
-        value={order.status}
-      >
-        {statusOptions.map((statusOption) => (
-          <option
-            key={statusOption.value}
-            value={statusOption.value}
-          >
-            {statusOption.label}
-          </option>
-        ))}
-      </TextField>
-      <Button
-        color="error"
-        sx={{ mt: 3 }}
-      >
-        Delete order
-      </Button>
     </>
   );
 };
@@ -397,17 +223,8 @@ const OrderDrawerMobile = styled(Drawer)({
 });
 
 export const OrderDrawer = (props) => {
-  const { containerRef, onClose, open, order, ...other } = props;
-  const [isEditing, setIsEditing] = useState(false);
+  const { containerRef, onClose, open, order, onApprove, ...other } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
 
   // The reason for doing this, is that the persistent drawer has to be rendered, but not it's
   // content if an order is not passed.
@@ -429,7 +246,7 @@ export const OrderDrawer = (props) => {
             color="inherit"
             variant="h6"
           >
-            {order.number}
+            Nº Venta: {order.id}
           </Typography>
           <IconButton
             color="inherit"
@@ -444,23 +261,12 @@ export const OrderDrawer = (props) => {
             py: 4
           }}
         >
-          {!isEditing
-            ? (
-              <OrderPreview
-                onApprove={onClose}
-                onEdit={handleEdit}
-                onReject={onClose}
-                order={order}
-                lgUp={lgUp}
-              />
-            )
-            : (
-              <OrderForm
-                onCancel={handleCancel}
-                onSave={handleCancel}
-                order={order}
-              />
-            )}
+        <OrderPreview
+          onApprove={onApprove}
+          onReject={onClose}
+          order={order}
+          lgUp={lgUp}
+        />
         </Box>
       </>
     )
@@ -473,7 +279,8 @@ export const OrderDrawer = (props) => {
         open={open}
         SlideProps={{ container: containerRef?.current }}
         variant="persistent"
-        {...other}>
+        {...other}
+      >
         {content}
       </OrderDrawerDesktop>
     );
@@ -487,7 +294,8 @@ export const OrderDrawer = (props) => {
       open={open}
       SlideProps={{ container: containerRef?.current }}
       variant="temporary"
-      {...other}>
+      {...other}
+    >
       {content}
     </OrderDrawerMobile>
   );
@@ -496,6 +304,7 @@ export const OrderDrawer = (props) => {
 OrderDrawer.propTypes = {
   containerRef: PropTypes.any,
   onClose: PropTypes.func,
+  onApprove: PropTypes.func,
   open: PropTypes.bool,
   order: PropTypes.object
 };

@@ -102,6 +102,21 @@ const getSections = (t) => [
         path: '/dashboard/products',
       },
       {
+        title: t('Ventas'),
+        path: '/dashboard/orders',
+        icon: <ReceiptTaxIcon fontSize="small" />,
+        children: [
+          {
+            title: t('List'),
+            path: '/dashboard/orders'
+          },
+          {
+            title: t('Details'),
+            path: '/dashboard/orders/1'
+          }
+        ]
+      },
+      {
         title: t('Facturas'),
         path: '/dashboard/invoices',
         icon: <ReceiptTaxIcon fontSize="small" />,
