@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   error: false,
   orderList: [],
+  order: {},
 };
 
 const slice = createSlice({
@@ -34,7 +35,11 @@ const slice = createSlice({
       const orderIndex = existingOrders.findIndex((order) => order.id === action.payload.orderId);
       existingOrders[orderIndex].status = action.payload.status;
       state.orderList= existingOrders;
-      console.log('==> existingOrders ', existingOrders)
+    },
+
+    getOrderSuccess(state, action) {
+      state.isLoading = false;
+      state.order = action.payload;
     },
   }
 });
@@ -60,12 +65,21 @@ export function updateStatusOrder(orderId, status) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log('==>  orderId', orderId)
-      console.log('==>  status', status)
-      // await axios.put(`/api/v1/order/${orderId}/status`, status);
+      await axios.put(`/api/v1/order/${orderId}/status/${status}`);
       dispatch(slice.actions.getOrderUpdateSuccess({orderId, status}));
     } catch (error) {
-      console.log('==>  error', error)
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getOrderById(orderId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/order/${orderId}`);
+      dispatch(slice.actions.getOrderSuccess(response.data));
+    } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };

@@ -1,4 +1,4 @@
-import {Box, Button, Card, CardContent, FormHelperText, Grid, MenuItem, TextField, Typography} from '@mui/material';
+import {Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Typography} from '@mui/material';
 import {useFormik} from 'formik';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
@@ -8,6 +8,12 @@ import * as Yup from 'yup';
 import {getBeneficiariesSelector} from '../../../slices/beneficiary';
 import {useDispatch, useSelector} from '../../../store';
 import axios from '../../../utils/axios';
+import OrderAddProducts from './order-add-products';
+import {OrderLineListTable} from './order-line-list-table';
+
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
 
 export const OrderCreateForm = ({isEdit, order}) => {
   const router = useRouter();
@@ -18,22 +24,69 @@ export const OrderCreateForm = ({isEdit, order}) => {
     dispatch(getBeneficiariesSelector());
   }, [dispatch]);
 
+  const handleNewProduct = (productLine) => {
+    const orderLines = [...formik.values.orderLines];
+    const originalOrderLine = orderLines.find((orderLine) => orderLine.productId === productLine.productId);
+    let orderLine = {...originalOrderLine}
+    console.log('==> orderLine ', orderLine)
+
+    if (!isEmpty(orderLine)) {
+      console.log('==> entro ', )
+      orderLine.units = orderLine.units + 1;
+      orderLines[orderLines.indexOf(originalOrderLine)] = orderLine;
+    } else {
+      const newOrderLine = {
+        productId: productLine.productId,
+        description: productLine.description,
+        price: productLine.price,
+        cost: productLine.cost,
+        units: 1,
+      };
+      console.log('==> newOrderLine ', newOrderLine)
+      orderLines.push(newOrderLine);
+    }
+    console.log('==>  orderLines', orderLines)
+
+    formik.setFieldValue('orderLines', orderLines);
+  }
+
+  const handleRemoveProduct = (productId) => {
+    const orderLines = [...formik.values.orderLines];
+    const originalOrderLine = orderLines.find((orderLine) => orderLine.productId === productId);
+    let orderLine = {...originalOrderLine};
+
+    if (!orderLine) {
+      return;
+    }
+
+    if (orderLine.units !== 1) {
+      orderLine.units = orderLine.units - 1;
+      orderLines[orderLines.indexOf(originalOrderLine)] = orderLine;
+    } else {
+      orderLines.splice(orderLines.indexOf(originalOrderLine), 1);
+    }
+
+    formik.setFieldValue('orderLines', orderLines);
+  }
+
   const orderSchema = Yup.object().shape({
-    beneficiaryId: Yup.number().required('El beneficiario es requerido'),
-    amount: Yup.number(),
+    beneficiaryId: Yup.number(),
     orderLines: Yup.array().of(
       Yup.object().shape({
-        productId: Yup.number().required('El producto es requerido'),
-        quantity: Yup.number().required('La cantidad es requerida'),
+        productId: Yup.number(),
+        description: Yup.string(),
+        price: Yup.number(),
+        cost: Yup.number(),
+        productDescription: Yup.string(),
+        units: Yup.number(),
       })
     )
   })
 
   const formik = useFormik({
-    enableReinitialize: true,
+    enableReinitialize: !!isEdit,
     initialValues: {
-      beneficiaryId: order?.beneficiaryId || 0,
-      amount: order?.amount || 0,
+      beneficiaryId: order?.beneficiaryId || null,
       orderLines: order?.orderLines || [],
     },
     validationSchema: orderSchema,
@@ -43,7 +96,7 @@ export const OrderCreateForm = ({isEdit, order}) => {
           await axios.put(`/api/v1/order/${order.id}`, {...formik.values});
           toast.success('Venta actualizada!');
         } else {
-          await axios.post('/api/v1/order/', {...formik.values})
+          await axios.post('/api/v1/order', {...formik.values})
           toast.success('Venta Creada!');
         }
         router.push('/dashboard/orders').catch(console.error);
@@ -56,6 +109,8 @@ export const OrderCreateForm = ({isEdit, order}) => {
       }
     }
   });
+
+  console.log(formik.values);
 
   return (
     <form
@@ -76,34 +131,38 @@ export const OrderCreateForm = ({isEdit, order}) => {
                 Beneficiario
               </Typography>
             </Grid>
+
             <Grid
               item
               md={8}
               xs={12}
             >
-              <TextField
-                fullWidth
-                label="Beneficiario"
-                name="beneficiaryId"
-                onChange={formik.handleChange}
-                select
-                SelectProps={{ native: true }}
-                value={formik.values.beneficiaryId}
-                variant="outlined"
-              >
-                <option value={0}>Seleccione un beneficiario</option>
-                {beneficiarySelector.map((beneficiary) => (
-                  <option
-                    key={beneficiary.id}
-                    value={beneficiary.id}
-                  >
-                    {beneficiary.name} {beneficiary.lastName}
-                  </option>
-                ))}
-              </TextField>
-              <FormHelperText error>
-                {formik.touched.beneficiaryId && formik.errors.beneficiaryId}
-              </FormHelperText>
+              <Autocomplete
+                autoHighlight
+                noOptionsText="Sin opciones"
+                id="controlled-demo"
+                options={beneficiarySelector}
+                getOptionLabel={(option) => option.name}
+                value={beneficiarySelector.find((option) => {
+                    if (option.id === formik.values.beneficiaryId) {
+                      return option.id;
+                    }
+                  })
+                }
+                onChange={(event, newValue) => {
+                  const value = newValue ? newValue.id : null;
+                  formik.setFieldValue('beneficiaryId', value);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Beneficiario"
+                    variant="standard"
+                    error={Boolean(formik.touched.beneficiaryId && formik.errors.beneficiaryId)}
+                    helperText={formik.touched.beneficiaryId && formik.errors.beneficiaryId}
+                  />
+                )}
+              />
             </Grid>
           </Grid>
         </CardContent>
@@ -113,6 +172,8 @@ export const OrderCreateForm = ({isEdit, order}) => {
           <Grid
             container
             spacing={3}
+            display="flex"
+            flexDirection="column"
           >
             <Grid
               item
@@ -120,107 +181,54 @@ export const OrderCreateForm = ({isEdit, order}) => {
               xs={12}
             >
               <Typography variant="h6">
-                Lineas de Venta
+                Listado de Productos
               </Typography>
             </Grid>
-            <Grid
-              item
-              md={8}
-              xs={12}
-            >
-              {/*<TextField
-                error={Boolean(formik.touched.q1 && formik.errors.q1)}
-                // fullWidth
-                label="UF1"
-                name="q1"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q1}
-              />
-              <TextField
-                error={Boolean(formik.touched.q2 && formik.errors.q2)}
-                // fullWidth
-                label="UF2"
-                name="q2"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q2}
-                sx={{ ml: 2 }}
-              />
-              <TextField
-                error={Boolean(formik.touched.q3 && formik.errors.q3)}
-                // fullWidth
-                label="UF3"
-                name="q3"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q3}
-                sx={{ mt: 2 }}
-              />
-              <TextField
-                error={Boolean(formik.touched.q4 && formik.errors.q4)}
-                // fullWidth
-                label="UF4"
-                name="q4"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q4}
-                sx={{ ml: 2, mt: 2 }}
-              />
-              <TextField
-                error={Boolean(formik.touched.q5 && formik.errors.q5)}
-                // fullWidth
-                label="UF5"
-                name="q5"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q5}
-                sx={{ mt: 2 }}
-              />
-              <TextField
-                error={Boolean(formik.touched.q6 && formik.errors.q6)}
-                // fullWidth
-                label="UF6"
-                name="q6"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="number"
-                value={formik.values.q6}
-                sx={{ ml: 2, mt: 2 }}
-              />*/}
-            </Grid>
+            <OrderAddProducts
+              handleAddProduct={handleNewProduct}
+            />
           </Grid>
         </CardContent>
       </Card>
 
-
+      <Card sx={{ mt: 3 }}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            display="flex"
+            flexDirection="column"
+          >
+            <Grid
+              item
+              md={4}
+              xs={12}
+              mb={4}
+            >
+              <Typography variant="h6">
+                Lineas de Venta
+              </Typography>
+            </Grid>
+            <OrderLineListTable
+              orderLines={formik.values.orderLines}
+              handleRemoveLine={handleRemoveProduct}
+            />
+          </Grid>
+        </CardContent>
+      </Card>
 
       <Box
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          justifyContent: 'right',
           mx: -1,
           mb: -1,
           mt: 3
         }}
       >
-        <Button
-          color="error"
-          sx={{
-            m: 1,
-            mr: 'auto'
-          }}
-        >
-          Delete
-        </Button>
         <NextLink
-          href="/dashboard/products"
+          href="/dashboard/orders"
           passHref
         >
           <Button
@@ -237,7 +245,7 @@ export const OrderCreateForm = ({isEdit, order}) => {
           type="submit"
           variant="contained"
         >
-          { isEdit ? 'Actualizar' : 'Crear'}
+          { isEdit ? 'Actualizar' : 'Nueva Venta'}
         </Button>
       </Box>
     </form>

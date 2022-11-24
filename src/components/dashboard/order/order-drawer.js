@@ -30,64 +30,69 @@ const OrderPreview = (props) => {
 
   return (
     <>
-      <Box
-        sx={{
-          alignItems: 'center',
-          backgroundColor: (theme) => theme.palette.mode === 'dark'
-            ? 'neutral.800'
-            : 'neutral.100',
-          borderRadius: 1,
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          px: 3,
-          py: 2.5
-        }}
-      >
-        <Typography
-          color="textSecondary"
-          sx={{ mr: 2 }}
-          variant="overline"
-        >
-          Actions
-        </Typography>
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            flexWrap: 'wrap',
-            m: -1,
-            '& > button': {
-              m: 1
-            }
-          }}
-        >
-          <Button
-            onClick={() => onApprove(order.id)}
-            size="small"
-            variant="contained"
+      {
+        order && order.status !== 'Pagado' ? (
+          <Box
+            sx={{
+              alignItems: 'center',
+              backgroundColor: (theme) => theme.palette.mode === 'dark'
+                ? 'neutral.800'
+                : 'neutral.100',
+              borderRadius: 1,
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              px: 3,
+              py: 2.5
+            }}
           >
-            Aprobar
-          </Button>
-          <Button
-            onClick={onReject}
-            size="small"
-            variant="outlined"
-          >
-            Cancelar
-          </Button>
-          <NextLink
-            href={`/dashboard/orders/${order.id}/edit`}
-            passHref
-          >
-            <Button
-              size="small"
+            <Typography
+              color="textSecondary"
+              sx={{ mr: 2 }}
+              variant="overline"
             >
-              Editar
-            </Button>
-          </NextLink>
-        </Box>
-      </Box>
+              Actions
+            </Typography>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexWrap: 'wrap',
+                m: -1,
+                '& > button': {
+                  m: 1
+                }
+              }}
+            >
+              <Button
+                onClick={() => onApprove(order.id)}
+                size="small"
+                variant="contained"
+              >
+                Pagar Pedido
+              </Button>
+              <Button
+                onClick={onReject}
+                size="small"
+                variant="outlined"
+              >
+                Cancelar
+              </Button>
+              <NextLink
+                href={`/dashboard/orders/${order.id}/edit`}
+                passHref
+              >
+                <Button
+                  size="small"
+                >
+                  Editar
+                </Button>
+              </NextLink>
+            </Box>
+          </Box>
+        ) : null
+      }
+
       <Typography
         sx={{ my: 3 }}
         variant="h6"
@@ -99,7 +104,7 @@ const OrderPreview = (props) => {
           align={align}
           disableGutters
           label="NºVenta"
-          value={order.id}
+          value={order.id.toString()}
         />
         <PropertyListItem
           align={align}
@@ -226,8 +231,6 @@ export const OrderDrawer = (props) => {
   const { containerRef, onClose, open, order, onApprove, ...other } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
-  // The reason for doing this, is that the persistent drawer has to be rendered, but not it's
-  // content if an order is not passed.
   const content = order
     ? (
       <>
