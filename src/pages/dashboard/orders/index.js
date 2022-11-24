@@ -1,57 +1,48 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {Box, Button, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {styled} from '@mui/material/styles';
 import Head from 'next/head';
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  InputAdornment,
-  Tab,
-  Tabs,
-  TextField,
-  Typography
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { orderApi } from '../../../__fake-api__/order-api';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { OrderDrawer } from '../../../components/dashboard/order/order-drawer';
-import { OrderListTable } from '../../../components/dashboard/order/order-list-table';
-import { useMounted } from '../../../hooks/use-mounted';
-import { Plus as PlusIcon } from '../../../icons/plus';
-import { Search as SearchIcon } from '../../../icons/search';
-import { gtm } from '../../../lib/gtm';
+import NextLink from 'next/link';
+import {useEffect, useRef, useState} from 'react';
+import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
+import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
+import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
+import {Plus as PlusIcon} from '../../../icons/plus';
+import {Search as SearchIcon} from '../../../icons/search';
+import {gtm} from '../../../lib/gtm';
+import {getOrders, updateStatusOrder} from '../../../slices/order';
+import {useDispatch, useSelector} from '../../../store';
 
 const tabs = [
   {
-    label: 'All',
+    label: 'Todas',
     value: 'all'
   },
   {
-    label: 'Canceled',
-    value: 'canceled'
+    label: 'Pendientes',
+    value: 'Cerrado'
   },
   {
-    label: 'Completed',
-    value: 'complete'
+    label: 'Abiertas',
+    value: 'Abierto'
   },
   {
-    label: 'Pending',
-    value: 'pending'
+    label: 'Pagadas',
+    value: 'Pagado'
   },
   {
-    label: 'Rejected',
-    value: 'rejected'
+    label: 'Canceladas',
+    value: 'Cancelado'
   }
 ];
 
 const sortOptions = [
   {
-    label: 'Newest',
+    label: 'Más Nuevas',
     value: 'desc'
   },
   {
-    label: 'Oldest',
+    label: 'Más Antiguas',
     value: 'asc'
   }
 ];
@@ -60,9 +51,10 @@ const applyFilters = (orders, filters) => orders.filter((order) => {
   if (filters.query) {
     // Checks only the order number, but can be extended to support other fields, such as customer
     // name, email, etc.
-    const containsQuery = (order.number || '').toLowerCase().includes(filters.query.toLowerCase());
+    const containsQuery = (order.id.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
+    const containsQueryBeneficiary = (order.beneficiaryName || '').toLowerCase().includes(filters.query.toLowerCase());
 
-    if (!containsQuery) {
+    if (!containsQuery && !containsQueryBeneficiary) {
       return false;
     }
   }
@@ -114,14 +106,15 @@ const OrderListInner = styled('div',
   }));
 
 const OrderList = () => {
-  const isMounted = useMounted();
+  const dispatch = useDispatch();
+  const { orderList } = useSelector((state) => state.order);
   const rootRef = useRef(null);
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
   const [sort, setSort] = useState('desc');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
   const [filters, setFilters] = useState({
     query: '',
     status: undefined
@@ -135,23 +128,9 @@ const OrderList = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  const getOrders = useCallback(async () => {
-    try {
-      const data = await orderApi.getOrders();
-
-      if (isMounted()) {
-        setOrders(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
   useEffect(() => {
-      getOrders();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    dispatch(getOrders());
+  }, [dispatch]);
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
@@ -196,8 +175,16 @@ const OrderList = () => {
     });
   };
 
+  const handleApprove = (orderId) => {
+    dispatch(updateStatusOrder(orderId, 'Pagado'));
+    setDrawer({
+      isOpen: false,
+      orderId: undefined
+    });
+  };
+
   // Usually query is done on backend with indexing solutions
-  const filteredOrders = applyFilters(orders, filters);
+  const filteredOrders = applyFilters(orderList, filters);
   const sortedOrders = applySort(filteredOrders, sort);
   const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
 
@@ -205,7 +192,7 @@ const OrderList = () => {
     <>
       <Head>
         <title>
-          Dashboard: Order List | Material Kit Pro
+          Dashboard: Ventas
         </title>
       </Head>
       <Box
@@ -227,16 +214,21 @@ const OrderList = () => {
             >
               <Grid item>
                 <Typography variant="h4">
-                  Orders
+                  Ventas Diarias
                 </Typography>
               </Grid>
               <Grid item>
-                <Button
-                  startIcon={<PlusIcon fontSize="small" />}
-                  variant="contained"
+                <NextLink
+                  href={`/dashboard/orders/new`}
+                  passHref
                 >
-                  Add
-                </Button>
+                  <Button
+                    startIcon={<PlusIcon fontSize="small" />}
+                    variant="contained"
+                  >
+                    Nueva Venta
+                  </Button>
+                </NextLink>
               </Grid>
             </Grid>
             <Tabs
@@ -286,11 +278,11 @@ const OrderList = () => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search by order number"
+                placeholder="Buscar por número de Venta"
               />
             </Box>
             <TextField
-              label="Sort By"
+              label="Ordenar por"
               name="order"
               onChange={handleSortChange}
               select
@@ -323,7 +315,8 @@ const OrderList = () => {
           containerRef={rootRef}
           onClose={handleCloseDrawer}
           open={drawer.isOpen}
-          order={orders.find((order) => order.id === drawer.orderId)}
+          order={orderList.find((order) => order.id === drawer.orderId)}
+          onApprove={handleApprove}
         />
       </Box>
     </>

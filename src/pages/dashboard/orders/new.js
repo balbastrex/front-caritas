@@ -1,15 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useEffect } from 'react';
-import NextLink from 'next/link';
+import {Box, Container, Link, Typography} from '@mui/material';
 import Head from 'next/head';
-import { Box, Container, Link, Typography } from '@mui/material';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { ProductCreateForm } from '../../../components/dashboard/product/product-create-form';
-import {TurnCreateForm} from '../../../components/dashboard/turn/turn-create-form';
-import { gtm } from '../../../lib/gtm';
+import NextLink from 'next/link';
+import {useEffect} from 'react';
+import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
+import {OrderCreateForm} from '../../../components/dashboard/order/order-create-form';
+import {gtm} from '../../../lib/gtm';
 
-const TurnCreate = () => {
+const OrderCreate = () => {
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
@@ -18,7 +17,7 @@ const TurnCreate = () => {
     <>
       <Head>
         <title>
-          Dashboard: Nuevo Turno
+          Dashboard: Nueva Venta
         </title>
       </Head>
       <Box
@@ -31,7 +30,7 @@ const TurnCreate = () => {
         <Container maxWidth="md">
           <Box sx={{ mb: 4 }}>
             <NextLink
-              href="/dashboard/turns"
+              href="/dashboard/orders"
               passHref
             >
               <Link
@@ -47,19 +46,19 @@ const TurnCreate = () => {
                   sx={{ mr: 1 }}
                 />
                 <Typography variant="subtitle2">
-                  Turnos
+                  Ventas
                 </Typography>
               </Link>
             </NextLink>
           </Box>
-          <TurnCreateForm />
+          <OrderCreateForm />
         </Container>
       </Box>
     </>
   );
 };
 
-TurnCreate.getLayout = (page) => (
+OrderCreate.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -67,4 +66,4 @@ TurnCreate.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default TurnCreate;
+export default OrderCreate;

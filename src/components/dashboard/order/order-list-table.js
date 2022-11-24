@@ -12,11 +12,11 @@ import {
 } from '@mui/material';
 import { SeverityPill } from '../../severity-pill';
 
-const severityMap = {
-  complete: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  rejected: 'error'
+export const severityMap = {
+  Pagado: 'success',
+  Cerrado: 'info',
+  Abierto: 'warning',
+  Cancelado: 'error'
 };
 
 export const OrderListTable = (props) => {
@@ -72,22 +72,68 @@ export const OrderListTable = (props) => {
                     {format(order.createdAt, 'd')}
                   </Typography>
                 </Box>
-                <Box sx={{ ml: 2 }}>
+                <Box sx={{ ml: 6 }}>
                   <Typography variant="subtitle2">
-                    {order.number}
+                    NºVenta: {order.id}
                   </Typography>
                   <Typography
                     color="textSecondary"
                     variant="body2"
                   >
-                    Total of
+                    Total
                     {' '}
-                    {numeral(order.totalAmount).format(`${order.currency}0,0.00`)}
+                    {numeral(order.amount).format(`${order.currency}0,0.00`)} €
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 6 }}>
+                  <Typography
+                    variant="subtitle2"
+                  >
+                    {order.marketName}
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    NºEconomato: {order.marketId}
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 6 }}>
+                  <Typography variant="subtitle2">
+                    Usuario:
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    {order.userName}
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 6 }}>
+                  <Typography variant="subtitle2">
+                    Cantidad de Productos:
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    {order.orderLines.length}
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 6 }}>
+                  <Typography variant="subtitle2">
+                    Beneficiario:
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    {order.beneficiaryName}
                   </Typography>
                 </Box>
               </TableCell>
               <TableCell align="right">
-                <SeverityPill color={severityMap[order.status] || 'warning'}>
+                <SeverityPill sx={{ mr: 4 }} color={severityMap[order.status] || 'warning'}>
                   {order.status}
                 </SeverityPill>
               </TableCell>
