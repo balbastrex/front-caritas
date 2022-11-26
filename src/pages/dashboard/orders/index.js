@@ -1,5 +1,6 @@
-import {Box, Button, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {Box, Button, Dialog, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';
+import {PDFViewer} from '@react-pdf/renderer';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useRef, useState} from 'react';
@@ -7,8 +8,11 @@ import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
 import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
+import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
+import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
+import {ViewList as ViewListIcon} from '../../../icons/view-list';
 import {gtm} from '../../../lib/gtm';
 import {getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
@@ -49,8 +53,6 @@ const sortOptions = [
 
 const applyFilters = (orders, filters) => orders.filter((order) => {
   if (filters.query) {
-    // Checks only the order number, but can be extended to support other fields, such as customer
-    // name, email, etc.
     const containsQuery = (order.id.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
     const containsQueryBeneficiary = (order.beneficiaryName || '').toLowerCase().includes(filters.query.toLowerCase());
 
@@ -114,7 +116,8 @@ const OrderList = () => {
   const [sort, setSort] = useState('desc');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  // const [orders, setOrders] = useState([]);
+  const [viewPDF, setViewPDF] = useState(null);
+  const [closeCash, setCloseCash] = useState(false);
   const [filters, setFilters] = useState({
     query: '',
     status: undefined
@@ -183,7 +186,10 @@ const OrderList = () => {
     });
   };
 
-  // Usually query is done on backend with indexing solutions
+  const onPreviewOrder = (order) => {
+    setViewPDF(order);
+  }
+
   const filteredOrders = applyFilters(orderList, filters);
   const sortedOrders = applySort(filteredOrders, sort);
   const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
@@ -216,6 +222,15 @@ const OrderList = () => {
                 <Typography variant="h4">
                   Ventas Diarias
                 </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={() => setCloseCash(true)}
+                  startIcon={<ViewListIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Cierre de Caja
+                </Button>
               </Grid>
               <Grid item>
                 <NextLink
@@ -314,11 +329,112 @@ const OrderList = () => {
         <OrderDrawer
           containerRef={rootRef}
           onClose={handleCloseDrawer}
+          onPreviewPDF={onPreviewOrder}
           open={drawer.isOpen}
           order={orderList.find((order) => order.id === drawer.orderId)}
           onApprove={handleApprove}
         />
       </Box>
+      <Dialog
+        fullScreen
+        open={!!viewPDF}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'background.default',
+              p: 2,
+            }}
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px'
+              }}
+            >
+              <Button
+                startIcon={<ArrowLeftIcon fontSize="small" />}
+                onClick={() => setViewPDF(null)}
+                variant="contained"
+              >
+                Volver
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="h4">
+                Hoja de Pedido {viewPDF?.id} - UF{viewPDF?.beneficiaryFamilyUnit}
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <PDFViewer
+              height="100%"
+              style={{ border: 'none' }}
+              width="100%"
+              showToolbar={false}
+            >
+              {
+                viewPDF && (
+                  <OrderPDF order={viewPDF} />
+                )
+              }
+            </PDFViewer>
+          </Box>
+        </Box>
+      </Dialog>
+      <Dialog
+        fullScreen
+        open={closeCash}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'background.default',
+              p: 2
+            }}
+          >
+            <Button
+              startIcon={<ArrowLeftIcon fontSize="small" />}
+              onClick={() => setCloseCash(null)}
+              variant="contained"
+            >
+              Volver
+            </Button>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <PDFViewer
+              height="100%"
+              style={{ border: 'none' }}
+              width="100%"
+            >
+              {
+                viewPDF && (
+                  <OrderPDF order={viewPDF} />
+                )
+              }
+            </PDFViewer>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 };

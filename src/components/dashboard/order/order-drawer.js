@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
+import {PDFDownloadLink} from '@react-pdf/renderer';
 import {format} from 'date-fns';
 import NextLink from 'next/link';
 import numeral from 'numeral';
@@ -22,7 +23,72 @@ import {PropertyList} from '../../property-list';
 import {PropertyListItem} from '../../property-list-item';
 import {Scrollbar} from '../../scrollbar';
 import {SeverityPill} from '../../severity-pill';
+import {InvoicePDF} from '../invoice/invoice-pdf';
 import {severityMap} from './order-list-table';
+import {OrderPDF} from './order-pdf';
+
+const renderOpenedOrder = ({onApprove, onReject, order}) => {
+  return (
+    <Box
+      sx={{
+        alignItems: 'center',
+        backgroundColor: (theme) => theme.palette.mode === 'dark'
+          ? 'neutral.800'
+          : 'neutral.100',
+        borderRadius: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        px: 3,
+        py: 2.5
+      }}
+    >
+      <Typography
+        color="textSecondary"
+        sx={{ mr: 2 }}
+        variant="overline"
+      >
+        Acciones
+      </Typography>
+      <Box
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          flexWrap: 'wrap',
+          m: -1,
+          '& > button': {
+            m: 1
+          }
+        }}
+      >
+        <Button
+          onClick={() => onApprove(order.id)}
+          size="small"
+          variant="contained"
+        >
+          Pagar Pedido
+        </Button>
+        <Button
+          onClick={onReject}
+          size="small"
+          variant="outlined"
+        >
+          Cancelar
+        </Button>
+        <NextLink
+          href={`/dashboard/orders/${order.id}/edit`}
+          passHref
+        >
+          <Button
+            size="small"
+          >
+            Editar
+          </Button>
+        </NextLink>
+      </Box>
+    </Box>
+  )
+}
 
 const OrderPreview = (props) => {
   const { lgUp, onApprove, onReject, order } = props;
@@ -30,68 +96,7 @@ const OrderPreview = (props) => {
 
   return (
     <>
-      {
-        order && order.status !== 'Pagado' ? (
-          <Box
-            sx={{
-              alignItems: 'center',
-              backgroundColor: (theme) => theme.palette.mode === 'dark'
-                ? 'neutral.800'
-                : 'neutral.100',
-              borderRadius: 1,
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              px: 3,
-              py: 2.5
-            }}
-          >
-            <Typography
-              color="textSecondary"
-              sx={{ mr: 2 }}
-              variant="overline"
-            >
-              Actions
-            </Typography>
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexWrap: 'wrap',
-                m: -1,
-                '& > button': {
-                  m: 1
-                }
-              }}
-            >
-              <Button
-                onClick={() => onApprove(order.id)}
-                size="small"
-                variant="contained"
-              >
-                Pagar Pedido
-              </Button>
-              <Button
-                onClick={onReject}
-                size="small"
-                variant="outlined"
-              >
-                Cancelar
-              </Button>
-              <NextLink
-                href={`/dashboard/orders/${order.id}/edit`}
-                passHref
-              >
-                <Button
-                  size="small"
-                >
-                  Editar
-                </Button>
-              </NextLink>
-            </Box>
-          </Box>
-        ) : null
-      }
+      { order && order.status !== 'Pagado' ? renderOpenedOrder({onApprove, onReject, order}) : null }
 
       <Typography
         sx={{ my: 3 }}
@@ -228,7 +233,7 @@ const OrderDrawerMobile = styled(Drawer)({
 });
 
 export const OrderDrawer = (props) => {
-  const { containerRef, onClose, open, order, onApprove, ...other } = props;
+  const { containerRef, onClose, open, order, onApprove, onPreviewPDF, ...other } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
   const content = order
@@ -251,6 +256,26 @@ export const OrderDrawer = (props) => {
           >
             Nº Venta: {order.id}
           </Typography>
+          <Button
+            onClick={() => onPreviewPDF(order)}
+            size="large"
+            style={{ backgroundColor: 'black' }}
+          >
+            Imprimir
+          </Button>
+          <PDFDownloadLink
+            document={<OrderPDF order={order} />}
+            fileName={`pedido-${order.id}.pdf`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Button
+              size="large"
+              style={{ backgroundColor: 'black' }}
+            >
+              Descargar
+            </Button>
+          </PDFDownloadLink>
+
           <IconButton
             color="inherit"
             onClick={onClose}
@@ -307,6 +332,8 @@ export const OrderDrawer = (props) => {
 OrderDrawer.propTypes = {
   containerRef: PropTypes.any,
   onClose: PropTypes.func,
+  onPreviewPDF: PropTypes.func,
+  onDownloadPDF: PropTypes.func,
   onApprove: PropTypes.func,
   open: PropTypes.bool,
   order: PropTypes.object

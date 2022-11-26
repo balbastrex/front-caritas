@@ -28,10 +28,8 @@ export const OrderCreateForm = ({isEdit, order}) => {
     const orderLines = [...formik.values.orderLines];
     const originalOrderLine = orderLines.find((orderLine) => orderLine.productId === productLine.productId);
     let orderLine = {...originalOrderLine}
-    console.log('==> orderLine ', orderLine)
 
     if (!isEmpty(orderLine)) {
-      console.log('==> entro ', )
       orderLine.units = orderLine.units + 1;
       orderLines[orderLines.indexOf(originalOrderLine)] = orderLine;
     } else {
@@ -42,10 +40,8 @@ export const OrderCreateForm = ({isEdit, order}) => {
         cost: productLine.cost,
         units: 1,
       };
-      console.log('==> newOrderLine ', newOrderLine)
       orderLines.push(newOrderLine);
     }
-    console.log('==>  orderLines', orderLines)
 
     formik.setFieldValue('orderLines', orderLines);
   }
@@ -109,8 +105,6 @@ export const OrderCreateForm = ({isEdit, order}) => {
       }
     }
   });
-
-  console.log(formik.values);
 
   return (
     <form

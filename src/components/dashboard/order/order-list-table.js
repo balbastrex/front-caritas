@@ -1,16 +1,8 @@
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import {Box, Table, TableBody, TableCell, TablePagination, TableRow, Typography} from '@mui/material';
+import {format} from 'date-fns';
 import numeral from 'numeral';
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Typography
-} from '@mui/material';
-import { SeverityPill } from '../../severity-pill';
+import PropTypes from 'prop-types';
+import {SeverityPill} from '../../severity-pill';
 
 export const severityMap = {
   Pagado: 'success',
