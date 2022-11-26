@@ -43,7 +43,6 @@ const applyFilters = (products, filters) => products.filter((product) => {
       return false;
     }
   }
-  console.log('==> filters ', filters)
 
   if (typeof filters.free !== 'undefined') {
     const statusMatched = product.free === filters.free;

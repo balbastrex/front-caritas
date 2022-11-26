@@ -44,25 +44,6 @@ const Login = () => {
         >
           <Card
             elevation={16}
-            sx={{ p: 4, mb: '15px' }}
-          >
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                backgroundColor: 'background.paper',
-                paddingY: '15px'
-              }}
-            >
-              <Typography variant="h3">
-                Gestión Cáritas
-              </Typography>
-            </Box>
-          </Card>
-          <Card
-            elevation={16}
             sx={{ p: 4 }}
           >
             <Box

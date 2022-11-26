@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 // utils
 import axios from '../utils/axios';
 
@@ -68,6 +69,7 @@ export function updateStatusOrder(orderId, status) {
       await axios.put(`/api/v1/order/${orderId}/status/${status}`);
       dispatch(slice.actions.getOrderUpdateSuccess({orderId, status}));
     } catch (error) {
+      toast.error(error.message);
       dispatch(slice.actions.hasError(error));
     }
   };
