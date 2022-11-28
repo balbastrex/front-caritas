@@ -4,11 +4,12 @@ import { useFormik } from 'formik';
 import { Box, Button, FormHelperText, TextField } from '@mui/material';
 import { useAuth } from '../../hooks/use-auth';
 import { useMounted } from '../../hooks/use-mounted';
+import {defaultURLProfile} from './allowed-route-profiles';
 
 export const JWTLogin = (props) => {
   const isMounted = useMounted();
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -28,10 +29,11 @@ export const JWTLogin = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await login(values.email, values.password);
+        const profileId = await login(values.email, values.password);
 
         if (isMounted()) {
-          const returnUrl = router.query.returnUrl || '/dashboard';
+          const url = defaultURLProfile[profileId];
+          const returnUrl = router.query.returnUrl || url;
           router.push(returnUrl).catch(console.error);
         }
       } catch (err) {

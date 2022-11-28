@@ -4,12 +4,14 @@ import {useRouter} from 'next/router';
 import PropTypes from 'prop-types';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useAuth} from '../../hooks/use-auth';
 import {Home as HomeIcon} from '../../icons/home';
 import {Bell as BellIcon} from '../../icons/bell';
 import {Calendar as CalendarIcon} from '../../icons/calendar';
 import {ReceiptTax as ReceiptTaxIcon} from '../../icons/receipt-tax';
 import {ShoppingBag as ShoppingBagIcon} from '../../icons/shopping-bag';
 import {Users as UsersIcon} from '../../icons/users';
+import {isAllowedRouteForProfile, isAllowedSectionForProfile} from '../authentication/allowed-route-profiles';
 import {Scrollbar} from '../scrollbar';
 import {DashboardSidebarSection} from './dashboard-sidebar-section';
 import {OrganizationPopover} from './organization-popover';
@@ -285,6 +287,7 @@ const getSections = (t) => [
 export const DashboardSidebar = (props) => {
   const { onClose, open } = props;
   const router = useRouter();
+  const { user } = useAuth();
   const { t } = useTranslation();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     noSsr: true
@@ -314,6 +317,22 @@ export const DashboardSidebar = (props) => {
   const handleCloseOrganizationsPopover = () => {
     setOpenOrganizationsPopover(false);
   };
+
+  const renderSectionWithProfileID = (section) => {
+
+    return isAllowedSectionForProfile(user.profileId, section.title) && (
+      <DashboardSidebarSection
+        key={section.title}
+        path={router.asPath}
+        sx={{
+          mt: 2,
+          '& + &': {
+            mt: 2
+          }
+        }}
+        {...section} />
+    )
+  }
 
   const content = (
     <>
@@ -391,18 +410,7 @@ export const DashboardSidebar = (props) => {
             }}
           />
           <Box sx={{ flexGrow: 1 }}>
-            {sections.map((section) => (
-              <DashboardSidebarSection
-                key={section.title}
-                path={router.asPath}
-                sx={{
-                  mt: 2,
-                  '& + &': {
-                    mt: 2
-                  }
-                }}
-                {...section} />
-            ))}
+            {sections.map(renderSectionWithProfileID)}
           </Box>
           <Divider
             sx={{

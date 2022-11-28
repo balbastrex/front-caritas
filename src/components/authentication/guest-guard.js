@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../hooks/use-auth';
+import {defaultURLProfile} from './allowed-route-profiles';
 
 export const GuestGuard = (props) => {
   const { children } = props;
@@ -17,7 +18,9 @@ export const GuestGuard = (props) => {
 
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
       if (auth.isAuthenticated && disableGuard !== 'true') {
-        router.push('/dashboard').catch(console.error);
+        const url = defaultURLProfile[auth.user?.profileId];
+        console.log('==> url guestGuard', url)
+        router.push(url).catch(console.error);
       } else {
         setChecked(true);
       }

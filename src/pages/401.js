@@ -1,13 +1,18 @@
+import {useRouter} from 'next/router';
 import { useEffect } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
 import { Box, Button, Container, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import {defaultURLProfile} from '../components/authentication/allowed-route-profiles';
+import {useAuth} from '../hooks/use-auth';
 import { gtm } from '../lib/gtm';
 
 const AuthorizationRequired = () => {
   const theme = useTheme();
+  const { user } = useAuth();
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
+  const backNavigation = user?.profileId ? defaultURLProfile[user.profileId] : '/';
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -17,7 +22,7 @@ const AuthorizationRequired = () => {
     <>
       <Head>
         <title>
-          Error: Authorization Required | Material Kit Pro
+          Error: Autorización Requerida
         </title>
       </Head>
       <Box
@@ -35,7 +40,7 @@ const AuthorizationRequired = () => {
             align="center"
             variant={mobileDevice ? 'h4' : 'h1'}
           >
-            401: Authorization required
+            401: Autorización Requerida
           </Typography>
           <Typography
             align="center"
@@ -43,9 +48,8 @@ const AuthorizationRequired = () => {
             sx={{ mt: 0.5 }}
             variant="subtitle2"
           >
-            You either tried some shady route or you
-            came here by mistake. Whichever it is, try using the
-            navigation.
+            Estás intentando acceder a una página que requiere autorización.
+            Intenta usar los botones de navegación.
           </Typography>
           <Box
             sx={{
@@ -73,14 +77,14 @@ const AuthorizationRequired = () => {
             }}
           >
             <NextLink
-              href="/dashboard"
+              href={backNavigation || '/dashboard'}
               passHref
             >
               <Button
                 component="a"
                 variant="outlined"
               >
-                Back to Dashboard
+                Volver a la página anterior
               </Button>
             </NextLink>
           </Box>

@@ -22,18 +22,18 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const { logout } = useAuth();
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
-  const user = {
-    avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
-    name: 'Anika Visser'
+  let { user } = useAuth();
+
+  user = {
+    ...user,
+    avatar: '/static/mock-images/avatars/avatar_default.jpg',
   };
 
   const handleLogout = async () => {
     try {
       onClose?.();
       await logout();
-      router.push('/').catch(console.error);
+      router.push('/authentication/login').catch(console.error);
     } catch (err) {
       console.error(err);
       toast.error('Unable to logout.');
@@ -75,13 +75,13 @@ export const AccountPopover = (props) => {
           }}
         >
           <Typography variant="body1">
-            {user.name}
+            {user.name} {user.lastName}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body2"
           >
-            Acme Inc
+            {user.email}
           </Typography>
         </Box>
       </Box>
@@ -99,40 +99,6 @@ export const AccountPopover = (props) => {
               primary={(
                 <Typography variant="body1">
                   Profile
-                </Typography>
-              )}
-            />
-          </MenuItem>
-        </NextLink>
-        <NextLink
-          href="/dashboard/account"
-          passHref
-        >
-          <MenuItem component="a">
-            <ListItemIcon>
-              <CogIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              primary={(
-                <Typography variant="body1">
-                  Settings
-                </Typography>
-              )}
-            />
-          </MenuItem>
-        </NextLink>
-        <NextLink
-          href="/dashboard"
-          passHref
-        >
-          <MenuItem component="a">
-            <ListItemIcon>
-              <SwitchHorizontalOutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              primary={(
-                <Typography variant="body1">
-                  Change organization
                 </Typography>
               )}
             />

@@ -9,14 +9,16 @@ import {
   ButtonBase,
   IconButton,
   Toolbar,
-  Tooltip
+  Tooltip, Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import {useAuth} from '../../hooks/use-auth';
 import { Menu as MenuIcon } from '../../icons/menu';
 import { Bell as BellIcon } from '../../icons/bell';
 import { Search as SearchIcon } from '../../icons/search';
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
 import { Users as UsersIcon } from '../../icons/users';
+import {getProfileName} from '../../utils/constants';
 import { AccountPopover } from './account-popover';
 import { ContactsPopover } from './contacts-popover';
 import { ContentSearchDialog } from './content-search-dialog';
@@ -201,8 +203,8 @@ const AccountButton = () => {
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
   const user = {
-    avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
-    name: 'Anika Visser'
+    avatar: '/static/mock-images/avatars/avatar_default.jpg',
+    name: 'User Default'
   };
 
   const handleOpenPopover = () => {
@@ -245,6 +247,7 @@ const AccountButton = () => {
 };
 
 export const DashboardNavbar = (props) => {
+  const { user } = useAuth();
   const { onOpenSidebar, ...other } = props;
 
   return (
@@ -278,6 +281,9 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Usuario: {user.name} {user.lastName} / Perfil: {getProfileName(user.profileId)}
+          </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <LanguageButton />
           <ContentSearchButton />

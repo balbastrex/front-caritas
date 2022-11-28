@@ -1,17 +1,23 @@
 import PropTypes from 'prop-types';
 import { List, ListSubheader } from '@mui/material';
+import {useAuth} from '../../hooks/use-auth';
+import {isAllowedRouteForProfile} from '../authentication/allowed-route-profiles';
 import { DashboardSidebarItem } from './dashboard-sidebar-item';
 
-const renderNavItems = ({ depth = 0, items, path }) => (
+const renderNavItems = ({ depth = 0, items, path, profileId }) => (
   <List disablePadding>
-    {items.reduce((acc, item) => reduceChildRoutes({ acc, depth, item, path }), [])}
+    {items.reduce((acc, item) => reduceChildRoutes({ acc, depth, item, path, profileId }), [])}
   </List>
 );
 
-const reduceChildRoutes = ({ acc, depth, item, path }) => {
+const reduceChildRoutes = ({ acc, depth, item, path, profileId }) => {
   const key = `${item.title}-${depth}`;
   const partialMatch = item.path ? path.includes(item.path) : false;
   const exactMatch = path.split('?')[0] === item.path; // We don't compare query params
+
+  if (!isAllowedRouteForProfile(profileId, item.path)) {
+    return acc;
+  }
 
   if (item.children) {
     acc.push(
@@ -29,7 +35,8 @@ const reduceChildRoutes = ({ acc, depth, item, path }) => {
         {renderNavItems({
           depth: depth + 1,
           items: item.children,
-          path
+          path,
+          profileId
         })}
       </DashboardSidebarItem>
     );
@@ -53,6 +60,7 @@ const reduceChildRoutes = ({ acc, depth, item, path }) => {
 
 export const DashboardSidebarSection = (props) => {
   const { items, path, title, ...other } = props;
+  const { user } = useAuth();
 
   return (
     <List
@@ -75,7 +83,8 @@ export const DashboardSidebarSection = (props) => {
       {...other}>
       {renderNavItems({
         items,
-        path
+        path,
+        profileId: user?.profileId
       })}
     </List>
   );

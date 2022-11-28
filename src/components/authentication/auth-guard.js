@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../hooks/use-auth';
+import {isAllowedRouteForProfile} from './allowed-route-profiles';
 
 export const AuthGuard = (props) => {
   const { children } = props;
@@ -13,7 +14,6 @@ export const AuthGuard = (props) => {
       if (!router.isReady) {
         return;
       }
-
       if (!auth.isAuthenticated) {
         router.push({
           pathname: '/authentication/login',
@@ -28,6 +28,13 @@ export const AuthGuard = (props) => {
 
   if (!checked) {
     return null;
+  }
+
+  if (!isAllowedRouteForProfile(auth.user?.profileId, router.pathname) && router.pathname !== '/') {
+    router.push({
+      pathname: '/401',
+      query: { returnUrl: router.asPath }
+    }).catch(console.error);
   }
 
   // If got here, it means that the redirect did not occur, and that tells us that the user is
