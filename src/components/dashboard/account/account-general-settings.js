@@ -16,7 +16,7 @@ export const AccountGeneralSettings = (props) => {
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
   const user = {
-    avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
+    avatar: '/static/mock-images/avatars/avatar_default.jpg',
     name: 'Anika Visser'
   };
 

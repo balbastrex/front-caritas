@@ -123,6 +123,8 @@ export const AuthProvider = (props) => {
         user
       }
     });
+
+    return user.profileId
   };
 
   const logout = async () => {

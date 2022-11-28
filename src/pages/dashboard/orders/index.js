@@ -12,7 +12,6 @@ import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
 import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
-import {ViewList as ViewListIcon} from '../../../icons/view-list';
 import {gtm} from '../../../lib/gtm';
 import {getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
@@ -21,10 +20,6 @@ const tabs = [
   {
     label: 'Todas',
     value: 'all'
-  },
-  {
-    label: 'Pendientes',
-    value: 'Cerrado'
   },
   {
     label: 'Abiertas',
@@ -117,7 +112,6 @@ const OrderList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [viewPDF, setViewPDF] = useState(null);
-  const [closeCash, setCloseCash] = useState(false);
   const [filters, setFilters] = useState({
     query: '',
     status: undefined
@@ -222,15 +216,6 @@ const OrderList = () => {
                 <Typography variant="h4">
                   Ventas Diarias
                 </Typography>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={() => setCloseCash(true)}
-                  startIcon={<ViewListIcon fontSize="small" />}
-                  variant="contained"
-                >
-                  Cierre de Caja
-                </Button>
               </Grid>
               <Grid item>
                 <NextLink
@@ -385,46 +370,6 @@ const OrderList = () => {
               style={{ border: 'none' }}
               width="100%"
               showToolbar={false}
-            >
-              {
-                viewPDF && (
-                  <OrderPDF order={viewPDF} />
-                )
-              }
-            </PDFViewer>
-          </Box>
-        </Box>
-      </Dialog>
-      <Dialog
-        fullScreen
-        open={closeCash}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: 'background.default',
-              p: 2
-            }}
-          >
-            <Button
-              startIcon={<ArrowLeftIcon fontSize="small" />}
-              onClick={() => setCloseCash(null)}
-              variant="contained"
-            >
-              Volver
-            </Button>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <PDFViewer
-              height="100%"
-              style={{ border: 'none' }}
-              width="100%"
             >
               {
                 viewPDF && (

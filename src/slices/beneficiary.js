@@ -91,7 +91,7 @@ export function getBeneficiariesSelector() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/v1/beneficiary/selector');
+      const response = await axios.get('/api/v1/beneficiary-selector');
       dispatch(slice.actions.getBeneficiariesSelectorSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
