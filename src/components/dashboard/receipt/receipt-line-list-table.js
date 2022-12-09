@@ -14,8 +14,9 @@ import {
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {Trash as TrashIcon} from '../../../icons/trash';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
-export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
+export const ReceiptLineListTable = ({ receiptLines, handleRemoveLine, handleRemoveProduct }) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -42,38 +43,47 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
                 Cantidad
               </TableCell>
               <TableCell>
-                Precio
+                Precio (Sin IVA)
               </TableCell>
               <TableCell>
+                Total (IVA incluido)
+              </TableCell>
+              <TableCell align="center">
                 Borrar Linea
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderLines.map((orderLine) => (
+            {receiptLines.map((receiptLine) => (
               <TableRow
                 hover
-                key={orderLine.productId}
+                key={receiptLine.productId}
               >
                 <TableCell>
                   <Typography
                     color="textPrimary"
                     variant="subtitle2"
                   >
-                    {orderLine.productId}
+                    {receiptLine.productId}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  {orderLine.description}
-                </TableCell>
-                <TableCell>
-                  {orderLine.units}
-                </TableCell>
-                <TableCell>
-                  {numeral(orderLine.price).format(`0,0.00`)} €
+                  {receiptLine.description}
                 </TableCell>
                 <TableCell align="center">
-                  <IconButton onClick={() => handleRemoveLine(orderLine.productId)} >
+                  {receiptLine.units}
+                </TableCell>
+                <TableCell align="right">
+                  {numeral(receiptLine.cost).format(`0,0.00`)} €
+                </TableCell>
+                <TableCell align="right">
+                  {numeral(receiptLine.totalCost).format(`0,0.00`)} €
+                </TableCell>
+                <TableCell align="center">
+                  <IconButton onClick={() => handleRemoveLine(receiptLine.productId)} >
+                    <RemoveCircleIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton onClick={() => handleRemoveProduct(receiptLine.productId)} >
                     <TrashIcon fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -86,11 +96,13 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
   );
 };
 
-OrderLineListTable.propTypes = {
-  orderLines: PropTypes.arrayOf(
+ReceiptLineListTable.propTypes = {
+  receiptLines: PropTypes.arrayOf(
     PropTypes.shape({
-      productId: PropTypes.number,
-      quantity: PropTypes.number,
+      id: PropTypes.number,
+      description: PropTypes.string,
+      units: PropTypes.number,
+      cost: PropTypes.number,
     })
   ).isRequired,
   handleRemoveLine: PropTypes.func.isRequired

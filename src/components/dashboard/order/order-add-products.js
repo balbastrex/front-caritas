@@ -90,7 +90,6 @@ const OrderAddProducts = ({ handleAddProduct }) => {
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
-    console.log('==> value ', value)
     setFilters((prevState) => ({
       ...prevState,
       free: value === 'all' || value === 'stock' ? undefined : true,
