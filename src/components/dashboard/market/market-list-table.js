@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import { toast } from 'react-hot-toast';
@@ -25,7 +25,7 @@ import {
 import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
 import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
 import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
-import { updateMarket } from '../../../slices/market';
+import {createMarket, updateMarket} from '../../../slices/market';
 import {useDispatch} from '../../../store';
 import { Scrollbar } from '../../scrollbar';
 
@@ -48,11 +48,19 @@ export const MarketListTable = (props) => {
     markets,
     marketsCount,
     rowsPerPage,
+    openNewMarket,
+    onCreatedNewMarket,
     ...other
   } = props;
   const dispatch = useDispatch();
   const [openMarket, setOpenMarket] = useState(null);
   const [editMarket, setEditMarket] = useState(null);
+
+  useEffect(() => {
+    if (openNewMarket) {
+      handleOpenMarket(0)
+    }
+  }, [openNewMarket])
 
   const handleOpenMarket = (marketId) => {
     setOpenMarket((prevValue) => (prevValue === marketId ? null : marketId));
@@ -62,6 +70,13 @@ export const MarketListTable = (props) => {
   const handleUpdateProduct = async (market) => {
     setOpenMarket(null);
 
+    if (editMarket.id === 0) {
+      dispatch(createMarket(editMarket));
+      onCreatedNewMarket(true);
+      toast.success('Economato creado.');
+      return;
+    }
+
     dispatch(updateMarket(editMarket));
 
     toast.success('Economato actualizado.');
@@ -69,6 +84,7 @@ export const MarketListTable = (props) => {
 
   const handleCancelEdit = () => {
     setOpenMarket(null);
+    onCreatedNewMarket(false);
   };
 
   const handleDeleteProduct = () => {
@@ -93,7 +109,7 @@ export const MarketListTable = (props) => {
                 Nombre
               </TableCell>
               <TableCell>
-                P.Base
+                1ª Persona
               </TableCell>
               <TableCell>
                 Inc.Adulto
@@ -434,7 +450,9 @@ export const MarketListTable = (props) => {
                             type="submit"
                             variant="contained"
                           >
-                            Actualizar
+                            {
+                              market.id === 0 ? 'Crear' : 'Actualizar'
+                            }
                           </Button>
                           <Button
                             onClick={handleCancelEdit}
@@ -481,6 +499,8 @@ MarketListTable.propTypes = {
   marketsCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
+  onCreatedNewMarket: PropTypes.func,
+  openNewMarket: PropTypes.bool,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired
 };
