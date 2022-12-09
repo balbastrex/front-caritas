@@ -116,3 +116,19 @@ export function updateMarket(market) {
     }
   };
 }
+
+export function createMarket(market) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.post('/api/v1/market/', {
+        ...market
+      })
+
+      const response = await axios.get('/api/v1/market');
+      dispatch(slice.actions.getMarketsListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

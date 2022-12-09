@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { Box, Button, Card, Container, Grid, Typography } from '@mui/material';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
+import {useAuth} from '../../../hooks/use-auth';
 import { useDispatch, useSelector } from '../../../store/index';
 import { AuthGuard } from '../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
@@ -58,6 +58,10 @@ const MarketList = () => {
   const { marketList } = useSelector((state) => state.market);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [markets, setMarkets] = useState(marketList);
+  const [openNew, setOpenNew] = useState(false);
+  const [disableNewButton, setDisableNewButton] = useState(true);
+  const { user: { profileId } } = useAuth();
   const [filters, setFilters] = useState({
     name: undefined,
     category: [],
@@ -70,9 +74,16 @@ const MarketList = () => {
   });
 
   useEffect(() => {
+    setMarkets(marketList);
+  }, [marketList]);
+
+  useEffect(() => {
       dispatch(getMarkets());
       }, [dispatch]);
 
+  useEffect(() => {
+    setDisableNewButton(profileId !== 1)
+  }, [profileId]);
   const handleFiltersChange = (filters) => {
     setFilters(filters);
   };
@@ -85,8 +96,35 @@ const MarketList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const handleNewMarket = () => {
+    const newMarket = {
+      id: 0,
+      name: 'Nuevo Economato',
+      address: '',
+      email: '',
+      phone: '',
+      distributionType: 'dias',
+      expenses: 0,
+      productPercentage: 0,
+      budgetBase: 0,
+      budgetAdult: 0,
+      budgetChild: 0,
+    }
+    setMarkets([newMarket, ...markets]);
+    setOpenNew(true);
+    setDisableNewButton(true);
+  }
+
+  const handleCreatedMarket = (isCreated) => {
+    setDisableNewButton(false);
+    setOpenNew(false);
+    if (!isCreated) {
+      setMarkets(markets.filter((market) => market.id !== 0));
+    }
+  }
+
   // Usually query is done on backend with indexing solutions
-  const filteredMarkets = applyFilters(marketList, filters);
+  const filteredMarkets = applyFilters(markets, filters);
   const paginatedMarkets = applyPagination(filteredMarkets, page, rowsPerPage);
 
   return (
@@ -116,18 +154,20 @@ const MarketList = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <NextLink
+                {/*<NextLink
                   href="/dashboard/markets/new"
                   passHref
-                >
+                >*/}
                   <Button
+                    disabled={disableNewButton}
                     component="a"
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"
+                    onClick={handleNewMarket}
                   >
                     Nuevo
                   </Button>
-                </NextLink>
+                {/*</NextLink>*/}
               </Grid>
             </Grid>
           </Box>
@@ -140,6 +180,9 @@ const MarketList = () => {
               markets={paginatedMarkets}
               marketsCount={filteredMarkets.length}
               rowsPerPage={rowsPerPage}
+              openNewMarket={openNew}
+              onCreatedNewMarket={handleCreatedMarket}
+
             />
           </Card>
         </Container>
