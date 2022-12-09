@@ -18,6 +18,8 @@ import turnReducer from '../slices/turn';
 import productReducer from '../slices/product';
 import serviceReducer from '../slices/service';
 import orderReducer from '../slices/order';
+import receiptReducer from '../slices/receipt';
+import providerReducer from '../slices/provider';
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -39,4 +41,6 @@ export const rootReducer = combineReducers({
   product: productReducer,
   service: serviceReducer,
   order: orderReducer,
+  receipt: receiptReducer,
+  provider: providerReducer,
 });

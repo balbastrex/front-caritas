@@ -232,7 +232,7 @@ const AccountButton = () => {
             height: 40,
             width: 40
           }}
-          src={user.avatar}
+          src={user?.avatar}
         >
           <UserCircleIcon fontSize="small" />
         </Avatar>
@@ -282,7 +282,7 @@ export const DashboardNavbar = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Usuario: {user.name} {user.lastName} / Perfil: {getProfileName(user.profileId)}
+            Usuario: {user?.name} {user?.lastName} / Perfil: {getProfileName(user?.profileId)}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <LanguageButton />

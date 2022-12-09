@@ -19,7 +19,6 @@ export const GuestGuard = (props) => {
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
       if (auth.isAuthenticated && disableGuard !== 'true') {
         const url = defaultURLProfile[auth.user?.profileId];
-        console.log('==> url guestGuard', url)
         router.push(url).catch(console.error);
       } else {
         setChecked(true);

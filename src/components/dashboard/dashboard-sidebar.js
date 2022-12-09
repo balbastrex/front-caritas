@@ -102,24 +102,24 @@ const getSections = (t) => [
         title: t('Productos'),
         icon: <ReceiptTaxIcon fontSize="small" />,
         path: '/dashboard/products',
-      },
-      {
-        title: t('Ventas'),
-        path: '/dashboard/orders',
-        icon: <ReceiptTaxIcon fontSize="small" />,
         children: [
           {
             title: t('Listado'),
-            path: '/dashboard/orders'
+            path: '/dashboard/products'
           },
           {
-            title: t('Details'),
-            path: '/dashboard/orders/1'
+            title: t('Entradas'),
+            path: '/dashboard/receipts'
           }
         ]
       },
       {
-        title: t('Facturas'),
+        title: t('Ventas'),
+        icon: <ReceiptTaxIcon fontSize="small" />,
+        path: '/dashboard/orders',
+      },
+      {
+        title: t('Historico Ventas'),
         path: '/dashboard/invoices',
         icon: <ReceiptTaxIcon fontSize="small" />,
         children: [
@@ -320,7 +320,7 @@ export const DashboardSidebar = (props) => {
 
   const renderSectionWithProfileID = (section) => {
 
-    return isAllowedSectionForProfile(user.profileId, section.title) && (
+    return isAllowedSectionForProfile(user?.profileId, section.title) && (
       <DashboardSidebarSection
         key={section.title}
         path={router.asPath}
