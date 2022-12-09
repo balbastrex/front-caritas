@@ -1,8 +1,3 @@
-import NextLink from 'next/link';
-import { Fragment, useState } from 'react';
-import numeral from 'numeral';
-import PropTypes from 'prop-types';
-import { toast } from 'react-hot-toast';
 import {
   Box,
   Button,
@@ -10,9 +5,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  InputAdornment,
-  LinearProgress,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -20,26 +12,18 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  Typography
+  Typography,
 } from '@mui/material';
-import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
-import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
-import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
-import { updateMarket } from '../../../slices/market';
-import {updateParish} from '../../../slices/parish';
+import NextLink from 'next/link';
+import PropTypes from 'prop-types';
+import {Fragment, useEffect, useState} from 'react';
+import {toast} from 'react-hot-toast';
+import {ArrowRight as ArrowRightIcon} from '../../../icons/arrow-right';
+import {ChevronDown as ChevronDownIcon} from '../../../icons/chevron-down';
+import {ChevronRight as ChevronRightIcon} from '../../../icons/chevron-right';
+import {createParish, updateParish} from '../../../slices/parish';
 import {useDispatch} from '../../../store';
-import { Scrollbar } from '../../scrollbar';
-
-const distributionType = [
-  {
-    label: 'Dias',
-    value: 'dias'
-  },
-  {
-    label: 'Presupuesto',
-    value: 'presupuesto'
-  }
-];
+import {Scrollbar} from '../../scrollbar';
 
 export const ParishListTable = (props) => {
   const {
@@ -49,11 +33,19 @@ export const ParishListTable = (props) => {
     parishes,
     parishesCount,
     rowsPerPage,
+    openNew,
+    onCreatedNew,
     ...other
   } = props;
   const dispatch = useDispatch();
   const [openParish, setOpenParish] = useState(null);
   const [editParish, setEditParish] = useState(null);
+
+  useEffect(() => {
+    if (openNew) {
+      handleOpenParish(0)
+    }
+  }, [openNew])
 
   const handleOpenParish = (parishId) => {
     setOpenParish((prevValue) => (prevValue === parishId ? null : parishId));
@@ -63,6 +55,13 @@ export const ParishListTable = (props) => {
   const handleUpdateProduct = async (parish) => {
     setOpenParish(null);
 
+    if (editParish.id === 0) {
+      dispatch(createParish(editParish));
+      onCreatedNew(true);
+      toast.success('Parroquia creada.');
+      return;
+    }
+
     dispatch(updateParish(editParish));
 
     toast.success('Parroquia actualizada.');
@@ -70,6 +69,7 @@ export const ParishListTable = (props) => {
 
   const handleCancelEdit = () => {
     setOpenParish(null);
+    onCreatedNew(false);
   };
 
   const handleDeleteProduct = () => {
@@ -314,7 +314,9 @@ export const ParishListTable = (props) => {
                             type="submit"
                             variant="contained"
                           >
-                            Actualizar
+                            {
+                              parish.id === 0 ? 'Crear' : 'Actualizar'
+                            }
                           </Button>
                           <Button
                             onClick={handleCancelEdit}

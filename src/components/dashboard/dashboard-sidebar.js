@@ -118,7 +118,7 @@ const getSections = (t) => [
         icon: <ReceiptTaxIcon fontSize="small" />,
         path: '/dashboard/orders',
       },
-      {
+      /*{
         title: t('Historico Ventas'),
         path: '/dashboard/invoices',
         icon: <ReceiptTaxIcon fontSize="small" />,
@@ -132,7 +132,7 @@ const getSections = (t) => [
             path: '/dashboard/invoices/1'
           }
         ]
-      },
+      },*/
       {
         title: t('Turnos'),
         path: '/dashboard/turns',
