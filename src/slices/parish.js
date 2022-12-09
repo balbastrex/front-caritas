@@ -97,3 +97,19 @@ export function updateParish(parish) {
     }
   };
 }
+
+export function createParish(parish) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.post('/api/v1/parish', {
+        ...parish
+      })
+
+      const response = await axios.get('/api/v1/parish');
+      dispatch(slice.actions.getParishesListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

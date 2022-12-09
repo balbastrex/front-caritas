@@ -10,6 +10,7 @@ import {MarketListTable} from '../../../components/dashboard/market/market-list-
 import { Plus as PlusIcon } from '../../../icons/plus';
 import { gtm } from '../../../lib/gtm';
 import {getMarkets} from '../../../slices/market';
+import {UserProfiles} from '../../../utils/constants';
 
 const applyFilters = (products, filters) => products.filter((product) => {
   if (filters.name) {
@@ -61,7 +62,7 @@ const MarketList = () => {
   const [markets, setMarkets] = useState(marketList);
   const [openNew, setOpenNew] = useState(false);
   const [disableNewButton, setDisableNewButton] = useState(true);
-  const { user: { profileId } } = useAuth();
+  const { user } = useAuth();
   const [filters, setFilters] = useState({
     name: undefined,
     category: [],
@@ -82,7 +83,7 @@ const MarketList = () => {
       }, [dispatch]);
 
   useEffect(() => {
-    setDisableNewButton(profileId !== 1)
+    setDisableNewButton(user?.profileId !== UserProfiles.ADMINISTRADOR)
   }, [profileId]);
   const handleFiltersChange = (filters) => {
     setFilters(filters);
@@ -154,20 +155,15 @@ const MarketList = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                {/*<NextLink
-                  href="/dashboard/markets/new"
-                  passHref
-                >*/}
-                  <Button
-                    disabled={disableNewButton}
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                    onClick={handleNewMarket}
-                  >
-                    Nuevo
-                  </Button>
-                {/*</NextLink>*/}
+                <Button
+                  disabled={disableNewButton}
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                  onClick={handleNewMarket}
+                >
+                  Nuevo
+                </Button>
               </Grid>
             </Grid>
           </Box>
