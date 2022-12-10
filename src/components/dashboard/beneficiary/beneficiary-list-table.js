@@ -1,6 +1,6 @@
 import {format} from 'date-fns';
 import NextLink from 'next/link';
-import { Fragment, useState } from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-hot-toast';
 import {
@@ -23,7 +23,7 @@ import {
 import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
 import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
 import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
-import {updateBeneficiary} from '../../../slices/beneficiary';
+import {createBeneficiary, updateBeneficiary} from '../../../slices/beneficiary';
 import {useDispatch} from '../../../store';
 import { Scrollbar } from '../../scrollbar';
 
@@ -56,11 +56,19 @@ export const BeneficiaryListTable = (props) => {
     beneficiaries,
     beneficiariesCount,
     rowsPerPage,
+    openNew,
+    onCreatedNew,
     ...other
   } = props;
   const dispatch = useDispatch();
   const [openBeneficiary, setOpenBeneficiary] = useState(null);
   const [editBeneficiary, setEditBeneficiary] = useState(null);
+
+  useEffect(() => {
+    if (openNew) {
+      handleOpenBeneficiary(0)
+    }
+  }, [openNew])
 
   const handleOpenBeneficiary = (beneficiaryId) => {
     setOpenBeneficiary((prevValue) => (prevValue === beneficiaryId ? null : beneficiaryId));
@@ -70,6 +78,13 @@ export const BeneficiaryListTable = (props) => {
   const handleUpdateBeneficiary = async () => {
     setOpenBeneficiary(null);
 
+    if (editBeneficiary.id === 0) {
+      dispatch(createBeneficiary(editBeneficiary));
+      onCreatedNew(true);
+      toast.success('Beneficiario actualizado.');
+      return;
+    }
+
     dispatch(updateBeneficiary(editBeneficiary));
 
     toast.success('Beneficiario actualizado.');
@@ -77,6 +92,7 @@ export const BeneficiaryListTable = (props) => {
 
   const handleCancelEdit = () => {
     setOpenBeneficiary(null);
+    onCreatedNew(false);
   };
 
   const handleDeleteBeneficiary = () => {
@@ -104,6 +120,9 @@ export const BeneficiaryListTable = (props) => {
                 Nombre
               </TableCell>
               <TableCell>
+                Parroquia
+              </TableCell>
+              <TableCell>
                 Caducidad
               </TableCell>
               <TableCell>
@@ -111,9 +130,6 @@ export const BeneficiaryListTable = (props) => {
               </TableCell>
               <TableCell>
                 U.F.
-              </TableCell>
-              <TableCell align="right">
-                Actions
               </TableCell>
             </TableRow>
           </TableHead>
@@ -169,23 +185,16 @@ export const BeneficiaryListTable = (props) => {
                       </Box>
                     </TableCell>
                     <TableCell>
+                      {beneficiary.parishName}
+                    </TableCell>
+                    <TableCell>
                       {format(new Date(beneficiary.expires), 'dd/MM/yyyy')}
                     </TableCell>
                     <TableCell>
-                      {beneficiary.expires}
+                      {beneficiary.budget}
                     </TableCell>
                     <TableCell>
                       {beneficiary.familyUnit}
-                    </TableCell>
-                    <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/beneficiaries/${beneficiary.id}`}
-                        passHref
-                      >
-                        <IconButton component="a">
-                          <ArrowRightIcon fontSize="small" />
-                        </IconButton>
-                      </NextLink>
                     </TableCell>
                   </TableRow>
                   {open && (
@@ -850,7 +859,9 @@ export const BeneficiaryListTable = (props) => {
                             type="submit"
                             variant="contained"
                           >
-                            Actualizar
+                            {
+                              beneficiary.id === 0 ? 'Crear' : 'Actualizar'
+                            }
                           </Button>
                           <Button
                             onClick={handleCancelEdit}
@@ -859,7 +870,7 @@ export const BeneficiaryListTable = (props) => {
                           >
                             Cancelar
                           </Button>
-                          <Button
+                          {/*<Button
                             onClick={handleDeleteBeneficiary}
                             color="error"
                             sx={{
@@ -868,7 +879,7 @@ export const BeneficiaryListTable = (props) => {
                             }}
                           >
                             Borrar Beneficiario
-                          </Button>
+                          </Button>*/}
                         </Box>
                       </TableCell>
                     </TableRow>

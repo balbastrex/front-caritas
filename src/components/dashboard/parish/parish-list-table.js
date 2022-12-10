@@ -325,7 +325,7 @@ export const ParishListTable = (props) => {
                           >
                             Cancelar
                           </Button>
-                          <Button
+                          {/*<Button
                             onClick={handleDeleteProduct}
                             color="error"
                             sx={{
@@ -334,7 +334,7 @@ export const ParishListTable = (props) => {
                             }}
                           >
                             Borrar Parroquia
-                          </Button>
+                          </Button>*/}
                         </Box>
                       </TableCell>
                     </TableRow>

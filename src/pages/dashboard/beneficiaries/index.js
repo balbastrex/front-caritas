@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
+import {Box, Button, Card, Container, Grid, Typography} from '@mui/material';
 import Head from 'next/head';
-import NextLink from 'next/link';
-import { Box, Button, Card, Container, Grid, Typography } from '@mui/material';
+import {useEffect, useState} from 'react';
+import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
+import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
+import {useAuth} from '../../../hooks/use-auth';
+import {Plus as PlusIcon} from '../../../icons/plus';
+import {gtm} from '../../../lib/gtm';
 import {getAuthorizationTypes} from '../../../slices/authorizationType';
 import {getBeneficiaries} from '../../../slices/beneficiary';
 import {getCitizenTypes} from '../../../slices/citizenType';
@@ -15,12 +19,8 @@ import {getFamilyTypes} from '../../../slices/familyType';
 import {getGuardianshipTypes} from '../../../slices/guardianshipType';
 import {getParishes} from '../../../slices/parish';
 import {getTurns} from '../../../slices/turn';
-import { useDispatch, useSelector } from '../../../store/index';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { Plus as PlusIcon } from '../../../icons/plus';
-import { gtm } from '../../../lib/gtm';
-import { getMarkets } from '../../../slices/market';
+import {useDispatch, useSelector} from '../../../store/index';
+import {UserProfiles} from '../../../utils/constants';
 
 const applyFilters = (products, filters) => products.filter((product) => {
   if (filters.name) {
@@ -77,6 +77,10 @@ const BeneficiariesList = () => {
   const { authorizationTypeList } = useSelector((state) => state.authorizationtype);
   const { parishList } = useSelector((state) => state.parish);
   const { turnList } = useSelector((state) => state.turn);
+  const [beneficiaries, setBeneficiaries] = useState(beneficiaryList);
+  const [openNew, setOpenNew] = useState(false);
+  const [disableNewButton, setDisableNewButton] = useState(true);
+  const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({
@@ -104,6 +108,14 @@ const BeneficiariesList = () => {
       dispatch(getTurns());
       }, [dispatch]);
 
+  useEffect(() => {
+    setBeneficiaries(beneficiaryList);
+  }, [beneficiaryList]);
+
+  useEffect(() => {
+    setDisableNewButton(user?.profileId !== UserProfiles.DIRECTOR_ECONOMATO && user?.profileId !== UserProfiles.GESTOR_PARROQUIA);
+  }, [user]);
+
   const handleFiltersChange = (filters) => {
     setFilters(filters);
   };
@@ -116,8 +128,57 @@ const BeneficiariesList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const handleNewBeneficiary = () => {
+    const newBeneficiary = {
+      id: 0,
+      license: 0,
+      expires: '2030-10-10',
+      cif: '',
+      name: '',
+      lastname1: '',
+      lastname2: '',
+      nationalityId: 0,
+      gender: '',
+      birthdate: '',
+      sice: '',
+      address: '',
+      state: '',
+      city: '',
+      zip: '',
+      email: '',
+      phone: 666666666,
+      free: true,
+      homeless: false,
+      familyTypeId: 0,
+      adults: 0,
+      minors: 0,
+      childrenUnder18: 0,
+      childrenOver18: 0,
+      gratuitous: 0,
+      citizenTypeId: 0,
+      civilStateTypeId: 0,
+      employmentTypeId: 0,
+      guardianshipTypeId: 0,
+      educationTypeId: 0,
+      authorizationTypeId: 0,
+      parishId: parishList[0].id,
+      turnId: turnList[0].id,
+    }
+    setBeneficiaries([newBeneficiary, ...beneficiaries]);
+    setOpenNew(true);
+    setDisableNewButton(true);
+  }
+
+  const handleCreatedBeneficiary = (isCreated) => {
+    setDisableNewButton(false);
+    setOpenNew(false);
+    if (!isCreated) {
+      setBeneficiaries(beneficiaries.filter((beneficiary) => beneficiary.id !== 0));
+    }
+  }
+
   // Usually query is done on backend with indexing solutions
-  const filteredBeneficiaries = applyFilters(beneficiaryList, filters);
+  const filteredBeneficiaries = applyFilters(beneficiaries, filters);
   const paginatedBeneficiaries = applyPagination(filteredBeneficiaries, page, rowsPerPage);
 
   return (
@@ -147,18 +208,15 @@ const BeneficiariesList = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <NextLink
-                  href="/dashboard/beneficiaries/new"
-                  passHref
+                <Button
+                  disabled={disableNewButton}
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                  onClick={handleNewBeneficiary}
                 >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
+                  Nuevo
+                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -181,6 +239,8 @@ const BeneficiariesList = () => {
               beneficiaries={paginatedBeneficiaries}
               beneficiariesCount={filteredBeneficiaries.length}
               rowsPerPage={rowsPerPage}
+              openNew={openNew}
+              onCreatedNew={handleCreatedBeneficiary}
             />
           </Card>
         </Container>

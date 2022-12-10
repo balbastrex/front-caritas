@@ -71,6 +71,22 @@ export function getBeneficiaryById(beneficiaryId) {
   };
 }
 
+export function createBeneficiary(beneficiary) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.post('/api/v1/beneficiary', {
+        ...beneficiary
+      })
+
+      const response = await axios.get('/api/v1/beneficiary');
+      dispatch(slice.actions.getBeneficiariesListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function updateBeneficiary(beneficiary) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
