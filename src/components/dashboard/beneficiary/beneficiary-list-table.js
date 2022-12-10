@@ -81,7 +81,7 @@ export const BeneficiaryListTable = (props) => {
     if (editBeneficiary.id === 0) {
       dispatch(createBeneficiary(editBeneficiary));
       onCreatedNew(true);
-      toast.success('Beneficiario actualizado.');
+      toast.success('Beneficiario creado.');
       return;
     }
 

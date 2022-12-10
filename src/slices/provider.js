@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   error: false,
   providerList: [],
+  provider: {},
 };
 
 const slice = createSlice({
@@ -27,6 +28,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.providerList = action.payload;
     },
+
+    getProviderSuccess(state, action) {
+      state.isLoading = false;
+      state.provider = action.payload;
+    },
   }
 });
 
@@ -41,6 +47,18 @@ export function getProviders() {
     try {
       const response = await axios.get('/api/v1/provider');
       dispatch(slice.actions.getProviderListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getProviderById(providerId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/provider/${providerId}`);
+      dispatch(slice.actions.getProviderSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
