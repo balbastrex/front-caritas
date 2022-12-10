@@ -84,7 +84,7 @@ const MarketList = () => {
 
   useEffect(() => {
     setDisableNewButton(user?.profileId !== UserProfiles.ADMINISTRADOR)
-  }, [profileId]);
+  }, [user]);
   const handleFiltersChange = (filters) => {
     setFilters(filters);
   };

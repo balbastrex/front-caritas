@@ -461,7 +461,7 @@ export const MarketListTable = (props) => {
                           >
                             Cancelar
                           </Button>
-                          <Button
+                          {/*<Button
                             onClick={handleDeleteProduct}
                             color="error"
                             sx={{
@@ -470,7 +470,7 @@ export const MarketListTable = (props) => {
                             }}
                           >
                             Borrar Economato
-                          </Button>
+                          </Button>*/}
                         </Box>
                       </TableCell>
                     </TableRow>

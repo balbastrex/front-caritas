@@ -30,6 +30,7 @@ export const AuthGuard = (props) => {
     return null;
   }
 
+  console.log('==> router.pathname ', router.pathname)
   if (!isAllowedRouteForProfile(auth.user?.profileId, router.pathname) && router.pathname !== '/') {
     router.push({
       pathname: '/401',

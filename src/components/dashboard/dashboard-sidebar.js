@@ -11,7 +11,7 @@ import {Calendar as CalendarIcon} from '../../icons/calendar';
 import {ReceiptTax as ReceiptTaxIcon} from '../../icons/receipt-tax';
 import {ShoppingBag as ShoppingBagIcon} from '../../icons/shopping-bag';
 import {Users as UsersIcon} from '../../icons/users';
-import {isAllowedRouteForProfile, isAllowedSectionForProfile} from '../authentication/allowed-route-profiles';
+import {isAllowedSectionForProfile} from '../authentication/allowed-route-profiles';
 import {Scrollbar} from '../scrollbar';
 import {DashboardSidebarSection} from './dashboard-sidebar-section';
 import {OrganizationPopover} from './organization-popover';
