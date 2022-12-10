@@ -1,3 +1,12 @@
+import BusinessIcon from '@mui/icons-material/Business';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ChurchIcon from '@mui/icons-material/Church';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import {Box, Divider, Drawer, Typography, useMediaQuery} from '@mui/material';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
@@ -6,10 +15,6 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../hooks/use-auth';
 import {Home as HomeIcon} from '../../icons/home';
-import {Bell as BellIcon} from '../../icons/bell';
-import {Calendar as CalendarIcon} from '../../icons/calendar';
-import {ReceiptTax as ReceiptTaxIcon} from '../../icons/receipt-tax';
-import {ShoppingBag as ShoppingBagIcon} from '../../icons/shopping-bag';
 import {Users as UsersIcon} from '../../icons/users';
 import {isAllowedSectionForProfile} from '../authentication/allowed-route-profiles';
 import {Scrollbar} from '../scrollbar';
@@ -67,7 +72,7 @@ const getSections = (t) => [
       {
         title: t('Economatos'),
         path: '/dashboard/markets',
-        icon: <UsersIcon fontSize="small" />,
+        icon: <StorefrontIcon fontSize="small" />,
       },
       /*{
         title: t('customers'),
@@ -91,7 +96,7 @@ const getSections = (t) => [
       {
         title: t('Parroquias'),
         path: '/dashboard/parishes',
-        icon: <ShoppingBagIcon fontSize="small" />,
+        icon: <ChurchIcon fontSize="small" />,
       },
       {
         title: t('Beneficiarios'),
@@ -100,22 +105,24 @@ const getSections = (t) => [
       },
       {
         title: t('Productos'),
-        icon: <ReceiptTaxIcon fontSize="small" />,
+        icon: <ViewHeadlineIcon fontSize="small" />,
         path: '/dashboard/products',
         children: [
           {
             title: t('Listado'),
-            path: '/dashboard/products'
+            path: '/dashboard/products',
+            icon: <SummarizeIcon fontSize="small" />,
           },
           {
             title: t('Entradas'),
-            path: '/dashboard/receipts'
+            path: '/dashboard/receipts',
+            icon: <ReceiptIcon fontSize="small" />,
           }
         ]
       },
       {
         title: t('Ventas'),
-        icon: <ReceiptTaxIcon fontSize="small" />,
+        icon: <ShoppingCartCheckoutIcon fontSize="small" />,
         path: '/dashboard/orders',
       },
       /*{
@@ -136,12 +143,17 @@ const getSections = (t) => [
       {
         title: t('Turnos'),
         path: '/dashboard/turns',
-        icon: <BellIcon fontSize="small" />,
+        icon: <EventRepeatIcon fontSize="small" />,
+      },
+      {
+        title: t('Proveedores'),
+        path: '/dashboard/providers',
+        icon: <BusinessIcon fontSize="small" />,
       },
       {
         title: t('Calendario'),
         path: '/dashboard/calendar',
-        icon: <CalendarIcon fontSize="small" />,
+        icon: <CalendarMonthIcon fontSize="small" />,
       }
     ]
   },
