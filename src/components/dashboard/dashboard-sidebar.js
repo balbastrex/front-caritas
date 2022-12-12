@@ -20,6 +20,7 @@ import {isAllowedSectionForProfile} from '../authentication/allowed-route-profil
 import {Scrollbar} from '../scrollbar';
 import {DashboardSidebarSection} from './dashboard-sidebar-section';
 import {OrganizationPopover} from './organization-popover';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 const getSections = (t) => [
   {
@@ -100,7 +101,7 @@ const getSections = (t) => [
       },
       {
         title: t('Beneficiarios'),
-        icon: <UsersIcon fontSize="small" />,
+        icon: <AssignmentIndIcon fontSize="small" />,
         path: '/dashboard/beneficiaries',
       },
       {
@@ -154,6 +155,11 @@ const getSections = (t) => [
         title: t('Calendario'),
         path: '/dashboard/calendar',
         icon: <CalendarMonthIcon fontSize="small" />,
+      },
+      {
+        title: t('Usuarios'),
+        path: '/dashboard/users',
+        icon: <UsersIcon fontSize="small" />,
       }
     ]
   },

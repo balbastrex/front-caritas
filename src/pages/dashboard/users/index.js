@@ -5,12 +5,12 @@ import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
-import {ProviderListTable} from '../../../components/dashboard/provider/provider-list-table';
 import {TurnListTable} from '../../../components/dashboard/turn/turn-list-table';
+import {UserListTable} from '../../../components/dashboard/user/user-list-table';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
-import {getProviders} from '../../../slices/provider';
 import {getTurnsForMarket} from '../../../slices/turn';
+import {getUsers} from '../../../slices/user';
 import {useDispatch, useSelector} from '../../../store/index';
 
 const applyFilters = (products, filters) => products.filter((product) => {
@@ -55,9 +55,9 @@ const applyFilters = (products, filters) => products.filter((product) => {
 const applyPagination = (products, page, rowsPerPage) => products.slice(page * rowsPerPage,
   page * rowsPerPage + rowsPerPage);
 
-const ProviderList = () => {
+const UserList = () => {
   const dispatch = useDispatch();
-  const { providerList } = useSelector((state) => state.provider);
+  const { userList } = useSelector((state) => state.user);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({
@@ -72,7 +72,7 @@ const ProviderList = () => {
   });
 
   useEffect(() => {
-      dispatch(getProviders());
+      dispatch(getUsers());
       }, [dispatch]);
 
   const handleFiltersChange = (filters) => {
@@ -88,14 +88,14 @@ const ProviderList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredProviders = applyFilters(providerList, filters);
-  const paginatedProviders = applyPagination(filteredProviders, page, rowsPerPage);
+  const filteredUsers = applyFilters(userList, filters);
+  const paginatedUsers = applyPagination(filteredUsers, page, rowsPerPage);
 
   return (
     <>
       <Head>
         <title>
-          Listado de Proveedores
+          Listado de Usuarios
         </title>
       </Head>
       <Box
@@ -114,12 +114,12 @@ const ProviderList = () => {
             >
               <Grid item>
                 <Typography variant="h4">
-                  Proveedores
+                  Usuarios
                 </Typography>
               </Grid>
               <Grid item>
                 <NextLink
-                  href="/dashboard/providers/new"
+                  href="/dashboard/users/new"
                   passHref
                 >
                   <Button
@@ -135,12 +135,12 @@ const ProviderList = () => {
           </Box>
           <Card>
             <MarketListFilters onChange={handleFiltersChange} />
-            <ProviderListTable
+            <UserListTable
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              providers={paginatedProviders}
-              providersCount={filteredProviders.length}
+              users={paginatedUsers}
+              usersCount={filteredUsers.length}
               rowsPerPage={rowsPerPage}
             />
           </Card>
@@ -150,7 +150,7 @@ const ProviderList = () => {
   );
 };
 
-ProviderList.getLayout = (page) => (
+UserList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -158,4 +158,4 @@ ProviderList.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default ProviderList;
+export default UserList;
