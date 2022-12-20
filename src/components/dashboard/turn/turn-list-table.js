@@ -12,8 +12,9 @@ import {
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import {Fragment} from 'react';
-import {ArrowRight as ArrowRightIcon} from '../../../icons/arrow-right';
 import {Scrollbar} from '../../scrollbar';
+import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 
 export const TurnListTable = (props) => {
   const {
@@ -23,6 +24,7 @@ export const TurnListTable = (props) => {
     turns,
     turnsCount,
     rowsPerPage,
+    handleBeneficiariesReport,
     ...other
   } = props;
 
@@ -112,9 +114,15 @@ export const TurnListTable = (props) => {
                         passHref
                       >
                         <IconButton component="a">
-                          <ArrowRightIcon fontSize="small" />
+                          <EditIcon fontSize="small" />
                         </IconButton>
                       </NextLink>
+                      <IconButton
+                        component="a"
+                        onClick={() => handleBeneficiariesReport(turn.id)}
+                      >
+                        <PrintIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 </Fragment>

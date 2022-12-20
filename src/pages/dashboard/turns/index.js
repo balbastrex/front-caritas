@@ -1,13 +1,18 @@
-import {Box, Button, Card, Container, Grid, Typography} from '@mui/material';
+import {Box, Button, Card, Container, Dialog, Grid, Typography} from '@mui/material';
+import {PDFViewer} from '@react-pdf/renderer';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
+import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
+import {TurnBeneficiaryPDF} from '../../../components/dashboard/turn/turn-beneficiary-pdf';
 import {TurnListTable} from '../../../components/dashboard/turn/turn-list-table';
+import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
+import {getBeneficiariesTurn} from '../../../slices/beneficiary';
 import {getTurnsForMarket} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store/index';
 
@@ -56,7 +61,9 @@ const applyPagination = (products, page, rowsPerPage) => products.slice(page * r
 const TurnList = () => {
   const dispatch = useDispatch();
   const { turnList } = useSelector((state) => state.turn);
+  const { beneficiariesTurnList } = useSelector((state) => state.beneficiary);
   const [page, setPage] = useState(0);
+  const [viewBeneficiaryPDF, setViewBeneficiaryPDF] = useState(null);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({
     name: undefined,
@@ -84,6 +91,11 @@ const TurnList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
+
+  const handleBeneficiariesReport = (turn) => {
+    dispatch(getBeneficiariesTurn())
+    setViewBeneficiaryPDF(turn);
+  }
 
   // Usually query is done on backend with indexing solutions
   const filteredTurns = applyFilters(turnList, filters);
@@ -140,10 +152,71 @@ const TurnList = () => {
               turns={paginatedTurns}
               turnsCount={filteredTurns.length}
               rowsPerPage={rowsPerPage}
+              handleBeneficiariesReport={handleBeneficiariesReport}
             />
           </Card>
         </Container>
       </Box>
+      <Dialog
+        fullScreen
+        open={!!viewBeneficiaryPDF}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'background.default',
+              p: 2,
+            }}
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px'
+              }}
+            >
+              <Button
+                startIcon={<ArrowLeftIcon fontSize="small" />}
+                onClick={() => setViewBeneficiaryPDF(null)}
+                variant="contained"
+              >
+                Volver
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="h4">
+                Beneficiarios del turno
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <PDFViewer
+              height="100%"
+              style={{ border: 'none' }}
+              width="100%"
+              showToolbar={false}
+            >
+              {
+                viewBeneficiaryPDF && beneficiariesTurnList.length > 0 && (
+                  <TurnBeneficiaryPDF turn={viewBeneficiaryPDF} beneficiaries={beneficiariesTurnList} />
+                )
+              }
+            </PDFViewer>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 };
