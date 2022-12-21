@@ -12,10 +12,14 @@ import {
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import {Fragment} from 'react';
-import {ArrowRight as ArrowRightIcon} from '../../../icons/arrow-right';
+import {useAuth} from '../../../hooks/use-auth';
+import {UserProfiles} from '../../../utils/constants';
 import {Scrollbar} from '../../scrollbar';
+import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 
 export const TurnListTable = (props) => {
+  const { user } = useAuth();
   const {
     onPageChange,
     onRowsPerPageChange,
@@ -23,6 +27,7 @@ export const TurnListTable = (props) => {
     turns,
     turnsCount,
     rowsPerPage,
+    handleBeneficiariesReport,
     ...other
   } = props;
 
@@ -107,14 +112,24 @@ export const TurnListTable = (props) => {
                       {turn.beneficiariesNumber}
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/turns/${turn.id}/edit`}
-                        passHref
+                      {
+                        user?.profileId === UserProfiles.DIRECTOR_ECONOMATO && (
+                          <NextLink
+                            href={`/dashboard/turns/${turn.id}/edit`}
+                            passHref
+                          >
+                            <IconButton component="a">
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                          </NextLink>
+                        )
+                      }
+                      <IconButton
+                        component="a"
+                        onClick={() => handleBeneficiariesReport(turn)}
                       >
-                        <IconButton component="a">
-                          <ArrowRightIcon fontSize="small" />
-                        </IconButton>
-                      </NextLink>
+                        <PrintIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 </Fragment>

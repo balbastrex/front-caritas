@@ -1,9 +1,8 @@
+import {Document, Image, Page, StyleSheet, Text, View} from '@react-pdf/renderer';
+import {format} from 'date-fns';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import numeral from 'numeral';
-import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
-const COL1_WIDTH = 60;
+const COL1_WIDTH = 100;
 const COLN_WIDTH = (100 - COL1_WIDTH) / 2;
 
 const styles = StyleSheet.create({
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
   },
   body2: {
     fontSize: 10,
-    lineHeight: 1.43
+    lineHeight: 1
   },
   gutterBottom: {
     marginBottom: 4
@@ -86,25 +85,26 @@ const styles = StyleSheet.create({
   },
   tableCell1: {
     padding: 6,
-    width: `${COL1_WIDTH}%`
+    width: `50%`
   },
   tableCellN: {
     padding: 6,
-    width: `${COLN_WIDTH}%`
+    width: `15%`
   },
   alignRight: {
     textAlign: 'right'
   }
 });
 
-export const OrderPDF = (props) => {
-  const { order } = props;
+export const TurnBeneficiaryPDF = (props) => {
+  const { turn, beneficiaries } = props;
 
   return (
     <Document>
       <Page
         size="A4"
         style={styles.page}
+        wrap
       >
         <View style={styles.header}>
           <View>
@@ -118,89 +118,77 @@ export const OrderPDF = (props) => {
           </View>
           <View>
             <Text style={styles.h4}>
-              {order.status}
-            </Text>
-            <Text style={styles.subtitle2}>
-              Hoja de Pedido # {order.id} - UF{order.beneficiaryFamilyUnit}
+              Turno: {turn.description}
             </Text>
           </View>
         </View>
         <View style={styles.company}>
           <View>
             <Text style={styles.h4}>
-              {order.marketName}
+              {turn.marketName}
             </Text>
-            <Text style={styles.body2}>
-              Parroquia: {order.parishName}
-            </Text>
-            <Text style={styles.body2}>
-              Nº de Beneficiario: {order.beneficiaryId}
-            </Text>
-            <Text style={styles.body2}>
-              Nombre: {order.beneficiaryName}
+            <Text style={styles.subtitle2}>
+              NºBeneficiarios del turno {turn.beneficiariesNumber}
             </Text>
           </View>
         </View>
         <View style={styles.references}>
           <View>
             <Text style={styles.subtitle2}>
-              Fecha de Pedido
-            </Text>
-            <Text style={styles.body2}>
-              {format(order.createdAt, 'dd/MM/yyyy')}
+              Fecha: {format(Date.now(), 'dd/MM/yyyy')}
             </Text>
           </View>
         </View>
         <View style={styles.items}>
           <View style={styles.table}>
-            <View style={styles.tableHeader}>
+            <View style={styles.tableHeader} fixed>
               <View style={styles.tableRow}>
-                <View style={styles.tableCell1}>
-                  <Text style={styles.h6}>
-                    Producto
-                  </Text>
-                </View>
-                <View style={styles.tableCellN} >
-                  <Text style={styles.h6}>
-                    Cantidad
-                  </Text>
-                </View>
                 <View style={styles.tableCellN}>
-                  <Text style={[styles.h6, styles.alignRight]}>
-                    Precio
+                  <Text style={styles.h6}>
+                    Carnet
                   </Text>
                 </View>
-                <View style={styles.tableCellN}>
-                  <Text style={[styles.h6, styles.alignRight]}>
-                    Total
+                <View style={styles.tableCell1} >
+                  <Text style={styles.h6}>
+                    Nombre
+                  </Text>
+                </View>
+                <View style={styles.tableCell1} >
+                  <Text style={styles.h6}>
+                    Parroquia
+                  </Text>
+                </View>
+                <View style={styles.tableCell1} >
+                  <Text style={styles.h6}>
+                    Última compra
                   </Text>
                 </View>
               </View>
             </View>
             <View style={styles.tableBody}>
-              {(order.orderLines || []).map((item) => (
+              {(beneficiaries || []).map((beneficiary) => (
                 <View
                   style={styles.tableRow}
-                  key={item.id}
+                  key={beneficiary.license}
                 >
+                  <View style={styles.tableCellN}>
+                    <Text style={[styles.body2, styles.alignRight]}>
+                      {beneficiary.license}
+                    </Text>
+                  </View>
                   <View style={styles.tableCell1}>
-                    <Text style={styles.body2}>
-                      {item.description}
+                    <Text style={[styles.body2, styles.alignLeft]}>
+                      {beneficiary.name}
                     </Text>
                   </View>
-                  <View style={styles.tableCellN}>
-                    <Text style={[styles.body2, styles.alignRight]}>
-                      {item.units}
+                  <View style={styles.tableCell1}>
+                    <Text style={[styles.body2, styles.alignLeft]}>
+                      {beneficiary.parishName}
                     </Text>
                   </View>
-                  <View style={styles.tableCellN}>
-                    <Text style={[styles.body2, styles.alignRight]}>
-                      {numeral(item.price).format(`0,0.00`)}€
-                    </Text>
-                  </View>
-                  <View style={styles.tableCellN}>
-                    <Text style={[styles.body2, styles.alignRight]}>
-                      {numeral(item.total).format(`0,0.00`)}€
+                  <View style={styles.tableCell1}>
+                    <Text style={[styles.body2, styles.alignCenter]}>
+                      {format(new Date(beneficiary.lastDateOrder), 'dd/MM/yyyy')}
                     </Text>
                   </View>
                 </View>
@@ -215,7 +203,7 @@ export const OrderPDF = (props) => {
                 </View>
                 <View style={styles.tableCellN}>
                   <Text style={[styles.h6, styles.alignRight]}>
-                    {numeral(order.amount).format(`0,0.00`)}€
+                    {turn.beneficiariesNumber}
                   </Text>
                 </View>
               </View>
@@ -227,6 +215,7 @@ export const OrderPDF = (props) => {
   );
 };
 
-OrderPDF.propTypes = {
-  order: PropTypes.object.isRequired
+TurnBeneficiaryPDF.propTypes = {
+  turn: PropTypes.object.isRequired,
+  beneficiaries: PropTypes.array
 };

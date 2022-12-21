@@ -1,3 +1,4 @@
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import {Box, Button, Dialog, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';
 import {PDFViewer} from '@react-pdf/renderer';
@@ -6,15 +7,20 @@ import NextLink from 'next/link';
 import {useEffect, useRef, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
+import {CloseCartModal} from '../../../components/dashboard/order/close-cart-modal';
+import {CloseCartPdfDialog} from '../../../components/dashboard/order/close-cart-pdf-dialog';
 import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
 import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
 import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
+import {OrderPdfDialog} from '../../../components/dashboard/order/order-pdf-dialog';
+import {useAuth} from '../../../hooks/use-auth';
 import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
 import {getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
+import {UserProfiles} from '../../../utils/constants';
 
 const tabs = [
   {
@@ -105,6 +111,7 @@ const OrderListInner = styled('div',
 const OrderList = () => {
   const dispatch = useDispatch();
   const { orderList } = useSelector((state) => state.order);
+  const { user } = useAuth();
   const rootRef = useRef(null);
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
@@ -112,6 +119,8 @@ const OrderList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [viewPDF, setViewPDF] = useState(null);
+  const [viewCloseCartPDF, setViewCloseCartPDF] = useState(null);
+  const [openCloseCart, setOpenCloseCart] = useState(false);
   const [filters, setFilters] = useState({
     query: '',
     status: undefined
@@ -184,6 +193,19 @@ const OrderList = () => {
     setViewPDF(order);
   }
 
+  const handleOpenCloseCart = () => {
+    setOpenCloseCart(true);
+  }
+
+  const handleCloseModal = () => {
+    setOpenCloseCart(false);
+  }
+
+  const handleCloseCart = () => {
+    setOpenCloseCart(false);
+    setViewCloseCartPDF(orderList)
+  }
+
   const filteredOrders = applyFilters(orderList, filters);
   const sortedOrders = applySort(filteredOrders, sort);
   const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
@@ -218,17 +240,33 @@ const OrderList = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <NextLink
-                  href={`/dashboard/orders/new`}
-                  passHref
-                >
-                  <Button
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nueva Venta
-                  </Button>
-                </NextLink>
+                {
+                  user?.profileId === UserProfiles.DIRECTOR_ECONOMATO && (
+                    <Button
+                      startIcon={<RemoveShoppingCartIcon fontSize="small" />}
+                      variant="contained"
+                      color="warning"
+                      onClick={() => handleOpenCloseCart()}
+                    >
+                      Cierre de Caja
+                    </Button>
+                  )
+                }
+                {
+                  user?.profileId === UserProfiles.CAJA_PEDIDOS && (
+                    <NextLink
+                      href={`/dashboard/orders/new`}
+                      passHref
+                    >
+                      <Button
+                        startIcon={<PlusIcon fontSize="small" />}
+                        variant="contained"
+                      >
+                        Nueva Venta
+                      </Button>
+                    </NextLink>
+                  )
+                }
               </Grid>
             </Grid>
             <Tabs
@@ -320,66 +358,22 @@ const OrderList = () => {
           onApprove={handleApprove}
         />
       </Box>
-      <Dialog
-        fullScreen
-        open={!!viewPDF}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: 'background.default',
-              p: 2,
-            }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '20px',
-                left: '20px'
-              }}
-            >
-              <Button
-                startIcon={<ArrowLeftIcon fontSize="small" />}
-                onClick={() => setViewPDF(null)}
-                variant="contained"
-              >
-                Volver
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography variant="h4">
-                Hoja de Pedido {viewPDF?.id} - UF{viewPDF?.beneficiaryFamilyUnit}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <PDFViewer
-              height="100%"
-              style={{ border: 'none' }}
-              width="100%"
-              showToolbar={false}
-            >
-              {
-                viewPDF && (
-                  <OrderPDF order={viewPDF} />
-                )
-              }
-            </PDFViewer>
-          </Box>
-        </Box>
-      </Dialog>
+      <OrderPdfDialog
+        viewPDF={viewPDF}
+        setViewPDF={setViewPDF}
+      />
+      {
+        openCloseCart && (
+          <CloseCartModal
+            handleClose={handleCloseModal}
+            handleCloseCart={handleCloseCart}
+          />
+        )
+      }
+      <CloseCartPdfDialog
+        viewCloseCartPDF={viewCloseCartPDF}
+        setViewCloseCartPDF={setViewCloseCartPDF}
+      />
     </>
   );
 };

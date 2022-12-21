@@ -10,6 +10,7 @@ const initialState = {
   beneficiaryList: [],
   beneficiarySelector: [],
   beneficiary: {},
+  beneficiariesTurnList: [],
 };
 
 const slice = createSlice({
@@ -38,6 +39,11 @@ const slice = createSlice({
     getBeneficiariesSelectorSuccess(state, action) {
       state.isLoading = false;
       state.beneficiarySelector = action.payload;
+    },
+
+    getBeneficiariesTurnSuccess(state, action) {
+      state.isLoading = false;
+      state.beneficiariesTurnList = action.payload;
     },
   }
 });
@@ -109,6 +115,18 @@ export function getBeneficiariesSelector() {
     try {
       const response = await axios.get('/api/v1/beneficiary-selector');
       dispatch(slice.actions.getBeneficiariesSelectorSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiariesTurn(turnId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/beneficiary-turn/${turnId}`);
+      dispatch(slice.actions.getBeneficiariesTurnSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

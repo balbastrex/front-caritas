@@ -9,7 +9,6 @@ export const GuestGuard = (props) => {
   const auth = useAuth();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
-  const disableGuard = router.query.disableGuard;
 
   useEffect(() => {
       if (!router.isReady) {
@@ -17,7 +16,7 @@ export const GuestGuard = (props) => {
       }
 
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
-      if (auth.isAuthenticated && disableGuard !== 'true') {
+      if (auth.isAuthenticated) {
         const url = defaultURLProfile[auth.user?.profileId];
         router.push(url).catch(console.error);
       } else {
