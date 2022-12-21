@@ -131,7 +131,7 @@ export const OrderPDF = (props) => {
               {order.marketName}
             </Text>
             <Text style={styles.body2}>
-              Parroquia: SAN LUIS BERTRAN
+              Parroquia: {order.parishName}
             </Text>
             <Text style={styles.body2}>
               Nº de Beneficiario: {order.beneficiaryId}

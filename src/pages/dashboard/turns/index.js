@@ -93,7 +93,7 @@ const TurnList = () => {
   };
 
   const handleBeneficiariesReport = (turn) => {
-    dispatch(getBeneficiariesTurn())
+    dispatch(getBeneficiariesTurn(turn.id))
     setViewBeneficiaryPDF(turn);
   }
 
@@ -206,7 +206,7 @@ const TurnList = () => {
               height="100%"
               style={{ border: 'none' }}
               width="100%"
-              showToolbar={false}
+              showToolbar={true}
             >
               {
                 viewBeneficiaryPDF && beneficiariesTurnList.length > 0 && (

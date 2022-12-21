@@ -35,7 +35,7 @@ const permissions = {
   "/dashboard/providers": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.COMPRAS],
   "/dashboard/providers/new": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.COMPRAS],
   "/dashboard/providers/[providerId]/edit": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.COMPRAS],
-  "/dashboard/turns": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  "/dashboard/turns": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.CAJA_PEDIDOS],
   "/dashboard/turns/new": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/turns/[turnId]/edit": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/calendar": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
