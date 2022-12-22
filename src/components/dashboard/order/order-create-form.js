@@ -15,7 +15,7 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-export const OrderCreateForm = ({isEdit, order}) => {
+export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { beneficiarySelector } = useSelector((state) => state.beneficiary);
@@ -43,6 +43,7 @@ export const OrderCreateForm = ({isEdit, order}) => {
       orderLines.push(newOrderLine);
     }
 
+    updateSummary(orderLines);
     formik.setFieldValue('orderLines', orderLines);
   }
 
@@ -62,6 +63,7 @@ export const OrderCreateForm = ({isEdit, order}) => {
       orderLines.splice(orderLines.indexOf(originalOrderLine), 1);
     }
 
+    updateSummary(orderLines);
     formik.setFieldValue('orderLines', orderLines);
   }
 

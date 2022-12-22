@@ -1,17 +1,27 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Box, Container, Link, Typography} from '@mui/material';
+import {Box, CardContent, Container, Grid, Link, Typography} from '@mui/material';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderCreateForm} from '../../../components/dashboard/order/order-create-form';
+import {OrderSummary} from '../../../components/dashboard/order/order-summary';
 import {gtm} from '../../../lib/gtm';
 
 const OrderCreate = () => {
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
+
+  const updateSummary = (orderLines) => {
+    const quantity = orderLines.reduce((acc, orderLine) => acc + orderLine.units, 0);
+    setQuantity(quantity);
+    const total = orderLines.reduce((acc, orderLine) => acc + orderLine.price * orderLine.units, 0);
+    setTotal(total);
+  }
 
   return (
     <>
@@ -51,8 +61,9 @@ const OrderCreate = () => {
               </Link>
             </NextLink>
           </Box>
-          <OrderCreateForm />
+          <OrderCreateForm updateSummary={updateSummary} />
         </Container>
+        <OrderSummary quantity={quantity} total={total} />
       </Box>
     </>
   );
