@@ -10,21 +10,38 @@ import {
   TableRow, TableSortLabel, Tooltip,
   Typography,
 } from '@mui/material';
+import {useState} from 'react';
 import {Scrollbar} from '../../scrollbar';
 import { SeverityPill } from '../../severity-pill';
+import {ExceedCartModal} from './exceed-cart-modal';
 
 export const severityMap = {
   true: 'success',
   false: 'warning',
 };
 
-export const OrderProductListTable = ({ products, handleAddProduct }) => {
+const calculateColumn = (uf) => {
+  switch (uf) {
+    case 1: return 'q1';
+    case 2: return 'q2';
+    case 3: return 'q3';
+    case 4: return 'q4';
+    case 5: return 'q5';
+    case 6: return 'q6';
+    default: return 'q1';
+  }
+}
+
+export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryUF = 1 }) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 300 }}>
         <Table sx={{ minWidth: 700}} stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
+              <TableCell>
+                Id
+              </TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip
                   enterDelay={300}
@@ -34,12 +51,9 @@ export const OrderProductListTable = ({ products, handleAddProduct }) => {
                     active
                     direction="desc"
                   >
-                    Prducto Id
+                    Producto
                   </TableSortLabel>
                 </Tooltip>
-              </TableCell>
-              <TableCell>
-                Producto
               </TableCell>
               <TableCell>
                 Stock
@@ -49,6 +63,9 @@ export const OrderProductListTable = ({ products, handleAddProduct }) => {
               </TableCell>
               <TableCell>
                 Precio
+              </TableCell>
+              <TableCell>
+                Max.
               </TableCell>
               <TableCell>
                 Gratuidad
@@ -61,7 +78,8 @@ export const OrderProductListTable = ({ products, handleAddProduct }) => {
                 hover
                 key={product.id}
                 sx={{ cursor: 'pointer' }}
-                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.salesPrice, cost: product.costPrice, units: 1 })}
+                disabled={true}
+                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.salesPrice, cost: product.costPrice, units: 1, maxUnits: product[calculateColumn(beneficiaryUF)] })}
               >
                 <TableCell>
                   <Typography
@@ -74,14 +92,17 @@ export const OrderProductListTable = ({ products, handleAddProduct }) => {
                 <TableCell>
                   {product.name}
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   {product.stock}
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   {numeral(product.costPrice).format(`0,0.00`)} €
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   {numeral(product.salesPrice).format(`0,0.00`)} €
+                </TableCell>
+                <TableCell align="right">
+                  {product[calculateColumn(beneficiaryUF)]}
                 </TableCell>
                 <TableCell>
                   <SeverityPill color={severityMap[product.free]}>

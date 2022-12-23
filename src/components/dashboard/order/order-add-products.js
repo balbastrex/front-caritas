@@ -6,6 +6,7 @@ import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
 import {getProducts} from '../../../slices/product';
 import {useDispatch, useSelector} from '../../../store';
+import {ExceedCartModal} from './exceed-cart-modal';
 import {OrderProductListTable} from './order-product-list-table';
 
 const tabs = [
@@ -69,7 +70,7 @@ const applySort = (orders, sortDir) => orders.sort((a, b) => {
   return sortDir === 'desc' ? comparator : -comparator;
 });
 
-const OrderAddProducts = ({ handleAddProduct }) => {
+const OrderAddProducts = ({ handleAddProduct, beneficiaryUF }) => {
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.product);
   const queryRef = useRef(null);
@@ -155,8 +156,6 @@ const OrderAddProducts = ({ handleAddProduct }) => {
           }}
         >
           <Box
-            // component="form"
-            // onSubmit={handleQueryChange}
             sx={{
               flexGrow: 1,
               m: 1.5
@@ -197,7 +196,7 @@ const OrderAddProducts = ({ handleAddProduct }) => {
           </TextField>
         </Box>
         <Divider />
-        <OrderProductListTable products={sortedProducts} handleAddProduct={handleAddProduct} />
+        <OrderProductListTable products={sortedProducts} handleAddProduct={handleAddProduct} beneficiaryUF={beneficiaryUF} />
       </Box>
     </>
   );

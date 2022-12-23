@@ -257,7 +257,6 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
                 })
                 }*/
                 onChange={(event, newValue) => {
-                  console.log('==> newValue ', newValue)
                   const value = newValue ? newValue.id : null;
                   formik.setFieldValue('productId', value);
                 }}

@@ -50,35 +50,37 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderLines.map((orderLine) => (
-              <TableRow
-                hover
-                key={orderLine.productId}
-              >
-                <TableCell>
-                  <Typography
-                    color="textPrimary"
-                    variant="subtitle2"
-                  >
-                    {orderLine.productId}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  {orderLine.description}
-                </TableCell>
-                <TableCell>
-                  {orderLine.units}
-                </TableCell>
-                <TableCell>
-                  {numeral(orderLine.price).format(`0,0.00`)} €
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton onClick={() => handleRemoveLine(orderLine.productId)} >
-                    <TrashIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {orderLines.map((orderLine) => {
+              return (
+                <TableRow
+                  key={orderLine.productId}
+                  sx={{backgroundColor: orderLine.units > orderLine.maxUnits ? 'error.light' : 'background.paper'}}
+                >
+                  <TableCell>
+                    <Typography
+                      color="textPrimary"
+                      variant="subtitle2"
+                    >
+                      {orderLine.productId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    {orderLine.description}
+                  </TableCell>
+                  <TableCell>
+                    {orderLine.units}
+                  </TableCell>
+                  <TableCell>
+                    {numeral(orderLine.price).format(`0,0.00`)} €
+                  </TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleRemoveLine(orderLine.productId)}>
+                      <TrashIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

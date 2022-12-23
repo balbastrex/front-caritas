@@ -77,8 +77,6 @@ export const UserCreateForm = ({isEdit, user}) => {
     }
   });
 
-  console.log(formik.values)
-
   return (
     <form
       onSubmit={formik.handleSubmit}
