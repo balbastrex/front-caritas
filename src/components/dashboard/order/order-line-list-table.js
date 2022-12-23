@@ -45,6 +45,9 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
                 Precio
               </TableCell>
               <TableCell>
+                Total
+              </TableCell>
+              <TableCell>
                 Borrar Linea
               </TableCell>
             </TableRow>
@@ -72,6 +75,9 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
                   </TableCell>
                   <TableCell>
                     {numeral(orderLine.price).format(`0,0.00`)} €
+                  </TableCell>
+                  <TableCell>
+                    {numeral(orderLine.price * orderLine.units).format(`0,0.00`)} €
                   </TableCell>
                   <TableCell align="center">
                     <IconButton onClick={() => handleRemoveLine(orderLine.productId)}>

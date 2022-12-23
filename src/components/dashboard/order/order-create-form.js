@@ -133,6 +133,8 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
     }
   });
 
+  console.log(formik.values.orderLines)
+
   return (
     <>
       {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } />)}
