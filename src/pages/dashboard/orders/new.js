@@ -12,15 +12,26 @@ import {gtm} from '../../../lib/gtm';
 const OrderCreate = () => {
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
+  const [budget, setBudget] = useState(0);
+  const [lastDateOrder, setLastDateOrder] = useState(null);
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  const updateSummary = (orderLines) => {
-    const quantity = orderLines.reduce((acc, orderLine) => acc + orderLine.units, 0);
-    setQuantity(quantity);
-    const total = orderLines.reduce((acc, orderLine) => acc + orderLine.price * orderLine.units, 0);
-    setTotal(total);
+  const updateSummary = ({orderLines, budget, lastDateOrder}) => {
+    if (orderLines) {
+      const quantity = orderLines.reduce((acc, orderLine) => acc + orderLine.units, 0);
+      setQuantity(quantity);
+
+      const total = orderLines.reduce((acc, orderLine) => acc + orderLine.price * orderLine.units, 0);
+      setTotal(total);
+    }
+
+    if (budget) {
+      setBudget(budget);
+      setLastDateOrder(lastDateOrder);
+    }
+
   }
 
   return (
@@ -63,7 +74,7 @@ const OrderCreate = () => {
           </Box>
           <OrderCreateForm updateSummary={updateSummary} />
         </Container>
-        <OrderSummary quantity={quantity} total={total} />
+        <OrderSummary quantity={quantity} total={total} budget={budget} lastDateOrder={lastDateOrder} />
       </Box>
     </>
   );
