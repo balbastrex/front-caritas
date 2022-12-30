@@ -1,13 +1,11 @@
-import {format} from 'date-fns';
-import NextLink from 'next/link';
-import {Fragment, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import { toast } from 'react-hot-toast';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
   Button,
-  CardContent, Checkbox,
-  Divider, FormControlLabel,
+  CardContent,
+  Checkbox,
+  Divider,
+  FormControlLabel,
   Grid,
   IconButton,
   MenuItem,
@@ -20,12 +18,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { ArrowRight as ArrowRightIcon } from '../../../icons/arrow-right';
-import { ChevronDown as ChevronDownIcon } from '../../../icons/chevron-down';
-import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right';
+import {format} from 'date-fns';
+import NextLink from 'next/link';
+import PropTypes from 'prop-types';
+import {Fragment, useEffect, useState} from 'react';
+import {toast} from 'react-hot-toast';
+import {ChevronDown as ChevronDownIcon} from '../../../icons/chevron-down';
+import {ChevronRight as ChevronRightIcon} from '../../../icons/chevron-right';
 import {createBeneficiary, updateBeneficiary} from '../../../slices/beneficiary';
 import {useDispatch} from '../../../store';
-import { Scrollbar } from '../../scrollbar';
+import {Scrollbar} from '../../scrollbar';
 
 const genderType = [
   {
@@ -131,6 +133,9 @@ export const BeneficiaryListTable = (props) => {
               <TableCell>
                 U.F.
               </TableCell>
+              <TableCell>
+                Acciones
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -195,6 +200,16 @@ export const BeneficiaryListTable = (props) => {
                     </TableCell>
                     <TableCell>
                       {beneficiary.familyUnit}
+                    </TableCell>
+                    <TableCell align="right">
+                      <NextLink
+                        href={`/dashboard/beneficiaries/${beneficiary.id}/edit`}
+                        passHref
+                      >
+                        <IconButton component="a">
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </NextLink>
                     </TableCell>
                   </TableRow>
                   {open && (

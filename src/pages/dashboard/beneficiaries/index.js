@@ -1,5 +1,6 @@
 import {Box, Button, Card, Container, Grid, Typography} from '@mui/material';
 import Head from 'next/head';
+import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
@@ -208,15 +209,20 @@ const BeneficiariesList = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Button
-                  disabled={disableNewButton}
-                  component="a"
-                  startIcon={<PlusIcon fontSize="small" />}
-                  variant="contained"
-                  onClick={handleNewBeneficiary}
+                <NextLink
+                  href="/dashboard/beneficiaries/new"
+                  passHref
                 >
-                  Nuevo
-                </Button>
+                  <Button
+                    disabled={disableNewButton}
+                    component="a"
+                    startIcon={<PlusIcon fontSize="small" />}
+                    variant="contained"
+                    onClick={handleNewBeneficiary}
+                  >
+                    Nuevo
+                  </Button>
+                </NextLink>
               </Grid>
             </Grid>
           </Box>
