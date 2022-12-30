@@ -23,7 +23,6 @@ import {PropertyList} from '../../property-list';
 import {PropertyListItem} from '../../property-list-item';
 import {Scrollbar} from '../../scrollbar';
 import {SeverityPill} from '../../severity-pill';
-import {InvoicePDF} from '../invoice/invoice-pdf';
 import {severityMap} from './order-list-table';
 import {OrderPDF} from './order-pdf';
 

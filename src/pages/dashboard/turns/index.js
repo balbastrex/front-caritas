@@ -9,12 +9,14 @@ import {MarketListFilters} from '../../../components/dashboard/market/market-lis
 import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
 import {TurnBeneficiaryPDF} from '../../../components/dashboard/turn/turn-beneficiary-pdf';
 import {TurnListTable} from '../../../components/dashboard/turn/turn-list-table';
+import {useAuth} from '../../../hooks/use-auth';
 import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
 import {getBeneficiariesTurn} from '../../../slices/beneficiary';
 import {getTurnsForMarket} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store/index';
+import {UserProfiles} from '../../../utils/constants';
 
 const applyFilters = (products, filters) => products.filter((product) => {
   if (filters.name) {
@@ -63,6 +65,8 @@ const TurnList = () => {
   const { turnList } = useSelector((state) => state.turn);
   const { beneficiariesTurnList } = useSelector((state) => state.beneficiary);
   const [page, setPage] = useState(0);
+  const [disableNewButton, setDisableNewButton] = useState(true);
+  const { user } = useAuth();
   const [viewBeneficiaryPDF, setViewBeneficiaryPDF] = useState(null);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filters, setFilters] = useState({
@@ -77,8 +81,12 @@ const TurnList = () => {
   });
 
   useEffect(() => {
-      dispatch(getTurnsForMarket());
-      }, [dispatch]);
+    dispatch(getTurnsForMarket());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setDisableNewButton(user?.profileId !== UserProfiles.DIRECTOR_ECONOMATO);
+  }, [user]);
 
   const handleFiltersChange = (filters) => {
     setFilters(filters);
@@ -133,6 +141,7 @@ const TurnList = () => {
                   passHref
                 >
                   <Button
+                    disabled={disableNewButton}
                     component="a"
                     startIcon={<PlusIcon fontSize="small" />}
                     variant="contained"

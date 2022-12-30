@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TablePagination,
-  TableRow,
+  TableRow, Tooltip,
   Typography,
 } from '@mui/material';
 import NextLink from 'next/link';
@@ -118,18 +118,22 @@ export const TurnListTable = (props) => {
                             href={`/dashboard/turns/${turn.id}/edit`}
                             passHref
                           >
-                            <IconButton component="a">
-                              <EditIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Editar turno">
+                              <IconButton component="a">
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
                           </NextLink>
                         )
                       }
-                      <IconButton
-                        component="a"
-                        onClick={() => handleBeneficiariesReport(turn)}
-                      >
-                        <PrintIcon fontSize="small" />
-                      </IconButton>
+                      <Tooltip title="Imprimir beneficiarios del turno">
+                        <IconButton
+                          component="a"
+                          onClick={() => handleBeneficiariesReport(turn)}
+                        >
+                          <PrintIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 </Fragment>

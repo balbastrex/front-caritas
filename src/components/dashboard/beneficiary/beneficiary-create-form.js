@@ -28,6 +28,7 @@ import {getGuardianshipTypes} from '../../../slices/guardianshipType';
 import {getParishes} from '../../../slices/parish';
 import {getTurns} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store';
+import axios from '../../../utils/axios';
 
 const genderType = [
   {
@@ -86,7 +87,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
     enableReinitialize: false,
     initialValues: {
       id: beneficiary?.id || 0,
-      license: beneficiary?.license || undefined,
+      license: beneficiary?.license || 0,
       name: beneficiary?.name || '',
       lastname1: beneficiary?.lastname1 || '',
       lastname2: beneficiary?.lastname2 || '',
@@ -127,10 +128,12 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
           dispatch(updateBeneficiary({...formik.values}));
           toast.success('Beneficiario actualizado!');
         } else {
-          dispatch(createBeneficiary({...formik.values}));
-          toast.success('Beneficiario Creado!');
+            // dispatch(createBeneficiary({...formik.values}));
+            await axios.post('/api/v1/beneficiary', {
+              ...formik.values
+            })
+            toast.success('Beneficiario Creado!');
         }
-        // NOTE: Make API request
         router.push('/dashboard/beneficiaries').catch(console.error);
       } catch (err) {
         console.error(err);
@@ -160,6 +163,9 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
               <Typography variant="h6">
                 Identificación
               </Typography>
+              <Typography variant="subtitle2">
+                Si dejas un 0 en el carnet, se generará automáticamente
+              </Typography>
             </Grid>
             <Grid
               item
@@ -181,7 +187,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
                   name="license"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="text"
+                  type="number"
                   value={formik.values.license}
                   required
                 />
@@ -902,7 +908,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
                   onChange={formik.handleChange}
                 >
                   {turnList.filter(turn => {
-                    const marketId = parishList.find(parish => parish.id === formik.values.parishId).marketId;
+                    const marketId = parishList.find(parish => parish.id === formik.values.parishId)?.marketId;
 
                     if (turn.marketId === marketId) return turn;
                   })?.map((turn) => (
