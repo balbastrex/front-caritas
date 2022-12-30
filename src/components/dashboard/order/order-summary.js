@@ -1,4 +1,4 @@
-import {Box, Container, Grid, Typography} from '@mui/material';
+import {Box, Button, Container, Grid, Typography} from '@mui/material';
 import {format} from 'date-fns';
 import numeral from 'numeral';
 
@@ -17,7 +17,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
         justifyContent: 'right',
         alignContent: 'right',
         borderRadius: 1,
-        height: 400,
+        height: 600,
         width: 210,
         m: 2,
         zIndex: 5
@@ -25,7 +25,39 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
     >
       <Grid
         container
-        // spacing={3}
+        display="flex"
+        flexDirection="column"
+        sx={{
+          backgroundColor: 'primary.dark',
+          color: 'primary.contrastText',
+          borderRadius: 1,
+          height: 150,
+          width: 200,
+          m: 2,
+        }}
+      >
+        <Grid
+          sx={{ textAlign: 'center', pt: 1, borderBottom: 2, borderColor: 'primary.contrastText' }}
+        >
+          <Typography variant="h4" sx={{ mb: 1, }} >
+            Notas
+          </Typography>
+        </Grid>
+        <Grid
+          sx={{ textAlign: 'center', pt: 2, pl: 2 }}
+        >
+          <Button
+            // onClick={() => onApprove(order.id)}
+            size="large"
+            style={{ backgroundColor: 'black' }}
+          >
+            Ver Notas
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
         display="flex"
         flexDirection="column"
         sx={{
@@ -51,7 +83,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
             Ayuda: {budget} €
           </Typography>
           <Typography variant="h6">
-            Última venta: {format(new Date(lastDateOrder), 'dd/MM/yyyy')}
+            Últ.Vta:{format(new Date(lastDateOrder), 'dd/MM/yyyy')}
           </Typography>
         </Grid>
       </Grid>
@@ -61,7 +93,6 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
         display="flex"
         flexDirection="column"
         sx={{
-          // backgroundColor: 'primary.dark',
           backgroundColor: total > budget ? 'error.light' : 'primary.dark',
           color: 'primary.contrastText',
           borderRadius: 1,

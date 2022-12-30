@@ -9,7 +9,7 @@ const initialState = {
   error: false,
   beneficiaryList: [],
   beneficiarySelector: [],
-  beneficiary: {},
+  beneficiary: null,
   beneficiariesTurnList: [],
 };
 
@@ -24,6 +24,10 @@ const slice = createSlice({
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
+    },
+
+    resetBeneficiary(state) {
+      state.beneficiary = null;
     },
 
     getBeneficiariesListSuccess(state, action) {
@@ -67,6 +71,7 @@ export function getBeneficiaries() {
 
 export function getBeneficiaryById(beneficiaryId) {
   return async (dispatch) => {
+    dispatch(slice.actions.resetBeneficiary());
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/v1/beneficiary/${beneficiaryId}`);
@@ -80,16 +85,11 @@ export function getBeneficiaryById(beneficiaryId) {
 export function createBeneficiary(beneficiary) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
-    try {
-      await axios.post('/api/v1/beneficiary', {
-        ...beneficiary
-      })
-
-      const response = await axios.get('/api/v1/beneficiary');
-      dispatch(slice.actions.getBeneficiariesListSuccess(response.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
+    await axios.post('/api/v1/beneficiary', {
+      ...beneficiary
+    })
+    const response = await axios.get('/api/v1/beneficiary');
+    dispatch(slice.actions.getBeneficiariesListSuccess(response.data));
   };
 }
 
@@ -126,6 +126,18 @@ export function getBeneficiariesTurn(turnId) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/v1/beneficiary-turn/${turnId}`);
+      dispatch(slice.actions.getBeneficiariesTurnSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiariesNotes(beneficiaryId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/beneficiary-turn/${beneficiaryId}`);
       dispatch(slice.actions.getBeneficiariesTurnSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
