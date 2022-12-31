@@ -166,7 +166,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                   noOptionsText="Sin opciones"
                   id="controlled-demo"
                   options={beneficiarySelector}
-                  getOptionLabel={(option) => `${option.name} (${option.id})`}
+                  getOptionLabel={(option) => `${option.name} (${option.license})`}
                   /*value={beneficiarySelector.find((option) => {
                       if (option.id === formik.values.beneficiaryId) {
                         return option.id;

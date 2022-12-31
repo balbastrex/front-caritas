@@ -68,7 +68,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
   }, []);
 
   const beneficiarySchema = Yup.object().shape({
-    cif: Yup.string().required('El nombre es requerido'),
+    cif: Yup.string().required('El NIF/NIE es requerido'),
     name: Yup.string().required('El nombre es requerido'),
     lastname1: Yup.string().required('El primer apellido es requerido'),
     address: Yup.string().required('La dirección es requerida'),
