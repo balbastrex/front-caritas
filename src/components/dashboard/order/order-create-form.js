@@ -29,6 +29,13 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
     dispatch(getBeneficiariesSelector());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (beneficiarySelector) {
+      const beneficiary = beneficiarySelector.find(b => b.id === order.beneficiaryId);
+      updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
+    }
+  }, [beneficiarySelector])
+
   const handleShowExceedModal = (productLine) => {
     const orderLines = [...formik.values.orderLines];
     const originalOrderLine = orderLines.find((orderLine) => orderLine.productId === productLine.productId);
@@ -167,12 +174,12 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                   id="controlled-demo"
                   options={beneficiarySelector}
                   getOptionLabel={(option) => `${option.name} (${option.license})`}
-                  /*value={beneficiarySelector.find((option) => {
+                  value={beneficiarySelector.find((option) => {
                       if (option.id === formik.values.beneficiaryId) {
                         return option.id;
                       }
                     })
-                  }*/
+                  }
                   onChange={(event, newValue) => {
                     const value = newValue ? newValue.id : null;
                     formik.setFieldValue('beneficiaryId', value);

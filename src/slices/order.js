@@ -10,6 +10,7 @@ const initialState = {
   error: false,
   orderList: [],
   order: {},
+  orderHistoryList: [],
 };
 
 const slice = createSlice({
@@ -41,6 +42,11 @@ const slice = createSlice({
     getOrderSuccess(state, action) {
       state.isLoading = false;
       state.order = action.payload;
+    },
+
+    getOrderCompleteListSuccess(state, action) {
+      state.isLoading = false;
+      state.orderHistoryList = action.payload;
     },
   }
 });
@@ -81,6 +87,18 @@ export function getOrderById(orderId) {
     try {
       const response = await axios.get(`/api/v1/order/${orderId}`);
       dispatch(slice.actions.getOrderSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getHistoryOrders() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/order-history');
+      dispatch(slice.actions.getOrderCompleteListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

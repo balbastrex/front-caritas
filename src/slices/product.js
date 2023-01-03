@@ -53,6 +53,18 @@ export function getProducts() {
   };
 }
 
+export function getProductOrders() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/product-order');
+      dispatch(slice.actions.getProductListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function getProductById(productId) {
 
   return async (dispatch) => {

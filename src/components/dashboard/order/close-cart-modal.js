@@ -39,8 +39,8 @@ export const CloseCartModal = ({ handleClose, handleCloseCart }) => (
             variant="body2"
           >
            ¿Está seguro que desea cerrar la caja?
-           Esto implica que no se podrán realizar más ventas.
-           Además esto generará un reporte de cierre de caja.
+           Esto implica que no se podrán realizar más ventas, además se cerrarán las ventas Abiertas.
+           Se generará un reporte de cierre de caja.
           </Typography>
         </div>
       </Box>

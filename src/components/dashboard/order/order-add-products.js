@@ -4,7 +4,7 @@ import {AuthGuard} from '../../authentication/auth-guard';
 import {DashboardLayout} from '../dashboard-layout';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
-import {getProducts} from '../../../slices/product';
+import {getProductOrders, getProducts} from '../../../slices/product';
 import {useDispatch, useSelector} from '../../../store';
 import {ExceedCartModal} from './exceed-cart-modal';
 import {OrderProductListTable} from './order-product-list-table';
@@ -86,7 +86,7 @@ const OrderAddProducts = ({ handleAddProduct, beneficiaryUF }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProductOrders());
   }, [dispatch]);
 
   const handleTabsChange = (event, value) => {

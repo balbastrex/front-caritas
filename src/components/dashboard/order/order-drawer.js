@@ -18,7 +18,9 @@ import {format} from 'date-fns';
 import NextLink from 'next/link';
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
+import {useAuth} from '../../../hooks/use-auth';
 import {X as XIcon} from '../../../icons/x';
+import {UserProfiles} from '../../../utils/constants';
 import {PropertyList} from '../../property-list';
 import {PropertyListItem} from '../../property-list-item';
 import {Scrollbar} from '../../scrollbar';
@@ -27,6 +29,7 @@ import {severityMap} from './order-list-table';
 import {OrderPDF} from './order-pdf';
 
 const renderOpenedOrder = ({onApprove, onReject, order}) => {
+  const { user } = useAuth();
   return (
     <Box
       sx={{
@@ -60,13 +63,17 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
           }
         }}
       >
-        <Button
-          onClick={() => onApprove(order.id)}
-          size="small"
-          variant="contained"
-        >
-          Pagar Pedido
-        </Button>
+        {
+          onApprove && (
+            <Button
+              onClick={() => onApprove(order.id)}
+              size="small"
+              variant="contained"
+            >
+              Pagar Pedido
+            </Button>
+          )
+        }
         <Button
           onClick={onReject}
           size="small"
@@ -74,16 +81,20 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
         >
           Cancelar
         </Button>
-        <NextLink
-          href={`/dashboard/orders/${order.id}/edit`}
-          passHref
-        >
-          <Button
-            size="small"
-          >
-            Editar
-          </Button>
-        </NextLink>
+        {
+          user.profileId === UserProfiles.GESTOR_PARROQUIA && (
+            <NextLink
+              href={`/dashboard/orders/${order.id}/edit`}
+              passHref
+            >
+              <Button
+                size="small"
+              >
+                Editar
+              </Button>
+            </NextLink>
+          )
+        }
       </Box>
     </Box>
   )

@@ -1,71 +1,82 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import {Box, Button, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {styled} from '@mui/material/styles';
 import Head from 'next/head';
-import { endOfDay, startOfDay } from 'date-fns';
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  Grid,
-  Switch,
-  Typography,
-  useMediaQuery
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { invoiceApi } from '../../../__fake-api__/invoice-api';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { InvoiceListFilters } from '../../../components/dashboard/invoice/invoice-list-filters';
-import { InvoiceListTable } from '../../../components/dashboard/invoice/invoice-list-table';
-import { useMounted } from '../../../hooks/use-mounted';
-import { Filter as FilterIcon } from '../../../icons/filter';
-import { Plus as PlusIcon } from '../../../icons/plus';
-import { gtm } from '../../../lib/gtm';
+import NextLink from 'next/link';
+import {useEffect, useRef, useState} from 'react';
+import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
+import {CloseCartModal} from '../../../components/dashboard/order/close-cart-modal';
+import {CloseCartPdfDialog} from '../../../components/dashboard/order/close-cart-pdf-dialog';
+import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
+import {orderHistoryListTable, OrderListTable} from '../../../components/dashboard/order/order-list-table';
+import {OrderPdfDialog} from '../../../components/dashboard/order/order-pdf-dialog';
+import {useAuth} from '../../../hooks/use-auth';
+import {Plus as PlusIcon} from '../../../icons/plus';
+import {Search as SearchIcon} from '../../../icons/search';
+import {gtm} from '../../../lib/gtm';
+import {getHistoryOrders, getOrders, updateStatusOrder} from '../../../slices/order';
+import {useDispatch, useSelector} from '../../../store';
+import {UserProfiles} from '../../../utils/constants';
 
-const applyFilters = (invoices, filters) => invoices.filter((invoice) => {
+const tabs = [
+  {
+    label: 'Todas',
+    value: 'all'
+  },
+  {
+    label: 'Abiertas',
+    value: 'Abierto'
+  },
+  {
+    label: 'Pagadas',
+    value: 'Pagado'
+  },
+  {
+    label: 'Canceladas',
+    value: 'Cancelado'
+  }
+];
+
+const sortOptions = [
+  {
+    label: 'Más Nuevas',
+    value: 'desc'
+  },
+  {
+    label: 'Más Antiguas',
+    value: 'asc'
+  }
+];
+
+const applyFilters = (orders, filters) => orders.filter((order) => {
   if (filters.query) {
-    const queryMatched = invoice.number.toLowerCase().includes(filters.query.toLowerCase());
+    const containsQuery = (order.id.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
+    const containsQueryBeneficiary = (order.beneficiaryName || '').toLowerCase().includes(filters.query.toLowerCase());
 
-    if (!queryMatched) {
+    if (!containsQuery && !containsQueryBeneficiary) {
       return false;
     }
   }
 
-  if (filters.startDate && invoice.issueDate) {
-    // Convert the filter start date to timestamp to be able to compare with the
-    // timestamp from the invoice
-    const startDateMatched = endOfDay(invoice.issueDate) >= startOfDay(filters.startDate.getTime());
+  if (typeof filters.status !== 'undefined') {
+    const statusMatched = order.status === filters.status;
 
-    if (!startDateMatched) {
+    if (!statusMatched) {
       return false;
     }
-  }
-
-  if (filters.endDate && invoice.issueDate) {
-    // Convert the filter end date to timestamp to be able to compare with the
-    // timestamp from the invoice
-    const endDateMatched = startOfDay(invoice.issueDate) <= endOfDay(filters.endDate.getTime());
-
-    if (!endDateMatched) {
-      return false;
-    }
-  }
-
-  if (filters.customer && filters.customer.length > 0) {
-    const customerMatched = filters.customer.includes(invoice.customer.name);
-
-    if (!customerMatched) {
-      return false;
-    }
-  }
-
-  if (filters.status === 'paid' && invoice.status !== 'paid') {
-    return false;
   }
 
   return true;
 });
 
-const applyPagination = (invoices, page, rowsPerPage) => invoices.slice(page * rowsPerPage,
+const applySort = (orders, sortDir) => orders.sort((a, b) => {
+  const comparator = a.createdAt > b.createdAt ? -1 : 1;
+
+  return sortDir === 'desc' ? comparator : -comparator;
+});
+
+const applyPagination = (orders, page, rowsPerPage) => orders.slice(page * rowsPerPage,
   page * rowsPerPage + rowsPerPage);
 
 const InvoiceListInner = styled('div',
@@ -73,13 +84,11 @@ const InvoiceListInner = styled('div',
   ({ theme, open }) => ({
     flexGrow: 1,
     overflow: 'hidden',
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     zIndex: 1,
     [theme.breakpoints.up('lg')]: {
-      marginLeft: -380
+      marginRight: -500
     },
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -87,7 +96,7 @@ const InvoiceListInner = styled('div',
     }),
     ...(open && {
       [theme.breakpoints.up('lg')]: {
-        marginLeft: 0
+        marginRight: 0
       },
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
@@ -97,58 +106,54 @@ const InvoiceListInner = styled('div',
   }));
 
 const InvoiceList = () => {
-  const isMounted = useMounted();
+  const dispatch = useDispatch();
+  const { orderHistoryList } = useSelector((state) => state.order);
+  const { user } = useAuth();
   const rootRef = useRef(null);
-  const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'), { noSsr: true });
-  const [group, setGroup] = useState(true);
-  const [invoices, setInvoices] = useState([]);
+  const queryRef = useRef(null);
+  const [currentTab, setCurrentTab] = useState('all');
+  const [sort, setSort] = useState('desc');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openFilters, setOpenFilters] = useState(mdUp);
+  const [viewPDF, setViewPDF] = useState(null);
+  const [viewCloseCartPDF, setViewCloseCartPDF] = useState(null);
+  const [openCloseCart, setOpenCloseCart] = useState(false);
   const [filters, setFilters] = useState({
     query: '',
-    startDate: null,
-    endDate: null,
-    customer: []
+    status: undefined
+  });
+  const [drawer, setDrawer] = useState({
+    isOpen: false,
+    orderId: undefined
   });
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  const getInvoices = useCallback(async () => {
-    try {
-      const data = await invoiceApi.getInvoices();
-
-      if (isMounted()) {
-        setInvoices(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
   useEffect(() => {
-      getInvoices();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    dispatch(getHistoryOrders());
+  }, [dispatch]);
 
-  const handleChangeGroup = (event) => {
-    setGroup(event.target.checked);
+  const handleTabsChange = (event, value) => {
+    setCurrentTab(value);
+    setFilters((prevState) => ({
+      ...prevState,
+      status: value === 'all' ? undefined : value
+    }));
   };
 
-  const handleToggleFilters = () => {
-    setOpenFilters((prevState) => !prevState);
+  const handleQueryChange = (event) => {
+    event.preventDefault();
+    setFilters((prevState) => ({
+      ...prevState,
+      query: queryRef.current?.value
+    }));
   };
 
-  const handleChangeFilters = (newFilters) => {
-    setFilters(newFilters);
-    setPage(0);
-  };
-
-  const handleCloseFilters = () => {
-    setOpenFilters(false);
+  const handleSortChange = (event) => {
+    const value = event.target.value;
+    setSort(value);
   };
 
   const handlePageChange = (event, newPage) => {
@@ -159,96 +164,150 @@ const InvoiceList = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  // Usually query is done on backend with indexing solutions
-  const filteredInvoices = applyFilters(invoices, filters);
-  const paginatedInvoices = applyPagination(filteredInvoices, page, rowsPerPage);
+  const handleOpenDrawer = (orderId) => {
+    setDrawer({
+      isOpen: true,
+      orderId
+    });
+  };
+
+  const handleCloseDrawer = () => {
+    setDrawer({
+      isOpen: false,
+      orderId: undefined
+    });
+  };
+
+  const onPreviewOrder = (order) => {
+    setViewPDF(order);
+  }
+
+  const filteredOrders = applyFilters(orderHistoryList, filters);
+  const sortedOrders = applySort(filteredOrders, sort);
+  const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
 
   return (
     <>
       <Head>
         <title>
-          Dashboard: Invoice List | Material Kit Pro
+          Dashboard: Histórico Ventas
         </title>
       </Head>
       <Box
         component="main"
         ref={rootRef}
         sx={{
-          backgroundColor: 'background.default',
+          backgroundColor: 'background.paper',
           display: 'flex',
           flexGrow: 1,
           overflow: 'hidden'
         }}
       >
-        <InvoiceListFilters
-          containerRef={rootRef}
-          filters={filters}
-          onChange={handleChangeFilters}
-          onClose={handleCloseFilters}
-          open={openFilters}
-        />
-        <InvoiceListInner open={openFilters}>
-          <Box sx={{ mb: 3 }}>
+        <InvoiceListInner open={drawer.isOpen}>
+          <Box sx={{ px: 3 }}>
             <Grid
               container
-              spacing={3}
               justifyContent="space-between"
+              spacing={3}
             >
               <Grid item>
                 <Typography variant="h4">
-                  Invoices
+                  Histórico de Ventas
                 </Typography>
               </Grid>
-              <Grid
-                item
-                sx={{ m: -1 }}
-              >
-                <Button
-                  endIcon={<FilterIcon fontSize="small" />}
-                  onClick={handleToggleFilters}
-                  sx={{ m: 1 }}
-                  variant="outlined"
-                >
-                  Filters
-                </Button>
-                <Button
-                  startIcon={<PlusIcon fontSize="small" />}
-                  sx={{ m: 1 }}
-                  variant="contained"
-                >
-                  New
-                </Button>
-              </Grid>
             </Grid>
+            <Tabs
+              indicatorColor="primary"
+              onChange={handleTabsChange}
+              scrollButtons="auto"
+              textColor="primary"
+              value={currentTab}
+              sx={{ mt: 3 }}
+              variant="scrollable"
+            >
+              {tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                />
+              ))}
+            </Tabs>
+          </Box>
+          <Divider />
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              flexWrap: 'wrap',
+              m: -1.5,
+              p: 3
+            }}
+          >
             <Box
+              component="form"
+              onSubmit={handleQueryChange}
               sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                mt: 3
+                flexGrow: 1,
+                m: 1.5
               }}
             >
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={group}
-                    onChange={handleChangeGroup}
-                  />
-                )}
-                label="Show groups"
+              <TextField
+                defaultValue=""
+                fullWidth
+                inputProps={{ ref: queryRef }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  )
+                }}
+                placeholder="Buscar por número de Venta"
               />
             </Box>
+            <TextField
+              label="Ordenar por"
+              name="order"
+              onChange={handleSortChange}
+              select
+              SelectProps={{ native: true }}
+              sx={{ m: 1.5 }}
+              value={sort}
+            >
+              {sortOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
           </Box>
-          <InvoiceListTable
-            group={group}
-            invoices={paginatedInvoices}
-            invoicesCount={filteredInvoices.length}
+          <Divider />
+          <OrderListTable
+            onOpenDrawer={handleOpenDrawer}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleRowsPerPageChange}
+            orders={paginatedOrders}
+            ordersCount={filteredOrders.length}
             page={page}
             rowsPerPage={rowsPerPage}
           />
         </InvoiceListInner>
+        <OrderDrawer
+          containerRef={rootRef}
+          onClose={handleCloseDrawer}
+          onPreviewPDF={onPreviewOrder}
+          open={drawer.isOpen}
+          order={orderHistoryList.find((order) => order.id === drawer.orderId)}
+        />
       </Box>
+      <OrderPdfDialog
+        viewPDF={viewPDF}
+        setViewPDF={setViewPDF}
+      />
     </>
   );
 };
