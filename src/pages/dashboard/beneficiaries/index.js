@@ -1,12 +1,16 @@
-import {Box, Button, Card, Container, Grid, Typography} from '@mui/material';
+import {Box, Button, Card, Container, Dialog, Grid, Typography} from '@mui/material';
+import {PDFViewer} from '@react-pdf/renderer';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
+import {TurnBeneficiaryPDF} from '../../../components/dashboard/turn/turn-beneficiary-pdf';
 import {useAuth} from '../../../hooks/use-auth';
+import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
 import {getBeneficiaries} from '../../../slices/beneficiary';
@@ -63,6 +67,7 @@ const BeneficiariesList = () => {
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF] = useState(null);
   const [filters, setFilters] = useState({
     name: undefined,
     category: [],
@@ -97,6 +102,10 @@ const BeneficiariesList = () => {
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
+
+  const handleBeneficiaryLicense = (beneficiary) => {
+    setViewBeneficiaryLicensePDF(beneficiary);
+  }
 
   // Usually query is done on backend with indexing solutions
   const filteredBeneficiaries = applyFilters(beneficiaries, filters);
@@ -154,10 +163,71 @@ const BeneficiariesList = () => {
               beneficiaries={paginatedBeneficiaries}
               beneficiariesCount={filteredBeneficiaries.length}
               rowsPerPage={rowsPerPage}
+              handleBeneficiaryLicense={handleBeneficiaryLicense}
             />
           </Card>
         </Container>
       </Box>
+      <Dialog
+        fullScreen
+        open={!!viewBeneficiaryLicensePDF}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'background.default',
+              p: 2,
+            }}
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px'
+              }}
+            >
+              <Button
+                startIcon={<ArrowLeftIcon fontSize="small" />}
+                onClick={() => setViewBeneficiaryLicensePDF(null)}
+                variant="contained"
+              >
+                Volver
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="h4">
+                Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <PDFViewer
+              height="100%"
+              style={{ border: 'none' }}
+              width="100%"
+              showToolbar={true}
+            >
+              {
+                viewBeneficiaryLicensePDF && (
+                  <BeneficiaryLicensePDF beneficiary={viewBeneficiaryLicensePDF} />
+                )
+              }
+            </PDFViewer>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 };

@@ -1,4 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 import {
   Box,
   IconButton,
@@ -7,7 +8,7 @@ import {
   TableCell,
   TableHead,
   TablePagination,
-  TableRow,
+  TableRow, Tooltip,
   Typography,
 } from '@mui/material';
 import {format} from 'date-fns';
@@ -24,6 +25,7 @@ export const BeneficiaryListTable = (props) => {
     beneficiaries,
     beneficiariesCount,
     rowsPerPage,
+    handleBeneficiaryLicense,
     ...other
   } = props;
 
@@ -104,10 +106,20 @@ export const BeneficiaryListTable = (props) => {
                         href={`/dashboard/beneficiaries/${beneficiary.id}/edit`}
                         passHref
                       >
-                        <IconButton component="a">
-                          <EditIcon fontSize="small" />
-                        </IconButton>
+                        <Tooltip title="Editar">
+                          <IconButton component="a">
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
                       </NextLink>
+                      <Tooltip title="Imprimir carnet">
+                        <IconButton
+                          component="a"
+                          onClick={() => handleBeneficiaryLicense(beneficiary)}
+                        >
+                          <PrintIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 </Fragment>
