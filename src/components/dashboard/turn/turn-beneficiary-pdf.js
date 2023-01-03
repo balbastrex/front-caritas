@@ -83,13 +83,21 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     flexDirection: 'row'
   },
-  tableCell1: {
-    padding: 6,
+  tableCellParish: {
+    padding: 2,
+    width: `30%`
+  },
+  tableCellDate: {
+    padding: 2,
+    width: `20%`
+  },
+  tableCellName: {
+    padding: 2,
     width: `50%`
   },
   tableCellN: {
-    padding: 6,
-    width: `15%`
+    padding: 2,
+    width: `10%`
   },
   alignRight: {
     textAlign: 'right'
@@ -148,17 +156,17 @@ export const TurnBeneficiaryPDF = (props) => {
                     Carnet
                   </Text>
                 </View>
-                <View style={styles.tableCell1} >
+                <View style={styles.tableCellName} >
                   <Text style={styles.h6}>
                     Nombre
                   </Text>
                 </View>
-                <View style={styles.tableCell1} >
+                <View style={styles.tableCellParish} >
                   <Text style={styles.h6}>
                     Parroquia
                   </Text>
                 </View>
-                <View style={styles.tableCell1} >
+                <View style={styles.tableCellDate} >
                   <Text style={styles.h6}>
                     Última compra
                   </Text>
@@ -176,17 +184,17 @@ export const TurnBeneficiaryPDF = (props) => {
                       {beneficiary.license}
                     </Text>
                   </View>
-                  <View style={styles.tableCell1}>
+                  <View style={styles.tableCellName}>
                     <Text style={[styles.body2, styles.alignLeft]}>
                       {beneficiary.name}
                     </Text>
                   </View>
-                  <View style={styles.tableCell1}>
+                  <View style={styles.tableCellParish}>
                     <Text style={[styles.body2, styles.alignLeft]}>
                       {beneficiary.parishName}
                     </Text>
                   </View>
-                  <View style={styles.tableCell1}>
+                  <View style={styles.tableCellDate}>
                     <Text style={[styles.body2, styles.alignCenter]}>
                       {format(new Date(beneficiary.lastDateOrder), 'dd/MM/yyyy')}
                     </Text>
