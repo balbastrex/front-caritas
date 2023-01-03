@@ -267,7 +267,9 @@ const Calendar = () => {
             rerenderDelay={10}
             select={handleRangeSelect}
             selectable
-            weekends = {false}
+            weekends = {true}
+            firstDay={1}
+            locale="es"
           />
         </FullCalendarWrapper>
       </Box>

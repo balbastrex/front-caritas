@@ -1,7 +1,6 @@
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
-import {Box, Button, Dialog, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {Box, Button, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';
-import {PDFViewer} from '@react-pdf/renderer';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useRef, useState} from 'react';
@@ -11,10 +10,8 @@ import {CloseCartModal} from '../../../components/dashboard/order/close-cart-mod
 import {CloseCartPdfDialog} from '../../../components/dashboard/order/close-cart-pdf-dialog';
 import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
 import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
-import {OrderPDF} from '../../../components/dashboard/order/order-pdf';
 import {OrderPdfDialog} from '../../../components/dashboard/order/order-pdf-dialog';
 import {useAuth} from '../../../hooks/use-auth';
-import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
@@ -203,7 +200,16 @@ const OrderList = () => {
 
   const handleCloseCart = () => {
     setOpenCloseCart(false);
+    closeOpenedOrders();
     setViewCloseCartPDF(orderList)
+  }
+
+  const closeOpenedOrders = () => {
+    orderList.forEach(order => {
+      if (order.status === 'Abierto') {
+        dispatch(updateStatusOrder(order.id, 'Pagado'));
+      }
+    });
   }
 
   const filteredOrders = applyFilters(orderList, filters);

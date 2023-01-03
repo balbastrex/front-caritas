@@ -79,7 +79,7 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
                 key={product.id}
                 sx={{ cursor: 'pointer' }}
                 disabled={true}
-                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.salesPrice, cost: product.costPrice, units: 1, maxUnits: product[calculateColumn(beneficiaryUF)] })}
+                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.free ? 0 : product.salesPrice, cost: product.costPrice, units: 1, maxUnits: product[calculateColumn(beneficiaryUF)] })}
               >
                 <TableCell>
                   <Typography

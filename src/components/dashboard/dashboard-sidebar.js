@@ -126,21 +126,11 @@ const getSections = (t) => [
         icon: <ShoppingCartCheckoutIcon fontSize="small" />,
         path: '/dashboard/orders',
       },
-      /*{
+      {
         title: t('Historico Ventas'),
         path: '/dashboard/invoices',
-        icon: <ReceiptTaxIcon fontSize="small" />,
-        children: [
-          {
-            title: t('List'),
-            path: '/dashboard/invoices'
-          },
-          {
-            title: t('Details'),
-            path: '/dashboard/invoices/1'
-          }
-        ]
-      },*/
+        icon: <ShoppingCartCheckoutIcon fontSize="small" />,
+      },
       {
         title: t('Turnos'),
         path: '/dashboard/turns',
