@@ -9,7 +9,7 @@ const initialState = {
   isLoading: false,
   error: false,
   orderList: [],
-  order: {},
+  order: null,
   orderHistoryList: [],
 };
 

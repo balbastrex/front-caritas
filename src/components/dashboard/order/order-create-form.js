@@ -30,9 +30,11 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (beneficiarySelector) {
+    if (beneficiarySelector && isEdit) {
       const beneficiary = beneficiarySelector.find(b => b.id === order.beneficiaryId);
-      updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
+      console.log('==> beneficiary ', beneficiary)
+      console.log('==> order ', order)
+      updateSummary({budget: beneficiary?.budget, lastDateOrder: beneficiary?.lastDateOrder});
     }
   }, [beneficiarySelector])
 

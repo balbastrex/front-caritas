@@ -93,7 +93,11 @@ const OrderCreate = () => {
               </Link>
             </NextLink>
           </Box>
-          <OrderCreateForm order={order} isEdit={true} updateSummary={updateSummary} />
+          {
+            order && (
+              <OrderCreateForm order={order} isEdit={true} updateSummary={updateSummary} />
+            )
+          }
         </Container>
         <OrderSummary quantity={quantity} total={total} budget={budget} lastDateOrder={lastDateOrder} />
       </Box>

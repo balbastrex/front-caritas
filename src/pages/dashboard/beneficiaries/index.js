@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf';
+import {BeneficiaryListFilters} from '../../../components/dashboard/beneficiary/beneficiary-list-filters';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
@@ -17,38 +18,14 @@ import {getBeneficiaries} from '../../../slices/beneficiary';
 import {useDispatch, useSelector} from '../../../store/index';
 import {UserProfiles} from '../../../utils/constants';
 
-const applyFilters = (products, filters) => products.filter((product) => {
+const applyFilters = (beneficiaries, filters) => beneficiaries.filter((beneficiary) => {
   if (filters.name) {
-    const nameMatched = product.name.toLowerCase().includes(filters.name.toLowerCase());
+    const nameMatched = beneficiary.name.toLowerCase().includes(filters.name.toLowerCase())
+      || beneficiary.lastname1?.toLowerCase().includes(filters.name.toLowerCase())
+      || beneficiary.lastname2?.toLowerCase().includes(filters.name.toLowerCase())
+      || beneficiary.license === parseInt(filters.name)
 
     if (!nameMatched) {
-      return false;
-    }
-  }
-
-  // It is possible to select multiple category options
-  if (filters.category?.length > 0) {
-    const categoryMatched = filters.category.includes(product.category);
-
-    if (!categoryMatched) {
-      return false;
-    }
-  }
-
-  // It is possible to select multiple status options
-  if (filters.status?.length > 0) {
-    const statusMatched = filters.status.includes(product.status);
-
-    if (!statusMatched) {
-      return false;
-    }
-  }
-
-  // Present only if filter required
-  if (typeof filters.inStock !== 'undefined') {
-    const stockMatched = product.inStock === filters.inStock;
-
-    if (!stockMatched) {
       return false;
     }
   }
@@ -92,6 +69,7 @@ const BeneficiariesList = () => {
   }, [user]);
 
   const handleFiltersChange = (filters) => {
+    console.log('==> filters ', filters)
     setFilters(filters);
   };
 
@@ -155,7 +133,7 @@ const BeneficiariesList = () => {
             </Grid>
           </Box>
           <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
+            <BeneficiaryListFilters onChange={handleFiltersChange} />
             <BeneficiaryListTable
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

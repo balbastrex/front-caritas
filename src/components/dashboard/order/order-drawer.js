@@ -82,7 +82,7 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
           Cancelar
         </Button>
         {
-          user.profileId === UserProfiles.GESTOR_PARROQUIA && (
+          user?.profileId === UserProfiles.CAJA_PEDIDOS && (
             <NextLink
               href={`/dashboard/orders/${order.id}/edit`}
               passHref
