@@ -11,6 +11,7 @@ const initialState = {
   orderList: [],
   order: null,
   orderHistoryList: [],
+  beneficiaryOrderHistoryList: [],
 };
 
 const slice = createSlice({
@@ -47,6 +48,11 @@ const slice = createSlice({
     getOrderCompleteListSuccess(state, action) {
       state.isLoading = false;
       state.orderHistoryList = action.payload;
+    },
+
+    getOrderBeneficiaryCompleteListSuccess(state, action) {
+      state.isLoading = false;
+      state.beneficiaryOrderHistoryList = action.payload;
     },
   }
 });
@@ -99,6 +105,18 @@ export function getHistoryOrders() {
     try {
       const response = await axios.get('/api/v1/order-history');
       dispatch(slice.actions.getOrderCompleteListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiaryHistoryOrders(beneficiaryId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/order-history/${beneficiaryId}`);
+      dispatch(slice.actions.getOrderBeneficiaryCompleteListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

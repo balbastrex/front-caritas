@@ -1,33 +1,22 @@
 import {Box, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';
 import Head from 'next/head';
+import {useRouter} from 'next/router';
 import {useEffect, useRef, useState} from 'react';
-import {AuthGuard} from '../../../components/authentication/auth-guard';
-import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
-import {OrderDrawer} from '../../../components/dashboard/order/order-drawer';
-import {OrderListTable} from '../../../components/dashboard/order/order-list-table';
-import {OrderPdfDialog} from '../../../components/dashboard/order/order-pdf-dialog';
-import {Search as SearchIcon} from '../../../icons/search';
-import {gtm} from '../../../lib/gtm';
-import {getHistoryOrders} from '../../../slices/order';
-import {useDispatch, useSelector} from '../../../store';
+import {AuthGuard} from '../../../../components/authentication/auth-guard';
+import {DashboardLayout} from '../../../../components/dashboard/dashboard-layout';
+import {OrderDrawer} from '../../../../components/dashboard/order/order-drawer';
+import {OrderListTable} from '../../../../components/dashboard/order/order-list-table';
+import {OrderPdfDialog} from '../../../../components/dashboard/order/order-pdf-dialog';
+import {Search as SearchIcon} from '../../../../icons/search';
+import {gtm} from '../../../../lib/gtm';
+import {getBeneficiaryHistoryOrders} from '../../../../slices/order';
+import {useDispatch, useSelector} from '../../../../store';
 
 const tabs = [
   {
     label: 'Todas',
     value: 'all'
-  },
-  {
-    label: 'Abiertas',
-    value: 'Abierto'
-  },
-  {
-    label: 'Pagadas',
-    value: 'Pagado'
-  },
-  {
-    label: 'Canceladas',
-    value: 'Cancelado'
   }
 ];
 
@@ -45,9 +34,8 @@ const sortOptions = [
 const applyFilters = (orders, filters) => orders.filter((order) => {
   if (filters.query) {
     const containsQuery = (order.id.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
-    const containsQueryBeneficiary = (order.beneficiaryName || '').toLowerCase().includes(filters.query.toLowerCase());
 
-    if (!containsQuery && !containsQueryBeneficiary) {
+    if (!containsQuery) {
       return false;
     }
   }
@@ -98,9 +86,9 @@ const InvoiceListInner = styled('div',
     })
   }));
 
-const InvoiceList = () => {
+const BeneficiaryOrdersHistoryList = () => {
   const dispatch = useDispatch();
-  const { orderHistoryList } = useSelector((state) => state.order);
+  const { beneficiaryOrderHistoryList } = useSelector((state) => state.order);
   const rootRef = useRef(null);
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
@@ -108,6 +96,8 @@ const InvoiceList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [viewPDF, setViewPDF] = useState(null);
+  const router = useRouter()
+  const { invoicebeneficiaryId } = router.query
   const [filters, setFilters] = useState({
     query: '',
     status: undefined
@@ -122,7 +112,7 @@ const InvoiceList = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getHistoryOrders());
+    dispatch(getBeneficiaryHistoryOrders(invoicebeneficiaryId));
   }, [dispatch]);
 
   const handleTabsChange = (event, value) => {
@@ -172,7 +162,7 @@ const InvoiceList = () => {
     setViewPDF(order);
   }
 
-  const filteredOrders = applyFilters(orderHistoryList, filters);
+  const filteredOrders = applyFilters(beneficiaryOrderHistoryList, filters);
   const sortedOrders = applySort(filteredOrders, sort);
   const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
 
@@ -202,7 +192,7 @@ const InvoiceList = () => {
             >
               <Grid item>
                 <Typography variant="h4">
-                  Histórico de Ventas
+                  Histórico de Ventas de beneficiario
                 </Typography>
               </Grid>
             </Grid>
@@ -253,7 +243,7 @@ const InvoiceList = () => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Buscar por número de Venta o Beneficiario"
+                placeholder="Buscar por número de Venta"
               />
             </Box>
             <TextField
@@ -291,7 +281,7 @@ const InvoiceList = () => {
           onClose={handleCloseDrawer}
           onPreviewPDF={onPreviewOrder}
           open={drawer.isOpen}
-          order={orderHistoryList.find((order) => order.id === drawer.orderId)}
+          order={beneficiaryOrderHistoryList.find((order) => order.id === drawer.orderId)}
         />
       </Box>
       <OrderPdfDialog
@@ -302,7 +292,7 @@ const InvoiceList = () => {
   );
 };
 
-InvoiceList.getLayout = (page) => (
+BeneficiaryOrdersHistoryList.getLayout = (page) => (
   <AuthGuard>
     <DashboardLayout>
       {page}
@@ -310,4 +300,4 @@ InvoiceList.getLayout = (page) => (
   </AuthGuard>
 );
 
-export default InvoiceList;
+export default BeneficiaryOrdersHistoryList;

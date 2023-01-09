@@ -106,7 +106,7 @@ const OrderPreview = (props) => {
 
   return (
     <>
-      { order && order.status !== 'Pagado' ? renderOpenedOrder({onApprove, onReject, order}) : null }
+      { order && order.status === 'Abierto' ? renderOpenedOrder({onApprove, onReject, order}) : null }
 
       <Typography
         sx={{ my: 3 }}
