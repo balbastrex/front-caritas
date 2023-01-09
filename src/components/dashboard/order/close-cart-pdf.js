@@ -223,17 +223,17 @@ export const CloseCartPDF = (props) => {
                   </View>
                   <View style={styles.tableCellShort}>
                     <Text style={[styles.body2, styles.alignRight]}>
-                      {numeral(order.amount).format(`0,0.00`)}€
+                      {numeral(order.budget).format(`0,0.00`)}€
                     </Text>
                   </View>
                   <View style={styles.tableCellShort}>
                     <Text style={[styles.body2, styles.alignRight]}>
-                      {numeral(order.amount).format(`0,0.00`)}€
+                      {numeral(order.beneficiaryAmount).format(`0,0.00`)}€
                     </Text>
                   </View>
                   <View style={styles.tableCellShort}>
                     <Text style={[styles.body2, styles.alignRight]}>
-                      {numeral(order.amount).format(`0,0.00`)}€
+                      {numeral(order.parishAmount).format(`0,0.00`)}€
                     </Text>
                   </View>
                   <View style={styles.tableCellShort}>

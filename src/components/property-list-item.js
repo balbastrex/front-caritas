@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Box, ListItem, ListItemText, Typography } from '@mui/material';
 
 export const PropertyListItem = (props) => {
-  const { align, children, disableGutters, value, label, ...other } = props;
+  const { align, children, disableGutters, value, suffix, label, ...other } = props;
 
   return (
     <ListItem
@@ -33,7 +33,7 @@ export const PropertyListItem = (props) => {
                 color="textSecondary"
                 variant="body2"
               >
-                {value}
+                {value} {suffix }
               </Typography>
             )}
           </Box>

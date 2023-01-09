@@ -247,7 +247,7 @@ const OrderList = () => {
               </Grid>
               <Grid item>
                 {
-                  user?.profileId === UserProfiles.DIRECTOR_ECONOMATO && (
+                  (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
                     <Button
                       startIcon={<RemoveShoppingCartIcon fontSize="small" />}
                       variant="contained"
@@ -258,21 +258,18 @@ const OrderList = () => {
                     </Button>
                   )
                 }
-                {
-                  user?.profileId === UserProfiles.CAJA_PEDIDOS && (
-                    <NextLink
-                      href={`/dashboard/orders/new`}
-                      passHref
+                  <NextLink
+                    href={`/dashboard/orders/new`}
+                    passHref
+                  >
+                    <Button
+                      sx={{ ml: 2 }}
+                      startIcon={<PlusIcon fontSize="small" />}
+                      variant="contained"
                     >
-                      <Button
-                        startIcon={<PlusIcon fontSize="small" />}
-                        variant="contained"
-                      >
-                        Nueva Venta
-                      </Button>
-                    </NextLink>
-                  )
-                }
+                      Nueva Venta
+                    </Button>
+                  </NextLink>
               </Grid>
             </Grid>
             <Tabs

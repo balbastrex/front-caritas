@@ -82,7 +82,7 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
           Cancelar
         </Button>
         {
-          user?.profileId === UserProfiles.CAJA_PEDIDOS && (
+          (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
             <NextLink
               href={`/dashboard/orders/${order.id}/edit`}
               passHref
@@ -161,7 +161,8 @@ const OrderPreview = (props) => {
           align={align}
           disableGutters
           label="Total"
-          value={numeral(order.amount).format(`${order.amount}0,0.00`)}
+          value={numeral(order.amount).format(`0,0.00`)}
+          suffix="€"
         />
         <PropertyListItem
           align={align}
@@ -206,10 +207,10 @@ const OrderPreview = (props) => {
                   {itemLine.units}
                 </TableCell>
                 <TableCell>
-                  {numeral(itemLine.price).format(`0,0.00`)}
+                  {numeral(itemLine.price).format(`0,0.00`)} €
                 </TableCell>
                 <TableCell>
-                  {numeral(itemLine.total).format(`0,0.00`)}
+                  {numeral(itemLine.total).format(`0,0.00`)} €
                 </TableCell>
               </TableRow>
             ))}
