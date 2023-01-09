@@ -13,9 +13,11 @@ import {
 } from '@mui/material';
 import {format} from 'date-fns';
 import NextLink from 'next/link';
+import {useRouter} from 'next/router';
 import PropTypes from 'prop-types';
 import {Fragment} from 'react';
 import {Scrollbar} from '../../scrollbar';
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 
 export const BeneficiaryListTable = (props) => {
   const {
@@ -28,6 +30,7 @@ export const BeneficiaryListTable = (props) => {
     handleBeneficiaryLicense,
     ...other
   } = props;
+  const router = useRouter();
 
   return (
     <div {...other}>
@@ -118,6 +121,14 @@ export const BeneficiaryListTable = (props) => {
                           onClick={() => handleBeneficiaryLicense(beneficiary)}
                         >
                           <PrintIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Mostrar ventas">
+                        <IconButton
+                          component="a"
+                          onClick={() => router.push(`/dashboard/invoices/beneficiary/${beneficiary.id}`) }
+                        >
+                          <ListAltOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
                     </TableCell>

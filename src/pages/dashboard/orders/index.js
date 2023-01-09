@@ -319,7 +319,7 @@ const OrderList = () => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Buscar por número de Venta"
+                placeholder="Buscar por número de Venta o Beneficiario"
               />
             </Box>
             <TextField
