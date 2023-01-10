@@ -38,7 +38,7 @@ export const OverviewBanner = (props) => {
         <div>
           <Chip
             color="secondary"
-            label="New"
+            label="Nuevo"
           />
         </div>
         <Typography
@@ -46,24 +46,15 @@ export const OverviewBanner = (props) => {
           sx={{ mt: 2 }}
           variant="h4"
         >
-          Welcome to Material Kit Pro v5!
+          Bienvenido a la nueva plataforma de ventas de Cáritas Valencia
         </Typography>
         <Typography
           color="inherit"
           sx={{ mt: 1 }}
           variant="subtitle2"
         >
-          Your dashboard has been improved! Explore new features like Notifications, Search, Jobs Platform and more.
+          Este dashboard se irá actualizando con las últimas novedades.
         </Typography>
-        <Box sx={{ mt: 2 }}>
-          <Button
-            color="secondary"
-            onClick={onDismiss}
-            variant="contained"
-          >
-            Dismiss Banner
-          </Button>
-        </Box>
       </div>
     </Card>
   );

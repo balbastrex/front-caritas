@@ -430,7 +430,7 @@ export const DashboardSidebar = (props) => {
               color="secondary.main"
               variant="subtitle1"
             >
-              {t('Gomez Avanza')}
+              {t('Cáritas Diocesana de Valencia')}
             </Typography>
           </Box>
         </Box>

@@ -51,10 +51,10 @@ const sortOptions = [
 
 const applyFilters = (orders, filters) => orders.filter((order) => {
   if (filters.query) {
-    const containsQuery = (order.id.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
     const containsQueryBeneficiary = (order.beneficiaryName || '').toLowerCase().includes(filters.query.toLowerCase());
+    const containsQueryLicense = (order.beneficiaryLicense?.toString() || '').toLowerCase().includes(filters.query.toLowerCase());
 
-    if (!containsQuery && !containsQueryBeneficiary) {
+    if (!containsQueryBeneficiary && !containsQueryLicense) {
       return false;
     }
   }
@@ -319,7 +319,7 @@ const OrderList = () => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Buscar por número de Venta o Beneficiario"
+                placeholder="Buscar por Beneficiario o Carnet"
               />
             </Box>
             <TextField

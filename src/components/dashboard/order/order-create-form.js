@@ -229,6 +229,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                   <OrderAddProducts
                     handleAddProduct={handleShowExceedModal}
                     beneficiaryUF={beneficiaryUF}
+                    orderLines={formik.values.orderLines}
                   />
                 </Grid>
               </CardContent>

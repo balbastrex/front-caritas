@@ -4,6 +4,10 @@ import numeral from 'numeral';
 
 export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
 
+  const getRest = () => {
+    return `${numeral(budget - total).format('0, 0.00')} €`;
+  }
+
   return(
     <Box
       display="flex"
@@ -96,7 +100,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           backgroundColor: total > budget ? 'error.light' : 'primary.dark',
           color: 'primary.contrastText',
           borderRadius: 1,
-          height: 150,
+          height: 170,
           width: 200,
           m: 2,
         }}
@@ -116,6 +120,9 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           </Typography>
           <Typography variant="h6">
             Importe: {numeral(total).format(`0,0.00`)} €
+          </Typography>
+          <Typography variant="h6">
+            Resta: {getRest()}
           </Typography>
         </Grid>
       </Grid>
