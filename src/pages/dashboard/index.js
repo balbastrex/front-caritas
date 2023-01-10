@@ -22,6 +22,7 @@ import { OverviewLatestTransactions } from '../../components/dashboard/overview/
 import { OverviewPrivateWallet } from '../../components/dashboard/overview/overview-private-wallet';
 import { OverviewTotalBalance } from '../../components/dashboard/overview/overview-total-balance';
 import { OverviewTotalTransactions } from '../../components/dashboard/overview/overview-total-transactions';
+import {useAuth} from '../../hooks/use-auth';
 import { ArrowRight as ArrowRightIcon } from '../../icons/arrow-right';
 import { Briefcase as BriefcaseIcon } from '../../icons/briefcase';
 import { Download as DownloadIcon } from '../../icons/download';
@@ -33,6 +34,7 @@ import { gtm } from '../../lib/gtm';
 
 const Overview = () => {
   const [displayBanner, setDisplayBanner] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -57,7 +59,7 @@ const Overview = () => {
     <>
       <Head>
         <title>
-          Dashboard: Overview | Material Kit Pro
+          Dashboard: Bienvenido
         </title>
       </Head>
       <Box
@@ -76,41 +78,8 @@ const Overview = () => {
             >
               <Grid item>
                 <Typography variant="h4">
-                  Good Morning
+                  Hola {user?.name} {user?.lastName}
                 </Typography>
-              </Grid>
-              <Grid
-                item
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  m: -1
-                }}
-              >
-                <Button
-                  startIcon={<ReportsIcon fontSize="small" />}
-                  sx={{ m: 1 }}
-                  variant="outlined"
-                >
-                  Reports
-                </Button>
-                <TextField
-                  defaultValue="week"
-                  label="Period"
-                  select
-                  size="small"
-                  sx={{ m: 1 }}
-                >
-                  <MenuItem value="week">
-                    Last week
-                  </MenuItem>
-                  <MenuItem value="month">
-                    Last month
-                  </MenuItem>
-                  <MenuItem value="year">
-                    Last year
-                  </MenuItem>
-                </TextField>
               </Grid>
             </Grid>
           </Box>
@@ -126,7 +95,7 @@ const Overview = () => {
                 <OverviewBanner onDismiss={handleDismissBanner} />
               </Grid>
             )}
-            <Grid
+            {/*<Grid
               item
               md={6}
               xs={12}
@@ -361,7 +330,7 @@ const Overview = () => {
                   </Button>
                 </CardActions>
               </Card>
-            </Grid>
+            </Grid>*/}
           </Grid>
         </Container>
       </Box>

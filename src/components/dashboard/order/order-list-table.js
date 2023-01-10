@@ -65,12 +65,12 @@ export const OrderListTable = (props) => {
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 6 }}>
-                  <Typography variant="subtitle2">
+                  <Typography variant="body2" color="textSecondary">
                     NºVenta: {order.id}
                   </Typography>
                   <Typography
-                    color="textSecondary"
-                    variant="body2"
+                    color="white"
+                    variant="subtitle2"
                   >
                     Total
                     {' '}
@@ -103,7 +103,7 @@ export const OrderListTable = (props) => {
                 </Box>
                 <Box sx={{ ml: 6 }}>
                   <Typography variant="subtitle2">
-                    Cantidad de Productos:
+                    NºProductos:
                   </Typography>
                   <Typography
                     color="textSecondary"
@@ -111,6 +111,12 @@ export const OrderListTable = (props) => {
                   >
                     {order.orderLines.length}
                   </Typography>
+                </Box>
+                <Box sx={{ ml: 6 }}>
+                  {`Carnet: `}
+                  <SeverityPill sx={{ mr: 4 }} color='success'>
+                    {order.beneficiaryLicense}
+                  </SeverityPill>
                 </Box>
                 <Box sx={{ ml: 6 }}>
                   <Typography variant="subtitle2">

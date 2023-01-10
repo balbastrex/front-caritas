@@ -23,6 +23,7 @@ import {X as XIcon} from '../../../icons/x';
 import {UserProfiles} from '../../../utils/constants';
 import {PropertyList} from '../../property-list';
 import {PropertyListItem} from '../../property-list-item';
+import {PropertyListItemBold} from '../../property-list-item-bold';
 import {Scrollbar} from '../../scrollbar';
 import {SeverityPill} from '../../severity-pill';
 import {severityMap} from './order-list-table';
@@ -157,7 +158,7 @@ const OrderPreview = (props) => {
           label="Fecha"
           value={format(order.createdAt, 'dd/MM/yyyy')}
         />
-        <PropertyListItem
+        <PropertyListItemBold
           align={align}
           disableGutters
           label="Total"

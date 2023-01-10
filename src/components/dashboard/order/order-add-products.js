@@ -70,7 +70,7 @@ const applySort = (orders, sortDir) => orders.sort((a, b) => {
   return sortDir === 'desc' ? comparator : -comparator;
 });
 
-const OrderAddProducts = ({ handleAddProduct, beneficiaryUF }) => {
+const OrderAddProducts = ({ handleAddProduct, beneficiaryUF, orderLines }) => {
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.product);
   const queryRef = useRef(null);
@@ -196,7 +196,12 @@ const OrderAddProducts = ({ handleAddProduct, beneficiaryUF }) => {
           </TextField>
         </Box>
         <Divider />
-        <OrderProductListTable products={sortedProducts} handleAddProduct={handleAddProduct} beneficiaryUF={beneficiaryUF} />
+        <OrderProductListTable
+          products={sortedProducts}
+          handleAddProduct={handleAddProduct}
+          beneficiaryUF={beneficiaryUF}
+          orderLines={orderLines}
+        />
       </Box>
     </>
   );

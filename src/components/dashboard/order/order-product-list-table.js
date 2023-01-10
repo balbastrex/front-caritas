@@ -32,10 +32,15 @@ const calculateColumn = (uf) => {
   }
 }
 
-export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryUF = 1 }) => {
+export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryUF = 1, orderLines }) => {
+
+  const getQuantity = (productId) => {
+    return orderLines.find((orderLine) => orderLine.productId === productId)?.units || 0;
+  }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 300 }}>
+      <TableContainer sx={{ maxHeight: 600 }}>
         <Table sx={{ minWidth: 700}} stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -59,7 +64,7 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
                 Stock
               </TableCell>
               <TableCell>
-                Coste
+                Añadidos
               </TableCell>
               <TableCell>
                 Precio
@@ -95,8 +100,10 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
                 <TableCell align="right">
                   {product.stock}
                 </TableCell>
-                <TableCell align="right">
-                  {numeral(product.costPrice).format(`0,0.00`)} €
+                <TableCell align="center">
+                  <SeverityPill color={getQuantity(product.id) === 0 ? 'warning' : 'success'}>
+                    {getQuantity(product.id)}
+                  </SeverityPill>
                 </TableCell>
                 <TableCell align="right">
                   {numeral(product.salesPrice).format(`0,0.00`)} €
