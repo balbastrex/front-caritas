@@ -8,6 +8,7 @@ import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderCreateForm} from '../../../components/dashboard/order/order-create-form';
 import {OrderSummary} from '../../../components/dashboard/order/order-summary';
 import {gtm} from '../../../lib/gtm';
+import {baseThemeOptions} from '../../../theme/base-theme-options';
 
 const OrderCreate = () => {
   const [quantity, setQuantity] = useState(0);
@@ -44,10 +45,10 @@ const OrderCreate = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{ mx: 0 }}>
           <Box sx={{ mb: 4 }}>
             <NextLink
               href="/dashboard/orders"

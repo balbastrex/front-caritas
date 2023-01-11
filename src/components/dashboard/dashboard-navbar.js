@@ -1,3 +1,4 @@
+import {useRouter} from 'next/router';
 import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -249,18 +250,23 @@ const AccountButton = () => {
 export const DashboardNavbar = (props) => {
   const { user } = useAuth();
   const { onOpenSidebar, ...other } = props;
+  const router = useRouter();
+
+  const isNewOrderPage = router.pathname === '/dashboard/orders/new';
+  const getSx = () => (isNewOrderPage ? {} : {
+    left: {
+      lg: 280
+    },
+    width: {
+      lg: 'calc(100% - 280px)'
+    }
+  });
+  const getDisplay = () => (isNewOrderPage ? 'inline-flex' : 'none');
 
   return (
     <>
       <DashboardNavbarRoot
-        sx={{
-          left: {
-            lg: 280
-          },
-          width: {
-            lg: 'calc(100% - 280px)'
-          }
-        }}
+        sx={getSx()}
         {...other}>
         <Toolbar
           disableGutters
@@ -275,7 +281,7 @@ export const DashboardNavbar = (props) => {
             sx={{
               display: {
                 xs: 'inline-flex',
-                lg: 'none'
+                lg: getDisplay()
               }
             }}
           >
