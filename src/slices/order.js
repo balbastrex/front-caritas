@@ -54,6 +54,14 @@ const slice = createSlice({
       state.isLoading = false;
       state.beneficiaryOrderHistoryList = action.payload;
     },
+    getDeleteOrderSuccess(state, action) {
+      console.log('==> action ', action)
+      state.isLoading = false;
+      const existingOrders = JSON.parse(JSON.stringify(state.orderList));
+      const orderIndex = existingOrders.findIndex((order) => order.id === action.payload.orderId);
+      existingOrders.splice(orderIndex, 1);
+      state.orderList = existingOrders;
+    }
   }
 });
 
@@ -117,6 +125,18 @@ export function getBeneficiaryHistoryOrders(beneficiaryId) {
     try {
       const response = await axios.get(`/api/v1/order-history/${beneficiaryId}`);
       dispatch(slice.actions.getOrderBeneficiaryCompleteListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDeleteOrderById(orderId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.delete(`/api/v1/order/${orderId}`);
+      dispatch(slice.actions.getDeleteOrderSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

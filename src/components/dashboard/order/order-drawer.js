@@ -29,7 +29,7 @@ import {SeverityPill} from '../../severity-pill';
 import {severityMap} from './order-list-table';
 import {OrderPDF} from './order-pdf';
 
-const renderOpenedOrder = ({onApprove, onReject, order}) => {
+const renderOpenedOrder = ({onApprove, onReject, order, onDelete}) => {
   const { user } = useAuth();
   return (
     <Box
@@ -46,13 +46,6 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
         py: 2.5
       }}
     >
-      <Typography
-        color="textSecondary"
-        sx={{ mr: 2 }}
-        variant="overline"
-      >
-        Acciones
-      </Typography>
       <Box
         sx={{
           alignItems: 'center',
@@ -96,18 +89,29 @@ const renderOpenedOrder = ({onApprove, onReject, order}) => {
             </NextLink>
           )
         }
+        {
+          (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
+            <Button
+              size="small"
+              color="error"
+              onClick={() => onDelete(order.id)}
+            >
+              Eliminar
+            </Button>
+          )
+        }
       </Box>
     </Box>
   )
 }
 
 const OrderPreview = (props) => {
-  const { lgUp, onApprove, onReject, order } = props;
+  const { lgUp, onApprove, onReject, order, onDelete, actions } = props;
   const align = lgUp ? 'horizontal' : 'vertical';
 
   return (
     <>
-      { order && order.status === 'Abierto' ? renderOpenedOrder({onApprove, onReject, order}) : null }
+      { order && order.status === 'Abierto' && actions ? renderOpenedOrder({onApprove, onReject, order, onDelete}) : null }
 
       <Typography
         sx={{ my: 3 }}
@@ -245,7 +249,7 @@ const OrderDrawerMobile = styled(Drawer)({
 });
 
 export const OrderDrawer = (props) => {
-  const { containerRef, onClose, open, order, onApprove, onPreviewPDF, ...other } = props;
+  const { containerRef, onClose, open, order, onApprove, onPreviewPDF, onDelete, actions = false, ...other } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
   const content = order
@@ -305,7 +309,9 @@ export const OrderDrawer = (props) => {
           onApprove={onApprove}
           onReject={onClose}
           order={order}
+          onDelete={onDelete}
           lgUp={lgUp}
+          actions={actions}
         />
         </Box>
       </>

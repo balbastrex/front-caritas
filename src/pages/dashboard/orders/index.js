@@ -15,7 +15,7 @@ import {useAuth} from '../../../hooks/use-auth';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
-import {getOrders, updateStatusOrder} from '../../../slices/order';
+import {getDeleteOrderById, getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
 import {UserProfiles} from '../../../utils/constants';
 
@@ -185,6 +185,14 @@ const OrderList = () => {
       orderId: undefined
     });
   };
+
+  const handleDelete = (orderId) => {
+    dispatch(getDeleteOrderById(orderId));
+    setDrawer({
+      isOpen: false,
+      orderId: undefined
+    });
+  }
 
   const onPreviewOrder = (order) => {
     setViewPDF(order);
@@ -359,6 +367,8 @@ const OrderList = () => {
           open={drawer.isOpen}
           order={orderList.find((order) => order.id === drawer.orderId)}
           onApprove={handleApprove}
+          onDelete={handleDelete}
+          actions={true}
         />
       </Box>
       <OrderPdfDialog
