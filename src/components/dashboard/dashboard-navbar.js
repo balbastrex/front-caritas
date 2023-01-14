@@ -12,7 +12,7 @@ import {
   Toolbar,
   Tooltip, Typography,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import {alpha, styled} from '@mui/material/styles';
 import {useAuth} from '../../hooks/use-auth';
 import { Menu as MenuIcon } from '../../icons/menu';
 import { Bell as BellIcon } from '../../icons/bell';
@@ -287,7 +287,7 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, color: (theme) => theme.palette.text.primary }}>
             Usuario: {user?.name} {user?.lastName} / Perfil: {getProfileName(user?.profileId)}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
