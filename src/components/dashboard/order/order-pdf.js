@@ -85,12 +85,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   tableCell1: {
-    padding: 6,
+    padding: 3,
     width: `${COL1_WIDTH}%`
   },
   tableCellN: {
-    padding: 6,
+    padding: 3,
     width: `${COLN_WIDTH}%`
+  },
+  tableCellSummary: {
+    padding: 3,
+    width: `40%`
   },
   alignRight: {
     textAlign: 'right'
@@ -205,17 +209,45 @@ export const OrderPDF = (props) => {
                   </View>
                 </View>
               ))}
-              <View style={styles.summatoryTableRow}>
+              <View style={styles.tableRow}>
                 <View style={styles.tableCell1} />
                 <View style={styles.tableCell1} />
-                <View style={styles.tableCellN}>
-                  <Text style={[styles.h6]}>
+                <View style={styles.tableCellSummary}>
+                  <Text style={[styles.h6, styles.alignRight]}>
                     Total
                   </Text>
                 </View>
                 <View style={styles.tableCellN}>
                   <Text style={[styles.h6, styles.alignRight]}>
                     {numeral(order.amount).format(`0,0.00`)}€
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.tableRow}>
+                <View style={styles.tableCell1} />
+                <View style={styles.tableCell1} />
+                <View style={styles.tableCellSummary}>
+                  <Text style={[styles.h6, styles.alignRight]}>
+                    Total Parroquia
+                  </Text>
+                </View>
+                <View style={styles.tableCellN}>
+                  <Text style={[styles.h6, styles.alignRight]}>
+                    {numeral(order.parishAmount).format(`0,0.00`)}€
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.summatoryTableRow}>
+                <View style={styles.tableCell1} />
+                <View style={styles.tableCell1} />
+                <View style={styles.tableCellSummary}>
+                  <Text style={[styles.h6, styles.alignRight]}>
+                    Total Beneficiario
+                  </Text>
+                </View>
+                <View style={styles.tableCellN}>
+                  <Text style={[styles.h6, styles.alignRight]}>
+                    {numeral(order.beneficiaryAmount).format(`0,0.00`)}€
                   </Text>
                 </View>
               </View>

@@ -55,7 +55,6 @@ const slice = createSlice({
       state.beneficiaryOrderHistoryList = action.payload;
     },
     getDeleteOrderSuccess(state, action) {
-      console.log('==> action ', action)
       state.isLoading = false;
       const existingOrders = JSON.parse(JSON.stringify(state.orderList));
       const orderIndex = existingOrders.findIndex((order) => order.id === action.payload.orderId);
