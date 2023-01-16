@@ -23,3 +23,10 @@ export const getProfileName = (profileId) => {
       return "Desconocido";
   }
 }
+
+export const OrderStatuses = {
+  ABIERTO: 'Abierto',
+  CERRADO: 'Cerrado',
+  CANCELADO: 'Cancelado',
+  PAGADO: 'Pagado',
+}

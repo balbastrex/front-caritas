@@ -20,7 +20,7 @@ import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {useAuth} from '../../../hooks/use-auth';
 import {X as XIcon} from '../../../icons/x';
-import {UserProfiles} from '../../../utils/constants';
+import {OrderStatuses, UserProfiles} from '../../../utils/constants';
 import {PropertyList} from '../../property-list';
 import {PropertyListItem} from '../../property-list-item';
 import {PropertyListItemBold} from '../../property-list-item-bold';
@@ -111,7 +111,7 @@ const OrderPreview = (props) => {
 
   return (
     <>
-      { order && order.status === 'Abierto' && actions ? renderOpenedOrder({onApprove, onReject, order, onDelete}) : null }
+      { order && order.status === OrderStatuses.ABIERTO && actions ? renderOpenedOrder({onApprove, onReject, order, onDelete}) : null }
 
       <Typography
         sx={{ my: 3 }}

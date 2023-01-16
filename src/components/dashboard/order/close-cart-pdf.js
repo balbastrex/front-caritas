@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import numeral from 'numeral';
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import {useEffect} from 'react';
 
 const COL1_WIDTH = 60;
 const COLN_WIDTH = (100 - COL1_WIDTH) / 2;
@@ -141,6 +142,18 @@ const styles = StyleSheet.create({
 export const CloseCartPDF = (props) => {
   const { orders } = props;
 
+  const totalOrders = orders.reduce((acc, order) => {
+    return acc + order.amount;
+  }, 0);
+
+  const totalQuantity = orders.length;
+  const totalBeneficiary = orders.reduce((acc, order) => {
+    return acc + parseFloat(order.beneficiaryAmount);
+  }, 0);
+  const totalParish = orders.reduce((acc, order) => {
+    return acc + parseFloat(order.parishAmount);
+  }, 0);
+
   return (
     <Document>
       <Page
@@ -163,10 +176,10 @@ export const CloseCartPDF = (props) => {
               CIERRE DE CAJA
             </Text>
             <Text style={styles.h4}>
-              {orders[0].marketName}
+              {orders[0]?.marketName}
             </Text>
             <Text style={styles.body2}>
-              Fecha {format(orders[0].createdAt, 'dd/MM/yyyy')}
+              Fecha {format(orders[0]?.createdAt, 'dd/MM/yyyy')}
             </Text>
           </View>
         </View>
@@ -276,7 +289,7 @@ export const CloseCartPDF = (props) => {
               </View>
               <View style={styles.tableSummaryCell}>
                 <Text style={[styles.body2, styles.alignRight]}>
-                  xxx ventas
+                  {totalQuantity}
                 </Text>
               </View>
             </View>
@@ -289,7 +302,7 @@ export const CloseCartPDF = (props) => {
               </View>
               <View style={styles.tableSummaryCell}>
                 <Text style={[styles.body2, styles.alignRight]}>
-                  xxx € Beneficiarios
+                  {numeral(totalBeneficiary).format(`0,0.00`)}€
                 </Text>
               </View>
             </View>
@@ -302,7 +315,7 @@ export const CloseCartPDF = (props) => {
               </View>
               <View style={styles.tableSummaryCell}>
                 <Text style={[styles.body2, styles.alignRight]}>
-                   xxx € Parroquias
+                  {numeral(totalParish).format(`0,0.00`)}€
                 </Text>
               </View>
             </View>
@@ -315,7 +328,7 @@ export const CloseCartPDF = (props) => {
               </View>
               <View style={styles.tableSummaryCell}>
                 <Text style={[styles.body2, styles.alignRight]}>
-                  xxx € Gastos
+                  {numeral(totalOrders).format(`0,0.00`)}€
                 </Text>
               </View>
             </View>
@@ -328,7 +341,7 @@ export const CloseCartPDF = (props) => {
               </View>
               <View style={styles.tableSummaryCell}>
                 <Text style={[styles.totalSummary, styles.alignRight]}>
-                  xxx € Recaudado
+                  {numeral(totalBeneficiary).format(`0,0.00`)}€
                 </Text>
               </View>
             </View>
@@ -341,5 +354,5 @@ export const CloseCartPDF = (props) => {
 };
 
 CloseCartPDF.propTypes = {
-  orders: PropTypes.array.isRequired
+  data: PropTypes.object.isRequired
 };
