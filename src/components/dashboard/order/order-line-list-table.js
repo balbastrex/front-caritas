@@ -57,7 +57,8 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
               return (
                 <TableRow
                   key={orderLine.productId}
-                  sx={{backgroundColor: orderLine.units > orderLine.maxUnits ? 'error.light' : 'background.paper'}}
+                  sx={{backgroundColor: orderLine.units > orderLine.maxUnits ? 'error.light' : 'background.paper', cursor: 'pointer'}}
+                  onClick={() => handleRemoveLine(orderLine.productId)}
                 >
                   <TableCell>
                     <Typography
