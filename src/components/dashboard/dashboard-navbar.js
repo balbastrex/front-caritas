@@ -250,23 +250,18 @@ const AccountButton = () => {
 export const DashboardNavbar = (props) => {
   const { user } = useAuth();
   const { onOpenSidebar, ...other } = props;
-  const router = useRouter();
-
-  const isNewOrderPage = router.pathname === '/dashboard/orders/new';
-  const getSx = () => (isNewOrderPage ? {} : {
-    left: {
-      lg: 280
-    },
-    width: {
-      lg: 'calc(100% - 280px)'
-    }
-  });
-  const getDisplay = () => (isNewOrderPage ? 'inline-flex' : 'none');
 
   return (
     <>
       <DashboardNavbarRoot
-        sx={getSx()}
+        sx={{
+          left: {
+            lg: 280
+          },
+          width: {
+            lg: 'calc(100% - 280px)'
+          }
+        }}
         {...other}>
         <Toolbar
           disableGutters
@@ -281,7 +276,7 @@ export const DashboardNavbar = (props) => {
             sx={{
               display: {
                 xs: 'inline-flex',
-                lg: getDisplay()
+                lg: 'none'
               }
             }}
           >
