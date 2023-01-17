@@ -13,18 +13,13 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   maxWidth: '100%',
   paddingTop: 64,
   [theme.breakpoints.up('lg')]: {
-    // paddingLeft: 280
+    paddingLeft: 280
   }
 }));
 
 export const DashboardLayout = (props) => {
   const { children } = props;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const router = useRouter();
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  const isNewOrderPage = router.pathname === '/dashboard/orders/new';
-
-  const paddingLeft = !isNewOrderPage && lgUp ? 35 : 0;
 
   return (
     <>
@@ -35,21 +30,16 @@ export const DashboardLayout = (props) => {
             flex: '1 1 auto',
             flexDirection: 'column',
             width: '100%',
-            paddingLeft: paddingLeft
           }}
         >
           {children}
         </Box>
       </DashboardLayoutRoot>
       <DashboardNavbar onOpenSidebar={() => setIsSidebarOpen(true)} />
-      {
-        !isNewOrderPage && (
-          <DashboardSidebar
-            onClose={() => setIsSidebarOpen(false)}
-            open={isSidebarOpen}
-          />
-        )
-      }
+      <DashboardSidebar
+        onClose={() => setIsSidebarOpen(false)}
+        open={isSidebarOpen}
+      />
     </>
   );
 };

@@ -22,43 +22,22 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
         alignContent: 'right',
         borderRadius: 1,
         height: 600,
-        width: 210,
+        width: 160,
         m: 2,
         zIndex: 5
       }}
     >
-      <Grid
-        container
-        display="flex"
-        flexDirection="column"
-        sx={{
-          backgroundColor: 'primary.dark',
-          color: 'primary.contrastText',
-          borderRadius: 1,
-          height: 150,
-          width: 200,
-          m: 2,
-        }}
-      >
-        <Grid
-          sx={{ textAlign: 'center', pt: 1, borderBottom: 2, borderColor: 'primary.contrastText' }}
-        >
-          <Typography variant="h4" sx={{ mb: 1, }} >
-            Notas
-          </Typography>
-        </Grid>
         <Grid
           sx={{ textAlign: 'center', pt: 2, pl: 2 }}
         >
           <Button
             // onClick={() => onApprove(order.id)}
             size="large"
-            style={{ backgroundColor: 'black' }}
+            style={{ backgroundColor: '#FFB020',color: 'black', marginRight: '15px' }}
           >
             Ver Notas
           </Button>
         </Grid>
-      </Grid>
 
       <Grid
         container
@@ -69,7 +48,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           color: 'primary.contrastText',
           borderRadius: 1,
           height: 150,
-          width: 200,
+          width: 150,
           m: 2,
         }}
       >
@@ -77,7 +56,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           sx={{ textAlign: 'center', pt: 1, borderBottom: 2, borderColor: 'primary.contrastText' }}
         >
           <Typography variant="h4" sx={{ mb: 1, }} >
-            Beneficiario
+            Bº
           </Typography>
         </Grid>
         <Grid
@@ -87,7 +66,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
             Ayuda: {budget} €
           </Typography>
           <Typography variant="h6">
-            Últ.Vta:{format(new Date(lastDateOrder), 'dd/MM/yyyy')}
+            {format(new Date(lastDateOrder), 'dd/MM/yyyy')}
           </Typography>
         </Grid>
       </Grid>
@@ -101,7 +80,7 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           color: 'primary.contrastText',
           borderRadius: 1,
           height: 170,
-          width: 200,
+          width: 150,
           m: 2,
         }}
       >
@@ -109,17 +88,17 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
           sx={{ textAlign: 'center', pt: 1, borderBottom: 2, borderColor: 'primary.contrastText' }}
         >
           <Typography variant="h4" sx={{ mb: 1 }} >
-            Total Venta
+            Venta
           </Typography>
         </Grid>
         <Grid
           sx={{ textAlign: 'left', pt: 2, pl: 2 }}
         >
           <Typography variant="h6">
-            NºProductos: {quantity}
+            NºProd.: {quantity}
           </Typography>
           <Typography variant="h6">
-            Importe: {numeral(total).format(`0,0.00`)} €
+            Total: {numeral(total).format(`0,0.00`)} €
           </Typography>
           <Typography variant="h6">
             Resta: {getRest()}
