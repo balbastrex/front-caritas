@@ -30,7 +30,7 @@ export const ProductListTable = (props) => {
   return (
     <div {...other}>
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell />
@@ -38,22 +38,7 @@ export const ProductListTable = (props) => {
                 Nombre
               </TableCell>
               <TableCell>
-                UF1
-              </TableCell>
-              <TableCell>
-                UF2
-              </TableCell>
-              <TableCell>
-                UF3
-              </TableCell>
-              <TableCell>
-                UF4
-              </TableCell>
-              <TableCell>
-                UF5
-              </TableCell>
-              <TableCell>
-                UF6
+                UF1-UF6
               </TableCell>
               <TableCell>
                 Gratuito
@@ -118,22 +103,7 @@ export const ProductListTable = (props) => {
                       </Box>
                     </TableCell>
                     <TableCell>
-                      {product.q1}
-                    </TableCell>
-                    <TableCell>
-                      {product.q2}
-                    </TableCell>
-                    <TableCell>
-                      {product.q3}
-                    </TableCell>
-                    <TableCell>
-                      {product.q4}
-                    </TableCell>
-                    <TableCell>
-                      {product.q5}
-                    </TableCell>
-                    <TableCell>
-                      {product.q6}
+                      {product.q1}-{product.q2}-{product.q3}-{product.q4}-{product.q5}-{product.q6}
                     </TableCell>
                     <TableCell align="center">
                       <SeverityPill color={product.free ? 'success' : 'warning'}>

@@ -1,3 +1,4 @@
+import locale from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
@@ -12,17 +13,17 @@ import { Plus as PlusIcon } from '../../../icons/plus';
 const viewOptions = [
   {
     icon: ViewConfigIcon,
-    label: 'Month',
+    label: 'Mes',
     value: 'dayGridMonth'
   },
   {
     icon: ViewWeekIcon,
-    label: 'Week',
+    label: 'Semana',
     value: 'timeGridWeek'
   },
   {
     icon: ViewDayIcon,
-    label: 'Day',
+    label: 'Día',
     value: 'timeGridDay'
   },
   {
@@ -75,7 +76,7 @@ export const CalendarToolbar = (props) => {
         }}
       >
         <Typography variant="h5">
-          {format(date, 'MMMM')}
+          {format(date, 'MMMM', { locale })}
         </Typography>
         <Typography
           sx={{
@@ -152,7 +153,7 @@ export const CalendarToolbar = (props) => {
           }}
           variant="contained"
         >
-          New Event
+          Nuevo turno
         </Button>
       </Box>
     </Box>

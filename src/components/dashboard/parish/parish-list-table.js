@@ -86,7 +86,7 @@ export const ParishListTable = (props) => {
   return (
     <div {...other}>
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell />
@@ -98,9 +98,6 @@ export const ParishListTable = (props) => {
               </TableCell>
               <TableCell>
                 Dirección
-              </TableCell>
-              <TableCell>
-                Email
               </TableCell>
               <TableCell>
                 Teléfono
@@ -163,9 +160,6 @@ export const ParishListTable = (props) => {
                     </TableCell>
                     <TableCell>
                       {parish.address}
-                    </TableCell>
-                    <TableCell>
-                      {parish.email}
                     </TableCell>
                     <TableCell>
                       {parish.phone}
