@@ -29,7 +29,7 @@ export const ProviderListTable = (props) => {
   return (
     <div {...other}>
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell />

@@ -132,15 +132,18 @@ export const CalendarEventDialog = (props) => {
               : 'Añadir Servicio'}
           </Typography>
         </Box>
-        <Box sx={{  }}>
-          <Typography
-            align="center"
-            gutterBottom
-            variant="h6"
-          >
-            Economato: {event?.marketName}
-          </Typography>
-        </Box>
+        {
+          event && (
+            <Box sx={{}}>
+              <Typography
+                align="center"
+                gutterBottom
+                variant="h6"
+              >
+                Economato: {event?.marketName}
+              </Typography>
+            </Box>)
+        }
         <Box sx={{ p: 3 }}>
           <TextField
             defaultValue={formik.values.turnId}

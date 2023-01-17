@@ -35,7 +35,7 @@ export const BeneficiaryListTable = (props) => {
   return (
     <div {...other}>
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell />
@@ -52,12 +52,12 @@ export const BeneficiaryListTable = (props) => {
                 Caducidad
               </TableCell>
               <TableCell>
-                Presupuesto
+                Pres.
               </TableCell>
               <TableCell>
                 U.F.
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 Acciones
               </TableCell>
             </TableRow>

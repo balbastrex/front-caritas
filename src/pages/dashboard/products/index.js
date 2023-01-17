@@ -103,7 +103,7 @@ const ProductList = () => {
           py: 8
         }}
       >
-        <Container maxWidth="xl">
+        <Container>
           <Box sx={{ mb: 4 }}>
             <Grid
               container

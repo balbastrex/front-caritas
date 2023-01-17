@@ -48,7 +48,7 @@ const OrderCreate = () => {
           py: 8,
         }}
       >
-        <Container maxWidth="md" sx={{ mx: { md: 0, lg: 8 } }}>
+        <Container sx={{ mx: { md: 0, lg: 8}, maxWidth: { md: "md", lg: "lg" } }}>
           <Box sx={{ mb: 4 }}>
             <NextLink
               href="/dashboard/orders"
