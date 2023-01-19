@@ -21,24 +21,12 @@ export const OrderSummary = ({ quantity, total, budget, lastDateOrder}) => {
         justifyContent: 'right',
         alignContent: 'right',
         borderRadius: 1,
-        height: 600,
+        height: 500,
         width: 160,
         m: 2,
         zIndex: 5
       }}
     >
-        <Grid
-          sx={{ textAlign: 'center', pt: 2, pl: 2 }}
-        >
-          <Button
-            // onClick={() => onApprove(order.id)}
-            size="large"
-            style={{ backgroundColor: '#FFB020',color: 'black', marginRight: '15px' }}
-          >
-            Ver Notas
-          </Button>
-        </Grid>
-
       <Grid
         container
         display="flex"

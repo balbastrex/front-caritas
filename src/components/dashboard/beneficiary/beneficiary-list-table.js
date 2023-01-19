@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import {Fragment} from 'react';
 import {Scrollbar} from '../../scrollbar';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
+import NoteAltOutlinedIcon from '@mui/icons-material/NoteAltOutlined';
 
 export const BeneficiaryListTable = (props) => {
   const {
@@ -129,6 +130,14 @@ export const BeneficiaryListTable = (props) => {
                           onClick={() => router.push(`/dashboard/invoices/beneficiary/${beneficiary.id}`) }
                         >
                           <ListAltOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Mostrar notas">
+                        <IconButton
+                          component="a"
+                          onClick={() => router.push(`/dashboard/beneficiaries/${beneficiary.id}/notes`) }
+                        >
+                          <NoteAltOutlinedIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
                     </TableCell>

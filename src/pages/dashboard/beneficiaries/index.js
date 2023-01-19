@@ -58,7 +58,7 @@ const BeneficiariesList = () => {
 
   useEffect(() => {
       dispatch(getBeneficiaries());
-      }, [dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     setBeneficiaries(beneficiaryList);
