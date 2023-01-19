@@ -21,6 +21,7 @@ import serviceReducer from '../slices/service';
 import turnReducer from '../slices/turn';
 import providerReducer from '../slices/provider';
 import userReducer from '../slices/user';
+import noteReducer from '../slices/note';
 
 export const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -45,4 +46,5 @@ export const rootReducer = combineReducers({
   receipt: receiptReducer,
   provider: providerReducer,
   user: userReducer,
+  note: noteReducer,
 });

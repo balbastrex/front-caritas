@@ -1,81 +1,73 @@
-import { Avatar, Box, Button, Container, Paper, Typography } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import WarningIcon from '@mui/icons-material/WarningOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import PropTypes from 'prop-types';
 
-export const ShowBeneficiaryNotesModal = ({ handleClose, handleCloseCart }) => {
+export const ShowBeneficiaryNotesModal = ({ notes, handleClose }) => {
+
+  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+      padding: theme.spacing(2),
+      minWidth: '600px',
+    },
+    '& .MuiDialogActions-root': {
+      padding: theme.spacing(1),
+    },
+  }));
+
+  function BootstrapDialogTitle(props) {
+    const { children, onClose, ...other } = props;
+
+    return (
+      <DialogTitle sx={{ m: 0, p: 2, textAlign: 'center' }} {...other}>
+        {children}
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
+    );
+  }
+
+  BootstrapDialogTitle.propTypes = {
+    children: PropTypes.node,
+    onClose: PropTypes.func.isRequired,
+  };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: 'background.default',
-        minHeight: '100%',
-        p: 3,
-      }}
+    <BootstrapDialog
+      sx={ { minWidth: 200 } }
+      onClose={handleClose}
+      aria-labelledby="customized-dialog-title"
+      open={open}
     >
-      <Container maxWidth="sm">
-        <Paper elevation={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              pb: 2,
-              pt: 3,
-              px: 3,
-            }}
-          >
-            <Avatar
-              sx={{
-                backgroundColor: (theme) => alpha(theme.palette.error.main, 0.08),
-                color: 'error.main',
-                mr: 2,
-              }}
-            >
-              <WarningIcon fontSize="small" />
-            </Avatar>
-            <div>
-              <Typography variant="h5">
-                Notas del beneficiario
-              </Typography>
-              <Typography
-                color="textSecondary"
-                sx={{mt: 1}}
-                variant="body2"
-              >
-                ¿Está seguro que desea cerrar la caja?
-                Esto implica que no se podrán realizar más ventas.
-                Además esto generará un reporte de cierre de caja.
-              </Typography>
-            </div>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              px: 3,
-              py: 1.5,
-            }}
-          >
-            <Button
-              sx={{mr: 2}}
-              variant="outlined"
-              onClick={handleClose}
-            >
-              Cancelar
-            </Button>
-            <Button
-              sx={{
-                backgroundColor: 'error.main',
-                '&:hover': {
-                  backgroundColor: 'error.dark',
-                },
-              }}
-              variant="contained"
-              onClick={handleCloseCart}
-            >
-              Cerrar Caja
-            </Button>
-          </Box>
-        </Paper>
-      </Container>
-    </Box>
+      <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+        Notas del beneficiario
+      </BootstrapDialogTitle>
+      <DialogContent dividers>
+        {
+          notes.map((note) => (
+            <li>
+              {note}
+            </li>
+          ))
+        }
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleClose}>
+          Cerrar
+        </Button>
+      </DialogActions>
+    </BootstrapDialog>
   );
 }

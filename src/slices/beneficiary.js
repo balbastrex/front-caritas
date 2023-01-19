@@ -11,6 +11,7 @@ const initialState = {
   beneficiarySelector: [],
   beneficiary: null,
   beneficiariesTurnList: [],
+  beneficiaryAndNotesList: { beneficiaryName: '', notes: [] },
 };
 
 const slice = createSlice({
@@ -48,6 +49,11 @@ const slice = createSlice({
     getBeneficiariesTurnSuccess(state, action) {
       state.isLoading = false;
       state.beneficiariesTurnList = action.payload;
+    },
+
+    getBeneficiaryNotesListSuccess(state, action) {
+      state.isLoading = false;
+      state.beneficiaryAndNotesList = action.payload;
     },
   }
 });
@@ -133,12 +139,12 @@ export function getBeneficiariesTurn(turnId) {
   };
 }
 
-export function getBeneficiariesNotes(beneficiaryId) {
+export function getBeneficiaryNotes(beneficiaryId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/beneficiary-turn/${beneficiaryId}`);
-      dispatch(slice.actions.getBeneficiariesTurnSuccess(response.data));
+      const response = await axios.get(`/api/v1/beneficiary/${beneficiaryId}/notes`);
+      dispatch(slice.actions.getBeneficiaryNotesListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

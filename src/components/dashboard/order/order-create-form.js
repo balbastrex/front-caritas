@@ -12,6 +12,7 @@ import axios from '../../../utils/axios';
 import {ExceedCartModal} from './exceed-cart-modal';
 import OrderAddProducts from './order-add-products';
 import {OrderLineListTable} from './order-line-list-table';
+import {ShowBeneficiaryNotesModal} from './show-beneficiary-notes-modal';
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
@@ -23,6 +24,8 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const { beneficiarySelector } = useSelector((state) => state.beneficiary);
   const [beneficiaryUF, setBeneficiaryUF] = useState(1)
   const [showExceedModal, setShowExceedModal] = useState(false)
+  const [showNotesModal, setShowNotesModal] = useState(false)
+  const [notes, setNotes] = useState([])
   const [prodLine, setProdLine] = useState(null)
 
   useEffect(() => {
@@ -142,6 +145,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
 
   return (
     <>
+      {showNotesModal && (<ShowBeneficiaryNotesModal notes={notes} handleClose={() => setShowNotesModal(false) } />)}
       {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } />)}
       <form
         onSubmit={formik.handleSubmit}
@@ -164,7 +168,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
 
               <Grid
                 item
-                md={8}
+                md={6}
                 xs={12}
               >
                 <Autocomplete
@@ -187,7 +191,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                     if (beneficiary) {
                       setBeneficiaryUF(beneficiary.familyUnit);
                       updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
-
+                      setNotes(beneficiary.notes);
                       const expires = new Date(beneficiary.expires);
                       const expiresDifference = compareAsc(expires, Date.now());
                       expiresDifference < 0 && toast.error('El beneficiario tiene el carnet expirado');
@@ -203,6 +207,20 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                     />
                   )}
                 />
+              </Grid>
+              <Grid
+                md={2}
+                xs={12}
+                sx={{ textAlign: 'center', pt: 2, pl: 2 }}
+              >
+                <Button
+                  onClick={() => setShowNotesModal(true)}
+                  disabled={!formik.values.beneficiaryId}
+                  size="large"
+                  style={{ backgroundColor: formik.values.beneficiaryId ? '#FFB020' : '#595757',color: 'black', marginRight: '15px' }}
+                >
+                  Ver Notas
+                </Button>
               </Grid>
             </Grid>
           </CardContent>
