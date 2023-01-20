@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     lineHeight: 1.6
   },
+  title: {
+    fontSize: 14,
+    fontWeight: 600,
+    lineHeight: 1.235,
+    textDecoration: 'underline'
+  },
   subtitle2: {
     fontSize: 10,
     fontWeight: 500,
@@ -43,21 +49,15 @@ const styles = StyleSheet.create({
   company: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 32
+    marginTop: 15
   },
   references: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 32
-  },
-  billing: {
-    marginTop: 32
+    marginTop: 15
   },
   items: {
-    marginTop: 32
-  },
-  notes: {
-    marginTop: 32
+    marginTop: 15
   },
   table: {
     display: 'flex',
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: '#9a9999',
   },
-  tableBody: {},
   tableRow: {
     borderBottomWidth: 1,
     borderLeftWidth: 2,
@@ -129,30 +128,32 @@ export const OrderPDF = (props) => {
             </Text>
           </View>
         </View>
-        <View style={styles.company}>
-          <View>
-            <Text style={styles.h4}>
-              {order.marketName}
-            </Text>
-            <Text style={styles.body2}>
-              Parroquia: {order.parishName}
-            </Text>
-            <Text style={styles.body2}>
-              Nº de Beneficiario: {order.beneficiaryId}
-            </Text>
-            <Text style={styles.body2}>
-              Nombre: {order.beneficiaryName}
-            </Text>
+        <View style={styles.header}>
+          <View style={styles.company}>
+            <View>
+              <Text style={styles.h4}>
+                {order.marketName}
+              </Text>
+              <Text style={styles.body2}>
+                Parroquia: {order.parishName}
+              </Text>
+              <Text style={styles.body2}>
+                <strong>Nº de Beneficiario: {order.beneficiaryLicense}</strong>
+              </Text>
+              <Text style={styles.body2}>
+                Nombre: <Text style={styles.title}><strong>{order.beneficiaryName}</strong></Text>
+              </Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.references}>
-          <View>
-            <Text style={styles.subtitle2}>
-              Fecha de Pedido
-            </Text>
-            <Text style={styles.body2}>
-              {format(order.createdAt, 'dd/MM/yyyy')}
-            </Text>
+          <View style={styles.references}>
+            <View>
+              <Text style={styles.subtitle2}>
+                Fecha de Pedido:
+              </Text>
+              <Text style={styles.h6}>
+                {format(order.createdAt, 'dd/MM/yyyy')}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.items}>
