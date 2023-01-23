@@ -1,18 +1,36 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useEffect } from 'react';
-import NextLink from 'next/link';
+import {Box, Container, Link, Typography} from '@mui/material';
 import Head from 'next/head';
-import { Box, Container, Link, Typography } from '@mui/material';
-import { AuthGuard } from '../../../components/authentication/auth-guard';
-import { DashboardLayout } from '../../../components/dashboard/dashboard-layout';
-import { ProductCreateForm } from '../../../components/dashboard/product/product-create-form';
+import NextLink from 'next/link';
+import {useEffect, useState} from 'react';
+import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {ReceiptCreateForm} from '../../../components/dashboard/receipt/receipt-create-form';
-import { gtm } from '../../../lib/gtm';
+import {ReceiptSummary} from '../../../components/dashboard/receipt/receipt-summary';
+import {gtm} from '../../../lib/gtm';
 
 const ReceiptCreate = () => {
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [totalReceipt, setTotalReceipt] = useState(0);
+
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
+
+  const updateSummary = ({receiptLines, totalReceipt}) => {
+    if (receiptLines) {
+      const quantity = receiptLines.length;
+      setQuantity(quantity);
+
+      const total = receiptLines.reduce((acc, receiptLine) => acc + receiptLine.totalCost, 0);
+      setTotal(total);
+    }
+
+    if (totalReceipt) {
+      setTotalReceipt(totalReceipt);
+    }
+  }
 
   return (
     <>
@@ -52,9 +70,10 @@ const ReceiptCreate = () => {
               </Link>
             </NextLink>
           </Box>
-          <ReceiptCreateForm />
+          <ReceiptCreateForm updateSummary={updateSummary} />
         </Container>
       </Box>
+      <ReceiptSummary quantity={quantity} total={total} totalReceipt={totalReceipt} />
     </>
   );
 };

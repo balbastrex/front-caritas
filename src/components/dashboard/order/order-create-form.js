@@ -1,5 +1,5 @@
 import {Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Typography} from '@mui/material';
-import {compareAsc, format} from 'date-fns';
+import {compareAsc} from 'date-fns';
 import {useFormik} from 'formik';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';

@@ -15,7 +15,7 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-export const ReceiptCreateForm = ({isEdit, receipt}) => {
+export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.product);
@@ -36,8 +36,8 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
     if (!isEmpty(receiptLine)) {
       receiptLine.units = receiptLine.units + formik.values.units;
       receiptLine.cost = formik.values.cost;
-      const bi = formik.values.cost * receiptLine.units
-      receiptLine.totalCost = ((bi * formik.values.iva) / 100) + bi
+      const bi = formik.values.cost * receiptLine.units;
+      receiptLine.totalCost = ((bi * formik.values.iva) / 100) + bi;
       receiptLines[receiptLines.indexOf(originalReceiptLine)] = receiptLine;
     } else {
       const bi = formik.values.cost * formik.values.units;
@@ -51,6 +51,7 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
       receiptLines.push(newReceiptLine);
     }
 
+    updateSummary({receiptLines});
     formik.setFieldValue('receiptLines', receiptLines);
 
     formik.setFieldValue('productId', null);
@@ -71,6 +72,7 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
 
     receiptLines.splice(receiptLines.indexOf(originalReceiptLine), 1);
 
+    updateSummary({receiptLines});
     formik.setFieldValue('receiptLines', receiptLines);
   }
 
@@ -85,12 +87,20 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
 
     if (receiptLine.units !== 1) {
       receiptLine.units = receiptLine.units - 1;
+      const bi = receiptLine.cost * receiptLine.units;
+      receiptLine.totalCost = ((bi * formik.values.iva) / 100) + bi;
       receiptLines[receiptLines.indexOf(originalReceiptLine)] = receiptLine;
     } else {
       receiptLines.splice(receiptLines.indexOf(originalReceiptLine), 1);
     }
 
+    updateSummary({receiptLines});
     formik.setFieldValue('receiptLines', receiptLines);
+  }
+
+  const amountChange = (event) => {
+    formik.handleChange(event);
+    updateSummary({ totalReceipt: event.target.value });
   }
 
   const receiptSchema = Yup.object().shape({
@@ -209,7 +219,7 @@ export const ReceiptCreateForm = ({isEdit, receipt}) => {
                 label="Total"
                 name="amount"
                 onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
+                onChange={amountChange}
                 sx={{ mt: 2 }}
                 type="number"
                 value={formik.values.amount}

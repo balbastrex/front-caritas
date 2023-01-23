@@ -8,8 +8,6 @@ import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/b
 import {BeneficiaryListFilters} from '../../../components/dashboard/beneficiary/beneficiary-list-filters';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
-import {MarketListFilters} from '../../../components/dashboard/market/market-list-filters';
-import {TurnBeneficiaryPDF} from '../../../components/dashboard/turn/turn-beneficiary-pdf';
 import {useAuth} from '../../../hooks/use-auth';
 import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
@@ -65,11 +63,10 @@ const BeneficiariesList = () => {
   }, [beneficiaryList]);
 
   useEffect(() => {
-    setDisableNewButton(user?.profileId !== UserProfiles.GESTOR_PARROQUIA);
+    setDisableNewButton(user?.profileId !== UserProfiles.GESTOR_PARROQUIA && user?.profileId !== UserProfiles.DIRECTOR_ECONOMATO);
   }, [user]);
 
   const handleFiltersChange = (filters) => {
-    console.log('==> filters ', filters)
     setFilters(filters);
   };
 

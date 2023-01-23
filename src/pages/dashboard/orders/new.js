@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Box, CardContent, Container, Grid, Link, Typography} from '@mui/material';
+import {Box, Container, Link, Typography} from '@mui/material';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
@@ -8,7 +8,6 @@ import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderCreateForm} from '../../../components/dashboard/order/order-create-form';
 import {OrderSummary} from '../../../components/dashboard/order/order-summary';
 import {gtm} from '../../../lib/gtm';
-import {baseThemeOptions} from '../../../theme/base-theme-options';
 
 const OrderCreate = () => {
   const [quantity, setQuantity] = useState(0);
