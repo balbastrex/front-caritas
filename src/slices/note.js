@@ -27,6 +27,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.note = action.payload;
     },
+
+    deleteNoteSuccess(state, action) {
+      state.isLoading = false;
+      state.note = action.payload;
+    },
   }
 });
 
@@ -41,6 +46,18 @@ export function getNoteById(noteId) {
     try {
       const response = await axios.get(`/api/v1/note/${noteId}`);
       dispatch(slice.actions.getNoteSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function DeleteNoteById(noteId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.delete(`/api/v1/note/${noteId}`);
+      dispatch(slice.actions.deleteNoteSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
