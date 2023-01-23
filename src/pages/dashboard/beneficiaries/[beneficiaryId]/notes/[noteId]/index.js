@@ -4,12 +4,11 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
-import {NoteCreateForm} from '../../../../../../components/dashboard/note/note-create-form';
-import {getNoteById} from '../../../../../../slices/note';
 import {AuthGuard} from '../../../../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../../../../components/dashboard/dashboard-layout';
-import {ProductCreateForm} from '../../../../../../components/dashboard/product/product-create-form';
+import {NoteCreateForm} from '../../../../../../components/dashboard/note/note-create-form';
 import {gtm} from '../../../../../../lib/gtm';
+import {getNoteById} from '../../../../../../slices/note';
 import {useDispatch, useSelector} from '../../../../../../store';
 import {getInitials} from '../../../../../../utils/get-initials';
 
@@ -18,8 +17,6 @@ const ProductEdit = () => {
   const { note } = useSelector((state) => state.note);
   const router = useRouter()
   const { beneficiaryId, noteId } = router.query
-  console.log('==> noteId ', noteId)
-  console.log('==> beneficiaryId ', beneficiaryId)
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
