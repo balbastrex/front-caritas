@@ -2,7 +2,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import {IconButton, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Tooltip} from '@mui/material';
 import {format} from 'date-fns';
 import NextLink from 'next/link';
-import {useRouter} from 'next/router';
 import PropTypes from 'prop-types';
 import {Fragment} from 'react';
 import {Trash as TrashIcon} from '../../../icons/trash';
@@ -20,7 +19,6 @@ export const BeneficiaryNotesTable = (props) => {
     handleRemoveNote,
     ...other
   } = props;
-  const router = useRouter();
 
   return (
     <div {...other}>
