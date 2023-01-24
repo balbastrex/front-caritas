@@ -3,13 +3,12 @@ import {Box, Container, Link, Typography} from '@mui/material';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../../components/dashboard/dashboard-layout';
-import {OrderCreateForm} from '../../../../components/dashboard/order/order-create-form';
 import {ReceiptCreateForm} from '../../../../components/dashboard/receipt/receipt-create-form';
+import {ReceiptSummary} from '../../../../components/dashboard/receipt/receipt-summary';
 import {gtm} from '../../../../lib/gtm';
-import {getOrderById} from '../../../../slices/order';
 import {getReceiptById} from '../../../../slices/receipt';
 import {useDispatch, useSelector} from '../../../../store';
 
@@ -18,6 +17,9 @@ const OrderCreate = () => {
   const router = useRouter()
   const { receiptId } = router.query
   const { receipt } = useSelector((state) => state.receipt);
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [totalReceipt, setTotalReceipt] = useState(0);
   useEffect(() => {
     gtm.push({ event: 'page_view' });
   }, []);
@@ -25,6 +27,32 @@ const OrderCreate = () => {
   useEffect(() => {
     dispatch(getReceiptById(receiptId));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (receipt) {
+      const quantity = receipt.receiptLines.length;
+      setQuantity(quantity);
+
+      const total = receipt.receiptLines.reduce((acc, receiptLine) => acc + receiptLine.totalCost, 0);
+      setTotal(total);
+
+      setTotalReceipt(receipt.amount);
+    }
+  }, [receipt]);
+
+  const updateSummary = ({receiptLines, totalReceipt}) => {
+    if (receiptLines) {
+      const quantity = receiptLines.length;
+      setQuantity(quantity);
+
+      const total = receiptLines.reduce((acc, receiptLine) => acc + receiptLine.totalCost, 0);
+      setTotal(total);
+    }
+
+    if (totalReceipt) {
+      setTotalReceipt(totalReceipt);
+    }
+  }
 
   return (
     <>
@@ -64,9 +92,10 @@ const OrderCreate = () => {
               </Link>
             </NextLink>
           </Box>
-          <ReceiptCreateForm receipt={receipt} isEdit={true} />
+          <ReceiptCreateForm receipt={receipt} isEdit={true} updateSummary={updateSummary} />
         </Container>
       </Box>
+      <ReceiptSummary quantity={quantity} total={total} totalReceipt={totalReceipt} />
     </>
   );
 };

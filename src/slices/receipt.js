@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import toast from 'react-hot-toast';
+import {createSlice} from '@reduxjs/toolkit';
 // utils
 import axios from '../utils/axios';
 
@@ -9,7 +8,7 @@ const initialState = {
   isLoading: false,
   error: false,
   receiptList: [],
-  receipt: {},
+  receipt: null,
 };
 
 const slice = createSlice({
