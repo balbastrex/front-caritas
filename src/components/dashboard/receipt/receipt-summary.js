@@ -4,7 +4,7 @@ import numeral from 'numeral';
 export const ReceiptSummary = ({ quantity, total, totalReceipt}) => {
 
   const getRest = () => {
-    return `${numeral(totalReceipt - total).format('0, 0.00')} €`;
+    return `${numeral(totalReceipt - total).format('0, 0.00')}€`;
   }
 
   return(
@@ -53,7 +53,7 @@ export const ReceiptSummary = ({ quantity, total, totalReceipt}) => {
             Lineas: {quantity}
           </Typography>
           <Typography variant="h6">
-            Total: {numeral(total).format(`0,0.00`)} €
+            T: {numeral(total).format(`0,0.00`)}€
           </Typography>
           <Typography variant="h6">
             R: {getRest()}
