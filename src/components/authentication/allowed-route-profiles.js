@@ -9,8 +9,9 @@ const generalSection = {
 }
 
 const permissions = {
-  "/dashboard": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  "/dashboard": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  "/dashboard/reports": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets/new": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets/[marketId]": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],

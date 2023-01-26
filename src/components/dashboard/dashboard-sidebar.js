@@ -30,6 +30,11 @@ const getSections = (t) => [
         title: t('Dashboard'),
         path: '/',
         icon: <HomeIcon fontSize="small" />
+      },
+      {
+        title: t('Informes'),
+        path: '/dashboard/reports',
+        icon: <SummarizeIcon fontSize="small" />,
       }
       /*{
         title: t('Analytics'),
