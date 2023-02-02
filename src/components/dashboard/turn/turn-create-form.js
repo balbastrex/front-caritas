@@ -2,12 +2,14 @@ import {Box, Button, Card, CardContent, Grid, TextField, Typography} from '@mui/
 import {useFormik} from 'formik';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
+import {useState} from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import axios from '../../../utils/axios';
 
 export const TurnCreateForm = ({isEdit, turn}) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const turnSchema = Yup.object().shape({
     name: Yup.string().required('Nombre es requerido'),
@@ -22,7 +24,11 @@ export const TurnCreateForm = ({isEdit, turn}) => {
     },
     validationSchema: turnSchema,
     onSubmit: async (values, helpers) => {
+      if (isSubmitting) {
+        return;
+      }
       try {
+        setIsSubmitting(true);
         if (isEdit) {
           await axios.put(`/api/v1/turn/${turn.id}`, {...formik.values});
           toast.success('Turno actualizado!');

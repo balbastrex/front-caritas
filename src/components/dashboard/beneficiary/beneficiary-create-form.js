@@ -1,7 +1,7 @@
 import {DatePicker} from '@mui/lab';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -42,6 +42,7 @@ const genderType = [
 export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { countryList } = useSelector((state) => state.countries);
   const { familyTypeList } = useSelector((state) => state.familytype);
@@ -123,7 +124,11 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
     },
     validationSchema: beneficiarySchema,
     onSubmit: async (values, helpers) => {
+      if (isSubmitting) {
+        return;
+      }
       try {
+        setIsSubmitting(true);
         if (isEdit) {
           dispatch(updateBeneficiary({...formik.values}));
           toast.success('Beneficiario actualizado!');

@@ -27,6 +27,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const [showNotesModal, setShowNotesModal] = useState(false)
   const [notes, setNotes] = useState([])
   const [prodLine, setProdLine] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     dispatch(getBeneficiariesSelector());
@@ -124,7 +125,11 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
     },
     validationSchema: orderSchema,
     onSubmit: async (values, helpers) => {
+      if (isSubmitting) {
+        return;
+      }
       try {
+        setIsSubmitting(true);
         if (isEdit) {
           await axios.put(`/api/v1/order/${order.id}`, {...formik.values});
           toast.success('Venta actualizada!');
