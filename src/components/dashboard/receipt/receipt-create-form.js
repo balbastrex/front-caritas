@@ -147,6 +147,7 @@ export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
         }
         router.push('/dashboard/receipts').catch(console.error);
       } catch (err) {
+        setIsSubmitting(false);
         console.error(err);
         toast.error(err.message);
         helpers.setStatus({ success: false });

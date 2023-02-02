@@ -38,6 +38,7 @@ export const ProviderCreateForm = ({isEdit, provider}) => {
         // NOTE: Make API request
         router.push('/dashboard/providers').catch(console.error);
       } catch (err) {
+        setIsSubmitting(false);
         console.error(err);
         toast.error(err.message);
         helpers.setStatus({ success: false });

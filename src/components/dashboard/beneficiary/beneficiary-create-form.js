@@ -75,7 +75,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
     address: Yup.string().required('La dirección es requerida'),
     state: Yup.string().required('La provincia es requerida'),
     city: Yup.string().required('La ciudad es requerida'),
-    email: Yup.string().email('El email introducido no es válido'),
+    // email: Yup.string().email('El email introducido no es válido'),
     birthDate: Yup.date().required('La fecha de nacimiento es requerida'),
     expires: Yup.date()
       // .typeError('Se espera un valor de tipo Fecha pero has introducido un ${value}')
@@ -108,7 +108,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
       childrenOver18: beneficiary ? beneficiary.childrenOver18 : 0,
       homeless: beneficiary ? beneficiary.homeless : false,
       gender: beneficiary ? beneficiary.gender : '',
-      expires: beneficiary ? beneficiary.expires : undefined,
+      expires: beneficiary ? beneficiary.expires : new Date(),
       gratuitous: beneficiary?.gratuitous || 0,
       sice: beneficiary?.sice || 0,
       needsPrint: beneficiary?.needsPrint || false,
@@ -141,6 +141,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
         }
         router.push('/dashboard/beneficiaries').catch(console.error);
       } catch (err) {
+        setIsSubmitting(false);
         console.error(err);
         toast.error(err.message);
         helpers.setStatus({ success: false });
@@ -379,10 +380,11 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
                 xs={12}
               >
                 <DatePicker
+                  required
                   error={Boolean(formik.touched.birthDate && formik.errors.birthDate)}
                   helperText={formik.touched.birthDate && formik.errors.birthDate}
                   inputFormat="dd/MM/yyyy"
-                  label="F.Nacimiento(dd/mm/yyyy)"
+                  label="F.Nacimiento(dd/mm/yyyy) *"
                   name="birthDate"
                   onChange={(value) => {
                     formik.setFieldValue('birthDate', value);
@@ -968,6 +970,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
           sx={{ m: 1 }}
           type="submit"
           variant="contained"
+          onClick={() => console.log(formik.values)}
         >
           { isEdit ? 'Actualizar' : 'Crear'}
         </Button>

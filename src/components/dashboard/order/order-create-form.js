@@ -139,6 +139,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
         }
         router.push('/dashboard/orders').catch(console.error);
       } catch (err) {
+        setIsSubmitting(false);
         console.error(err);
         toast.error(err.message);
         helpers.setStatus({ success: false });

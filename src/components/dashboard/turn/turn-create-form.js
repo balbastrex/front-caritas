@@ -39,6 +39,7 @@ export const TurnCreateForm = ({isEdit, turn}) => {
         // NOTE: Make API request
         router.push('/dashboard/turns').catch(console.error);
       } catch (err) {
+        setIsSubmitting(false);
         console.error(err);
         toast.error(err.message);
         helpers.setStatus({ success: false });
