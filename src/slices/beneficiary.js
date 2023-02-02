@@ -94,8 +94,6 @@ export function createBeneficiary(beneficiary) {
     await axios.post('/api/v1/beneficiary', {
       ...beneficiary
     })
-    const response = await axios.get('/api/v1/beneficiary');
-    dispatch(slice.actions.getBeneficiariesListSuccess(response.data));
   };
 }
 
@@ -107,8 +105,6 @@ export function updateBeneficiary(beneficiary) {
         ...beneficiary
       })
 
-      const response = await axios.get('/api/v1/beneficiary');
-      dispatch(slice.actions.getBeneficiariesListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

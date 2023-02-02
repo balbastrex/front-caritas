@@ -2,12 +2,14 @@ import {Box, Button, Card, CardContent, Grid, TextField, Typography} from '@mui/
 import {useFormik} from 'formik';
 import NextLink from 'next/link';
 import {useRouter} from 'next/router';
+import {useState} from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import axios from '../../../utils/axios';
 
 export const ProviderCreateForm = ({isEdit, provider}) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const turnSchema = Yup.object().shape({
     name: Yup.string().required('El nombre del Proveedor es requerido'),
@@ -21,7 +23,11 @@ export const ProviderCreateForm = ({isEdit, provider}) => {
     },
     validationSchema: turnSchema,
     onSubmit: async (values, helpers) => {
+      if (isSubmitting) {
+        return;
+      }
       try {
+        setIsSubmitting(true);
         if (isEdit) {
           await axios.put(`/api/v1/provider/${provider.id}`, {...formik.values});
           toast.success('Proveedor actualizado!');

@@ -21,6 +21,7 @@ export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
   const { productList } = useSelector((state) => state.product);
   const { providerList } = useSelector((state) => state.provider);
   const [clear, setClear] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     dispatch(getProducts());
@@ -132,7 +133,11 @@ export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
     },
     validationSchema: receiptSchema,
     onSubmit: async (values, helpers) => {
+      if (isSubmitting) {
+        return;
+      }
       try {
+        setIsSubmitting(true);
         if (isEdit) {
           await axios.put(`/api/v1/receipt/${receipt.id}`, {...formik.values});
           toast.success('Albarán actualizado!');
