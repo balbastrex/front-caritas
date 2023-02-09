@@ -394,16 +394,13 @@ export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
             Cancelar
           </Button>
         </NextLink>
-        {!isEdit && (
-          <Button
-            sx={{ m: 1 }}
-            type="submit"
-            variant="contained"
-          >
-            { isEdit ? 'Actualizar' : 'Crear'}
-          </Button>)
-        }
-
+        <Button
+          sx={{ m: 1 }}
+          type="submit"
+          variant="contained"
+        >
+          { isEdit ? 'Actualizar' : 'Crear'}
+        </Button>
       </Box>
     </form>
   );
