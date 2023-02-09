@@ -316,7 +316,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'right',
+            justifyContent: 'left',
             mx: -1,
             mb: -1,
             mt: 3

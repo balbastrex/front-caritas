@@ -16,7 +16,7 @@ export const PropertyListItemBold = (props) => {
         primary={(
           <Typography
             sx={{ minWidth: align === 'vertical' ? 'inherit' : 180 }}
-            variant="h4"
+            variant="h6"
           >
             {label}
           </Typography>
@@ -30,7 +30,7 @@ export const PropertyListItemBold = (props) => {
           >
             {children || (
               <Typography
-                color="textSecondary"
+                color={(theme) => theme.palette.mode === 'dark' ? 'white' : 'black'}
                 variant="h4"
               >
                 {value} {suffix }
@@ -41,6 +41,7 @@ export const PropertyListItemBold = (props) => {
         sx={{
           display: 'flex',
           flexDirection: align === 'vertical' ? 'column' : 'row',
+          alignItems: 'center',
           my: 0
         }}
       />

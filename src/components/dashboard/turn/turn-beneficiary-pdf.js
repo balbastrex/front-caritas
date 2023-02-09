@@ -196,7 +196,7 @@ export const TurnBeneficiaryPDF = (props) => {
                   </View>
                   <View style={styles.tableCellDate}>
                     <Text style={[styles.body2, styles.alignCenter]}>
-                      {format(new Date(beneficiary.lastDateOrder), 'dd/MM/yyyy')}
+                      {beneficiary?.lastDateOrder ? format(new Date(beneficiary.lastDateOrder), 'dd/MM/yyyy') : '-' }
                     </Text>
                   </View>
                 </View>
