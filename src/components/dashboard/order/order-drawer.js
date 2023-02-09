@@ -165,6 +165,20 @@ const OrderPreview = (props) => {
         <PropertyListItemBold
           align={align}
           disableGutters
+          label="Beneficiario"
+          value={numeral(order.beneficiaryAmount).format(`0,0.00`)}
+          suffix="€"
+        />
+        <PropertyListItem
+          align={align}
+          disableGutters
+          label="Parroquia"
+          value={numeral(order.parishAmount).format(`0,0.00`)}
+          suffix="€"
+        />
+        <PropertyListItem
+          align={align}
+          disableGutters
           label="Total"
           value={numeral(order.amount).format(`0,0.00`)}
           suffix="€"
