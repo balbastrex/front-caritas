@@ -4,6 +4,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
+import {exportBeneficiariesToExcel} from '../../../components/dashboard/beneficiary/beneficiary-export-excel';
 import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf';
 import {BeneficiaryListFilters} from '../../../components/dashboard/beneficiary/beneficiary-list-filters';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
@@ -15,6 +16,7 @@ import {gtm} from '../../../lib/gtm';
 import {getBeneficiaries} from '../../../slices/beneficiary';
 import {useDispatch, useSelector} from '../../../store/index';
 import {UserProfiles} from '../../../utils/constants';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 const applyFilters = (beneficiaries, filters) => beneficiaries.filter((beneficiary) => {
   if (filters.name) {
@@ -112,7 +114,18 @@ const BeneficiariesList = () => {
                   Beneficiarios
                 </Typography>
               </Grid>
-              <Grid item>
+              <Grid item container justifyContent={'right'} spacing={2}>
+                <Grid item>
+                  <Button
+                    disabled={disableNewButton}
+                    component="a"
+                    startIcon={<FileDownloadOutlinedIcon fontSize="small" />}
+                    variant="contained"
+                    onClick={() => { exportBeneficiariesToExcel(beneficiaries) }}
+                  >
+                    Exportar
+                  </Button>
+                </Grid><Grid item>
                 <NextLink
                   href="/dashboard/beneficiaries/new"
                   passHref
@@ -126,6 +139,7 @@ const BeneficiariesList = () => {
                     Nuevo
                   </Button>
                 </NextLink>
+              </Grid>
               </Grid>
             </Grid>
           </Box>
