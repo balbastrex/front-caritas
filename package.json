@@ -77,6 +77,7 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
+    "sheetjs-style": "^0.15.8",
     "simplebar": "^5.3.6",
     "simplebar-react": "^2.3.7",
     "stylis": "^4.1.1",
