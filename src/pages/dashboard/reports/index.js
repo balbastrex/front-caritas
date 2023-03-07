@@ -4,12 +4,17 @@ import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {OrderSheetDialog} from '../../../components/dashboard/report/order-sheet/order-sheet-dialog';
+import {ParishOrdersDialog} from '../../../components/dashboard/report/parish-orders/parish-orders-dialog';
+import {ParishOrdersReportModal} from '../../../components/dashboard/report/parish-orders/parish-orders-report-modal';
 import {ShowReportsCard} from '../../../components/dashboard/report/show-reports-card';
 import {gtm} from '../../../lib/gtm';
 
 const Overview = () => {
   const [orderSheetReportOpen, setOrderSheetReportOpen] = useState(false);
   const [orderSheetReportData, setOrderSheetReportData] = useState('UF1');
+  const [parishOrdersListReportOpen, setParishOrdersListReportOpen] = useState(false);
+  const [parishOrdersListModalOpen, setParishOrdersListModalOpen] = useState(false);
+  const [parishOrdersListReportData, setParishOrdersListReportData] = useState({ startDate: null, endDate: null });
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -22,9 +27,18 @@ const Overview = () => {
         setOrderSheetReportData(data);
         setOrderSheetReportOpen(true);
         break;
+    case 'parish-orders-list':
+      setParishOrdersListModalOpen(true);
+      break;
       default:
         break;
     }
+  }
+
+  const handleParishOrdersListReport = ({ startDate, endDate }) => {
+    setParishOrdersListReportData({ startDate, endDate });
+    setParishOrdersListModalOpen(false);
+    setParishOrdersListReportOpen(true);
   }
 
   return (
@@ -64,6 +78,13 @@ const Overview = () => {
         </Container>
       </Box>
       <OrderSheetDialog open={orderSheetReportOpen} close={() => setOrderSheetReportOpen(false)} UF={orderSheetReportData} />
+
+      <ParishOrdersReportModal
+        handleSelect={handleParishOrdersListReport}
+        open={parishOrdersListModalOpen}
+        handleClose={() => setParishOrdersListModalOpen(false)}
+      />
+      <ParishOrdersDialog open={parishOrdersListReportOpen} close={() => setParishOrdersListReportOpen(false)} data={parishOrdersListReportData} />
     </>
   );
 };
