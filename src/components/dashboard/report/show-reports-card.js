@@ -32,6 +32,11 @@ const reports = [
         value: 'UF6'
       },
     ]
+  },
+  {
+    id: 'parish-orders-list',
+    cover: '/static/report/order-sheet.png',
+    title: 'Listado de Pedidos por Parroquia',
   }
 ];
 
