@@ -6,16 +6,23 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle, Grid, MenuItem,
   TextField,
 } from '@mui/material';
 import {useEffect, useState} from 'react';
-import axios from '../../../../utils/axios';
+import {getParishes} from '../../../../slices/parish';
+import {useDispatch, useSelector} from '../../../../store';
 
 export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => {
-
+  const dispatch = useDispatch();
+  const { parishList } = useSelector((state) => state.parish);
+  const [selectedParish, setSelectedParish] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+
+  useEffect(() => {
+    dispatch(getParishes());
+  }, []);
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -39,6 +46,36 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
         <DialogContentText id="alert-dialog-description">
           Selecciona las fechas para generar el reporte
         </DialogContentText>
+        <Grid
+          mt={2}
+          item
+          md={6}
+          xs={12}
+        >
+          <TextField
+            defaultValue={0}
+            fullWidth
+            label="Parroquia asociada"
+            select
+            name="parishId"
+            onChange={(parishId) => { setSelectedParish(parishId.target.value) }}
+          >
+            <MenuItem
+              key={0}
+              value={0}
+            >
+              Todas
+            </MenuItem>
+            {parishList.map((parish) => (
+              <MenuItem
+                key={parish.id}
+                value={parish.id}
+              >
+                {parish.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
         <Box sx={{mt: 2}}>
           <DatePicker
             label="Desde"
@@ -71,7 +108,7 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
         <Button
           color="primary"
           variant="contained"
-          onClick={() => handleSelect({startDate, endDate})}
+          onClick={() => handleSelect({startDate, endDate, parishId: selectedParish})}
           autoFocus
         >
           Seleccionar

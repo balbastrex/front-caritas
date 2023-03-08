@@ -14,7 +14,7 @@ const Overview = () => {
   const [orderSheetReportData, setOrderSheetReportData] = useState('UF1');
   const [parishOrdersListReportOpen, setParishOrdersListReportOpen] = useState(false);
   const [parishOrdersListModalOpen, setParishOrdersListModalOpen] = useState(false);
-  const [parishOrdersListReportData, setParishOrdersListReportData] = useState({ startDate: null, endDate: null });
+  const [parishOrdersListReportData, setParishOrdersListReportData] = useState({ startDate: null, endDate: null, parishId: null });
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -35,10 +35,14 @@ const Overview = () => {
     }
   }
 
-  const handleParishOrdersListReport = ({ startDate, endDate }) => {
-    setParishOrdersListReportData({ startDate, endDate });
+  const handleParishOrdersListReport = ({ startDate, endDate, parishId }) => {
+    setParishOrdersListReportData({ startDate, endDate, parishId });
+    console.log("-> parishId", parishId);
+    console.log("-> endDate", endDate);
+    console.log("-> startDate", startDate);
     setParishOrdersListModalOpen(false);
     setParishOrdersListReportOpen(true);
+
   }
 
   return (
@@ -77,6 +81,7 @@ const Overview = () => {
           </Grid>
         </Container>
       </Box>
+
       <OrderSheetDialog open={orderSheetReportOpen} close={() => setOrderSheetReportOpen(false)} UF={orderSheetReportData} />
 
       <ParishOrdersReportModal
