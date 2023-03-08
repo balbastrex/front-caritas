@@ -9,7 +9,9 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
   const [responseData, setResponseData] = useState(null);
 
   useEffect(async () => {
-    const response = await axios.post('/api/v1/receipt/parish-report', {startDate: data.startDate, endDate: data.endDate});
+    if (data.startDate === null || data.endDate === null) return;
+
+    const response = await axios.post('/api/v1/receipt/parish-report', {startDate: data.startDate, endDate: data.endDate, parishId: data.parishId});
     setResponseData(response.data);
   }, [data]);
 

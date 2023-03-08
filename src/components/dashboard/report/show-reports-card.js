@@ -1,5 +1,7 @@
 import {Box, Grid} from '@mui/material';
+import {useAuth} from '../../../hooks/use-auth';
 import {ReportCard} from './report-card';
+import {UserProfiles} from '../../../utils/constants';
 
 const reports = [
   {
@@ -35,10 +37,20 @@ const reports = [
   },
   {
     id: 'parish-orders-list',
-    cover: '/static/report/order-sheet.png',
-    title: 'Listado de Pedidos por Parroquia',
+    cover: '/static/report/parish-orders.png',
+    title: 'Pedidos por Parroquia',
   }
 ];
+
+const reportPermissions = {
+  'order-sheet': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  'parish-orders-list': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
+}
+
+const hasPermissionReport = (reportId) => {
+  const { user } = useAuth();
+  return reportPermissions[reportId].includes(user?.profileId);
+}
 
 export const ShowReportsCard = ({ onPrint }) => (
   <Box
@@ -53,12 +65,13 @@ export const ShowReportsCard = ({ onPrint }) => (
       spacing={3}
     >
       {reports.map((report) => (
-        <ReportCard
-          key={report.id}
-          report={report}
-          defaultData={'UF1'}
-          onPrint={onPrint}
-        />
+        hasPermissionReport(report.id) && (
+            <ReportCard
+              key={report.id}
+              report={report}
+              defaultData={'UF1'}
+              onPrint={onPrint}
+            />)
       ))}
     </Grid>
   </Box>

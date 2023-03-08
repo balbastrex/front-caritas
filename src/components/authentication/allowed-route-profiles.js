@@ -4,14 +4,14 @@ export const isAllowedRouteForProfile = (profileId, urlPath) => permissions[urlP
 export const isAllowedSectionForProfile = (profileId, section) => generalSection[section]?.find((profile) => (profile === profileId)) !== undefined
 
 const generalSection = {
-  'General': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  'General': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
   'Mantenimiento': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.COMPRAS, UserProfiles.CAJA_PEDIDOS, UserProfiles.GESTOR_PARROQUIA],
 }
 
 const permissions = {
   "/": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
-  "/dashboard/reports": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  "/dashboard/reports": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
   "/dashboard/markets": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets/new": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets/[marketId]": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
