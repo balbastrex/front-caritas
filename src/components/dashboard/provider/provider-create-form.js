@@ -106,10 +106,7 @@ export const ProviderCreateForm = ({isEdit, provider}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/providers"
-          passHref
-        >
+        <NextLink href="/dashboard/providers" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

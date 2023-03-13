@@ -100,10 +100,7 @@ export const TurnListTable = (props) => {
                     <TableCell>
                       {turn.description}
                     </TableCell>
-                    <NextLink
-                      href={`/dashboard/markets/${turn.marketId}/edit`}
-                      passHref
-                    >
+                    <NextLink href={`/dashboard/markets/${turn.marketId}/edit`} passHref legacyBehavior>
                       <TableCell sx={{ cursor: 'pointer' }} >
                         {turn.marketName}
                       </TableCell>
@@ -114,10 +111,7 @@ export const TurnListTable = (props) => {
                     <TableCell align="right">
                       {
                         user?.profileId === UserProfiles.DIRECTOR_ECONOMATO && (
-                          <NextLink
-                            href={`/dashboard/turns/${turn.id}/edit`}
-                            passHref
-                          >
+                          <NextLink href={`/dashboard/turns/${turn.id}/edit`} passHref legacyBehavior>
                             <Tooltip title="Editar turno">
                               <IconButton component="a">
                                 <EditIcon fontSize="small" />

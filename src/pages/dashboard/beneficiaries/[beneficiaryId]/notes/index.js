@@ -45,92 +45,87 @@ const BeneficiaryNotesList = () => {
     setOpenDeleteNote(noteId)
   };
 
-  return (
-    <>
-      <Head>
-        <title>
-          Notas
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/beneficiaries"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Notas
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Beneficiarios
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Notas del Beneficiario {beneficiaryAndNotesList.beneficiaryName}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href={`/dashboard/beneficiaries/${beneficiaryId}/notes/new`}
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nueva Nota
-                  </Button>
-                </NextLink>
-              </Grid>
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Beneficiarios
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Notas del Beneficiario {beneficiaryAndNotesList.beneficiaryName}
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <BeneficiaryNotesTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              notes={beneficiaryAndNotesList.notes}
-              notesCount={beneficiaryAndNotesList.notes.length}
-              rowsPerPage={rowsPerPage}
-              beneficiaryId={beneficiaryId}
-              handleRemoveNote={removeNote}
-            />
-          </Card>
-        </Container>
-      </Box>
-      <DeleteNoteModal
-        handleDelete={handleDeleteNote}
-        open={!!openDeleteNote}
-        handleClose={() => setOpenDeleteNote(null)}
-      />
-    </>
-  );
+            <Grid item>
+              <NextLink
+                href={`/dashboard/beneficiaries/${beneficiaryId}/notes/new`}
+                passHref
+                legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nueva Nota
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <BeneficiaryNotesTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            notes={beneficiaryAndNotesList.notes}
+            notesCount={beneficiaryAndNotesList.notes.length}
+            rowsPerPage={rowsPerPage}
+            beneficiaryId={beneficiaryId}
+            handleRemoveNote={removeNote}
+          />
+        </Card>
+      </Container>
+    </Box>
+    <DeleteNoteModal
+      handleDelete={handleDeleteNote}
+      open={!!openDeleteNote}
+      handleClose={() => setOpenDeleteNote(null)}
+    />
+  </>;
 }
 
 BeneficiaryNotesList.getLayout = (page) => (

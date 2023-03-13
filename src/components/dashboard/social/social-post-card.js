@@ -52,10 +52,7 @@ export const SocialPostCard = (props) => {
     <Card {...other}>
       <CardHeader
         avatar={(
-          <NextLink
-            href="#"
-            passHref
-          >
+          <NextLink href="#" passHref legacyBehavior>
             <Avatar
               component="a"
               src={authorAvatar}
@@ -93,10 +90,7 @@ export const SocialPostCard = (props) => {
               display: 'flex'
             }}
           >
-            <NextLink
-              href="#"
-              passHref
-            >
+            <NextLink href="#" passHref legacyBehavior>
               <Link
                 color="textPrimary"
                 variant="subtitle2"

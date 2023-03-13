@@ -91,63 +91,58 @@ const ProviderList = () => {
   const filteredProviders = applyFilters(providerList, filters);
   const paginatedProviders = applyPagination(filteredProviders, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado de Proveedores
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Proveedores
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href="/dashboard/providers/new"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado de Proveedores
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Proveedores
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
-            <ProviderListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              providers={paginatedProviders}
-              providersCount={filteredProviders.length}
-              rowsPerPage={rowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+            <Grid item>
+              <NextLink href="/dashboard/providers/new" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <MarketListFilters onChange={handleFiltersChange} />
+          <ProviderListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            providers={paginatedProviders}
+            providersCount={filteredProviders.length}
+            rowsPerPage={rowsPerPage}
+          />
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 ProviderList.getLayout = (page) => (

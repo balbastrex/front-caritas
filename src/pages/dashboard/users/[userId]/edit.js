@@ -34,96 +34,91 @@ const UserEdit = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Editar Usuario
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: 'background.default',
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/users"
-              passHref
-            >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Usuarios
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              overflow: 'hidden'
-            }}
-          >
-            <Avatar
-              src={user.avatar}
+  return <>
+    <Head>
+      <title>
+        Dashboard: Editar Usuario
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.default',
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/users" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
               sx={{
-                height: 64,
-                mr: 2,
-                width: 64
+                alignItems: 'center',
+                display: 'flex'
               }}
             >
-              {getInitials(user.name)}
-            </Avatar>
-            <div>
-              <Typography
-                noWrap
-                variant="h4"
-              >
-                {user.name}
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Usuarios
               </Typography>
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                <Typography variant="subtitle2">
-                  user_id:
-                </Typography>
-                <Chip
-                  label={user.id}
-                  size="small"
-                  sx={{ ml: 1 }}
-                />
-              </Box>
-            </div>
-          </Box>
-          <Box mt={3}>
-            <UserCreateForm isEdit user={user} />
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+            </Link>
+          </NextLink>
+        </Box>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            overflow: 'hidden'
+          }}
+        >
+          <Avatar
+            src={user.avatar}
+            sx={{
+              height: 64,
+              mr: 2,
+              width: 64
+            }}
+          >
+            {getInitials(user.name)}
+          </Avatar>
+          <div>
+            <Typography
+              noWrap
+              variant="h4"
+            >
+              {user.name}
+            </Typography>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <Typography variant="subtitle2">
+                user_id:
+              </Typography>
+              <Chip
+                label={user.id}
+                size="small"
+                sx={{ ml: 1 }}
+              />
+            </Box>
+          </div>
+        </Box>
+        <Box mt={3}>
+          <UserCreateForm isEdit user={user} />
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 UserEdit.getLayout = (page) => (

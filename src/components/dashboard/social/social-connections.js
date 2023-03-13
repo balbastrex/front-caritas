@@ -111,10 +111,7 @@ export const SocialConnections = (props) => {
                       p: 2
                     }}
                   >
-                    <NextLink
-                      href="#"
-                      passHref
-                    >
+                    <NextLink href="#" passHref legacyBehavior>
                       <Avatar
                         component="a"
                         src={connection.avatar}
@@ -130,10 +127,7 @@ export const SocialConnections = (props) => {
                         mx: 2
                       }}
                     >
-                      <NextLink
-                        href="#"
-                        passHref
-                      >
+                      <NextLink href="#" passHref legacyBehavior>
                         <Link
                           color="textPrimary"
                           variant="subtitle2"

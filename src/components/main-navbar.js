@@ -27,18 +27,18 @@ export const MainNavbar = (props) => {
             href="/"
             passHref
           >
-            <a>
-              <Logo
-                sx={{
-                  display: {
-                    md: 'inline',
-                    xs: 'none'
-                  },
-                  height: 40,
-                  width: 40
-                }}
-              />
-            </a>
+
+            <Logo
+              sx={{
+                display: {
+                  md: 'inline',
+                  xs: 'none'
+                },
+                height: 40,
+                width: 40
+              }}
+            />
+
           </NextLink>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
@@ -61,10 +61,7 @@ export const MainNavbar = (props) => {
               }
             }}
           >
-            <NextLink
-              href="/dashboard"
-              passHref
-            >
+            <NextLink href="/dashboard" passHref legacyBehavior>
               <Link
                 color="textSecondary"
                 underline="none"
@@ -73,10 +70,7 @@ export const MainNavbar = (props) => {
                 Live Demo
               </Link>
             </NextLink>
-            <NextLink
-              href="/browse"
-              passHref
-            >
+            <NextLink href="/browse" passHref legacyBehavior>
               <Link
                 color="textSecondary"
                 sx={{ ml: 2 }}
@@ -86,10 +80,7 @@ export const MainNavbar = (props) => {
                 Components
               </Link>
             </NextLink>
-            <NextLink
-              href="/docs/welcome"
-              passHref
-            >
+            <NextLink href="/docs/welcome" passHref legacyBehavior>
               <Link
                 color="textSecondary"
                 component="a"

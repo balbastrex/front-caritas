@@ -149,201 +149,196 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
     }
   });
 
-  return (
-    <>
-      {showNotesModal && (<ShowBeneficiaryNotesModal notes={notes} handleClose={() => setShowNotesModal(false) } />)}
-      {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } />)}
-      <form
-        onSubmit={formik.handleSubmit}
-      >
-        <Card sx={{ mt: 3 }}>
-          <CardContent>
+  return <>
+    {showNotesModal && (<ShowBeneficiaryNotesModal notes={notes} handleClose={() => setShowNotesModal(false) } />)}
+    {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } />)}
+    <form
+      onSubmit={formik.handleSubmit}
+    >
+      <Card sx={{ mt: 3 }}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+          >
             <Grid
-              container
-              spacing={3}
+              item
+              md={4}
+              xs={12}
             >
-              <Grid
-                item
-                md={4}
-                xs={12}
-              >
-                <Typography variant="h6">
-                  Beneficiario
-                </Typography>
-              </Grid>
-
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <Autocomplete
-                  autoHighlight
-                  disabled={isEdit || formik.values.orderLines.length > 0}
-                  noOptionsText="Sin opciones"
-                  id="controlled-demo"
-                  options={beneficiarySelector}
-                  getOptionLabel={(option) => `${option.name} (${option.license})`}
-                  value={beneficiarySelector.find((option) => {
-                      if (option.id === formik.values.beneficiaryId) {
-                        return option.id;
-                      }
-                    })
-                  }
-                  onChange={(event, newValue) => {
-                    const value = newValue ? newValue.id : null;
-                    formik.setFieldValue('beneficiaryId', value);
-                    const beneficiary = beneficiarySelector.find((beneficiary) => beneficiary.id === value);
-                    if (beneficiary) {
-                      setBeneficiaryUF(beneficiary.familyUnit);
-                      updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
-                      setNotes(beneficiary.notes);
-                      const expires = new Date(beneficiary.expires);
-                      const expiresDifference = compareAsc(expires, Date.now());
-                      expiresDifference < 0 && toast.error('El beneficiario tiene el carnet expirado');
-                    }
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Beneficiario"
-                      variant="standard"
-                      error={Boolean(formik.touched.beneficiaryId && formik.errors.beneficiaryId)}
-                      helperText={formik.touched.beneficiaryId && formik.errors.beneficiaryId}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid
-                md={2}
-                xs={12}
-                sx={{ textAlign: 'center', pt: 2, pl: 2 }}
-              >
-                <Button
-                  onClick={() => setShowNotesModal(true)}
-                  disabled={!formik.values.beneficiaryId}
-                  size="large"
-                  style={{ backgroundColor: formik.values.beneficiaryId ? '#FFB020' : '#595757',color: 'black', marginRight: '15px' }}
-                >
-                  Ver Notas
-                </Button>
-              </Grid>
+              <Typography variant="h6">
+                Beneficiario
+              </Typography>
             </Grid>
-          </CardContent>
-        </Card>
-        <Card sx={{ mt: 3 }} >
-          {
-            formik.values.beneficiaryId && (
-              <CardContent>
-                <Grid
-                  container
-                  spacing={3}
-                  display="flex"
-                  flexDirection="column"
-                >
-                  <Grid
-                    item
-                    md={4}
-                    xs={12}
-                  >
-                    <Typography variant="h6">
-                      Listado de Productos
-                    </Typography>
-                  </Grid>
-                  <OrderAddProducts
-                    handleAddProduct={handleShowExceedModal}
-                    beneficiaryUF={beneficiaryUF}
-                    orderLines={formik.values.orderLines}
-                  />
-                </Grid>
-              </CardContent>
-            )
-          }
-          {
-            !formik.values.beneficiaryId && (
-              <CardContent>
-                <Grid
-                  container
-                  spacing={3}
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  height={150}
-                >
-                  <Grid
-                    item
-                    md={12}
-                    xs={12}
-                  >
-                    <Typography variant="h6">
-                      Para empezar a añadir productos, primero debes seleccionar un beneficiario
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            )
-          }
-        </Card>
 
-        <Card sx={{ mt: 3 }}>
-          <CardContent>
             <Grid
-              container
-              spacing={3}
-              display="flex"
-              flexDirection="column"
+              item
+              md={6}
+              xs={12}
             >
-              <Grid
-                item
-                md={4}
-                xs={12}
-                mb={4}
-              >
-                <Typography variant="h6">
-                  Lineas de Venta
-                </Typography>
-              </Grid>
-              <OrderLineListTable
-                orderLines={formik.values.orderLines}
-                handleRemoveLine={handleRemoveProduct}
+              <Autocomplete
+                autoHighlight
+                disabled={isEdit || formik.values.orderLines.length > 0}
+                noOptionsText="Sin opciones"
+                id="controlled-demo"
+                options={beneficiarySelector}
+                getOptionLabel={(option) => `${option.name} (${option.license})`}
+                value={beneficiarySelector.find((option) => {
+                    if (option.id === formik.values.beneficiaryId) {
+                      return option.id;
+                    }
+                  })
+                }
+                onChange={(event, newValue) => {
+                  const value = newValue ? newValue.id : null;
+                  formik.setFieldValue('beneficiaryId', value);
+                  const beneficiary = beneficiarySelector.find((beneficiary) => beneficiary.id === value);
+                  if (beneficiary) {
+                    setBeneficiaryUF(beneficiary.familyUnit);
+                    updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
+                    setNotes(beneficiary.notes);
+                    const expires = new Date(beneficiary.expires);
+                    const expiresDifference = compareAsc(expires, Date.now());
+                    expiresDifference < 0 && toast.error('El beneficiario tiene el carnet expirado');
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Beneficiario"
+                    variant="standard"
+                    error={Boolean(formik.touched.beneficiaryId && formik.errors.beneficiaryId)}
+                    helperText={formik.touched.beneficiaryId && formik.errors.beneficiaryId}
+                  />
+                )}
               />
             </Grid>
-          </CardContent>
-        </Card>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'left',
-            mx: -1,
-            mb: -1,
-            mt: 3
-          }}
-        >
-          <NextLink
-            href="/dashboard/orders"
-            passHref
-          >
-            <Button
-              sx={{ m: 1 }}
-              variant="outlined"
-              component="a"
-              disabled={formik.isSubmitting}
+            <Grid
+              md={2}
+              xs={12}
+              sx={{ textAlign: 'center', pt: 2, pl: 2 }}
             >
-              Cancelar
-            </Button>
-          </NextLink>
+              <Button
+                onClick={() => setShowNotesModal(true)}
+                disabled={!formik.values.beneficiaryId}
+                size="large"
+                style={{ backgroundColor: formik.values.beneficiaryId ? '#FFB020' : '#595757',color: 'black', marginRight: '15px' }}
+              >
+                Ver Notas
+              </Button>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+      <Card sx={{ mt: 3 }} >
+        {
+          formik.values.beneficiaryId && (
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+                display="flex"
+                flexDirection="column"
+              >
+                <Grid
+                  item
+                  md={4}
+                  xs={12}
+                >
+                  <Typography variant="h6">
+                    Listado de Productos
+                  </Typography>
+                </Grid>
+                <OrderAddProducts
+                  handleAddProduct={handleShowExceedModal}
+                  beneficiaryUF={beneficiaryUF}
+                  orderLines={formik.values.orderLines}
+                />
+              </Grid>
+            </CardContent>
+          )
+        }
+        {
+          !formik.values.beneficiaryId && (
+            <CardContent>
+              <Grid
+                container
+                spacing={3}
+                display="flex"
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="center"
+                height={150}
+              >
+                <Grid
+                  item
+                  md={12}
+                  xs={12}
+                >
+                  <Typography variant="h6">
+                    Para empezar a añadir productos, primero debes seleccionar un beneficiario
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+          )
+        }
+      </Card>
+
+      <Card sx={{ mt: 3 }}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            display="flex"
+            flexDirection="column"
+          >
+            <Grid
+              item
+              md={4}
+              xs={12}
+              mb={4}
+            >
+              <Typography variant="h6">
+                Lineas de Venta
+              </Typography>
+            </Grid>
+            <OrderLineListTable
+              orderLines={formik.values.orderLines}
+              handleRemoveLine={handleRemoveProduct}
+            />
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'left',
+          mx: -1,
+          mb: -1,
+          mt: 3
+        }}
+      >
+        <NextLink href="/dashboard/orders" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
-            type="submit"
-            variant="contained"
+            variant="outlined"
+            component="a"
+            disabled={formik.isSubmitting}
           >
-            { isEdit ? 'Actualizar' : 'Nueva Venta'}
+            Cancelar
           </Button>
-        </Box>
-      </form>
-    </>
-  );
+        </NextLink>
+        <Button
+          sx={{ m: 1 }}
+          type="submit"
+          variant="contained"
+        >
+          { isEdit ? 'Actualizar' : 'Nueva Venta'}
+        </Button>
+      </Box>
+    </form>
+  </>;
 };

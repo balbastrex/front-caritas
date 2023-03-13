@@ -37,9 +37,6 @@ const Overview = () => {
 
   const handleParishOrdersListReport = ({ startDate, endDate, parishId }) => {
     setParishOrdersListReportData({ startDate, endDate, parishId });
-    console.log("-> parishId", parishId);
-    console.log("-> endDate", endDate);
-    console.log("-> startDate", startDate);
     setParishOrdersListModalOpen(false);
     setParishOrdersListReportOpen(true);
 

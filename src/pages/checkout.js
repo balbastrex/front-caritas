@@ -75,112 +75,107 @@ const Checkout = () => {
   const shippingTax = 12;
   const total = subtotal + shippingTax;
 
-  return (
-    <>
-      <Head>
-        <title>
-          Checkout | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: 'background.paper',
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="lg">
-          <form onSubmit={handleSubmit}>
-            <NextLink
-              href="/dashboard"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Checkout | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.paper',
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="lg">
+        <form onSubmit={handleSubmit}>
+          <NextLink href="/dashboard" passHref legacyBehavior>
+            <Button
+              component="a"
+              startIcon={<ArrowLeftIcon fontSize="small" />}
             >
-              <Button
-                component="a"
-                startIcon={<ArrowLeftIcon fontSize="small" />}
-              >
-                Dashboard
-              </Button>
-            </NextLink>
-            <Typography
-              variant="h3"
-              sx={{ mt: 3 }}
+              Dashboard
+            </Button>
+          </NextLink>
+          <Typography
+            variant="h3"
+            sx={{ mt: 3 }}
+          >
+            Checkout
+          </Typography>
+          <Box mt={6}>
+            <Grid
+              container
+              spacing={6}
             >
-              Checkout
-            </Typography>
-            <Box mt={6}>
               <Grid
-                container
-                spacing={6}
+                item
+                md={7}
+                xs={12}
               >
-                <Grid
-                  item
-                  md={7}
-                  xs={12}
-                >
-                  <CheckoutBilling
-                    billing={billing}
-                    onChange={handleBillingChange}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  md={5}
-                  xs={12}
-                >
-                  <CheckoutOrderSummary
-                    onQuantityChange={handleProductQuantityChange}
-                    products={products}
-                    shippingTax={shippingTax}
-                    subtotal={subtotal}
-                    total={total}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-            <Box sx={{ mt: 6 }}>
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <LockIcon
-                  fontWeight="small"
-                  sx={{ color: 'text.secondary' }}
+                <CheckoutBilling
+                  billing={billing}
+                  onChange={handleBillingChange}
                 />
-                <Typography
-                  sx={{ ml: 2 }}
-                  variant="subtitle2"
-                >
-                  Secure Checkout
-                </Typography>
-              </Box>
+              </Grid>
+              <Grid
+                item
+                md={5}
+                xs={12}
+              >
+                <CheckoutOrderSummary
+                  onQuantityChange={handleProductQuantityChange}
+                  products={products}
+                  shippingTax={shippingTax}
+                  subtotal={subtotal}
+                  total={total}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+          <Box sx={{ mt: 6 }}>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
+            >
+              <LockIcon
+                fontWeight="small"
+                sx={{ color: 'text.secondary' }}
+              />
               <Typography
-                color="textSecondary"
-                sx={{ mt: 2 }}
-                variant="body2"
+                sx={{ ml: 2 }}
+                variant="subtitle2"
               >
-                Your purchases are secured by an industry best encryption
-                service – Braintree
+                Secure Checkout
               </Typography>
-              <Button
-                color="primary"
-                endIcon={<ArrowRightIcon fontSize="small" />}
-                size="large"
-                sx={{ mt: 3 }}
-                type="submit"
-                variant="contained"
-              >
-                Complete order
-              </Button>
             </Box>
-          </form>
-        </Container>
-      </Box>
-    </>
-  );
+            <Typography
+              color="textSecondary"
+              sx={{ mt: 2 }}
+              variant="body2"
+            >
+              Your purchases are secured by an industry best encryption
+              service – Braintree
+            </Typography>
+            <Button
+              color="primary"
+              endIcon={<ArrowRightIcon fontSize="small" />}
+              size="large"
+              sx={{ mt: 3 }}
+              type="submit"
+              variant="contained"
+            >
+              Complete order
+            </Button>
+          </Box>
+        </form>
+      </Container>
+    </Box>
+  </>;
 };
 
 export default Checkout;

@@ -1,4 +1,4 @@
-import {DatePicker} from '@mui/lab';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
@@ -953,10 +953,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/beneficiaries"
-          passHref
-        >
+        <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

@@ -42,10 +42,7 @@ export const HomeDevelopers = (props) => {
                 Not just a set of tools, the package includes ready-to-deploy conceptual
                 applications written in JavaScript & TypeScript.
               </Typography>
-              <NextLink
-                href="/browse"
-                passHref
-              >
+              <NextLink href="/browse" passHref legacyBehavior>
                 <Button
                   size="large"
                   component="a"

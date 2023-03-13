@@ -207,10 +207,7 @@ export const MarketListTable = (props) => {
                       {market.email}
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/markets/${market.id}`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/markets/${market.id}`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>

@@ -72,128 +72,123 @@ const CompanyDetails = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Company Details | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/jobs"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Company Details | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/jobs" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Jobs
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Jobs
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <Grid
+          container
+          spacing={4}
+        >
           <Grid
-            container
-            spacing={4}
+            item
+            xs={12}
+            lg={8}
           >
-            <Grid
-              item
-              xs={12}
-              lg={8}
-            >
-              <Card>
-                <CardHeader
-                  disableTypography
-                  title={(
-                    <Box sx={{ display: 'flex' }}>
-                      <Avatar
-                        src={company.logo}
-                        sx={{
-                          background: 'transparent',
-                          mr: 2
-                        }}
-                        variant="rounded"
+            <Card>
+              <CardHeader
+                disableTypography
+                title={(
+                  <Box sx={{ display: 'flex' }}>
+                    <Avatar
+                      src={company.logo}
+                      sx={{
+                        background: 'transparent',
+                        mr: 2
+                      }}
+                      variant="rounded"
+                    >
+                      {getInitials(company.name)}
+                    </Avatar>
+                    <div>
+                      <Typography variant="h6">
+                        {company.name}
+                      </Typography>
+                      <Typography
+                        sx={{ mt: 1 }}
+                        variant="body2"
                       >
-                        {getInitials(company.name)}
-                      </Avatar>
-                      <div>
-                        <Typography variant="h6">
-                          {company.name}
-                        </Typography>
-                        <Typography
-                          sx={{ mt: 1 }}
-                          variant="body2"
-                        >
-                          {company.shortDescription}
-                        </Typography>
-                      </div>
-                    </Box>
-                  )}
-                />
-                <Divider />
-                <Tabs
-                  indicatorColor="primary"
-                  onChange={handleTabsChange}
-                  scrollButtons="auto"
-                  sx={{ px: 3 }}
-                  textColor="primary"
-                  value={currentTab}
-                  variant="scrollable"
-                >
-                  {tabs.map((tab) => (
-                    <Tab
-                      key={tab.value}
-                      label={tab.label}
-                      value={tab.value}
-                    />
-                  ))}
-                </Tabs>
-                <Divider />
-                <CardContent>
-                  {currentTab === 'overview' && <CompanyOverview company={company} />}
-                  {currentTab === 'reviews' && (
-                    <CompanyReviews
-                      reviews={company.reviews || []}
-                      averageRating={company.averageRating}
-                    />
-                  )}
-                  {currentTab === 'activity' && (
-                    <CompanyActivity activities={company.activities || []} />
-                  )}
-                  {currentTab === 'team' && <CompanyTeam members={company.members || []} />}
-                  {currentTab === 'assets' && <CompanyAssets assets={company.assets || []} />}
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              lg={4}
-            >
-              <CompanySummary company={company} />
-            </Grid>
+                        {company.shortDescription}
+                      </Typography>
+                    </div>
+                  </Box>
+                )}
+              />
+              <Divider />
+              <Tabs
+                indicatorColor="primary"
+                onChange={handleTabsChange}
+                scrollButtons="auto"
+                sx={{ px: 3 }}
+                textColor="primary"
+                value={currentTab}
+                variant="scrollable"
+              >
+                {tabs.map((tab) => (
+                  <Tab
+                    key={tab.value}
+                    label={tab.label}
+                    value={tab.value}
+                  />
+                ))}
+              </Tabs>
+              <Divider />
+              <CardContent>
+                {currentTab === 'overview' && <CompanyOverview company={company} />}
+                {currentTab === 'reviews' && (
+                  <CompanyReviews
+                    reviews={company.reviews || []}
+                    averageRating={company.averageRating}
+                  />
+                )}
+                {currentTab === 'activity' && (
+                  <CompanyActivity activities={company.activities || []} />
+                )}
+                {currentTab === 'team' && <CompanyTeam members={company.members || []} />}
+                {currentTab === 'assets' && <CompanyAssets assets={company.assets || []} />}
+              </CardContent>
+            </Card>
           </Grid>
-        </Container>
-      </Box>
-    </>
-  );
+          <Grid
+            item
+            xs={12}
+            lg={4}
+          >
+            <CompanySummary company={company} />
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
+  </>;
 };
 
 CompanyDetails.getLayout = (page) => (

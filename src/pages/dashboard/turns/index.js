@@ -109,125 +109,120 @@ const TurnList = () => {
   const filteredTurns = applyFilters(turnList, filters);
   const paginatedTurns = applyPagination(filteredTurns, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado de Turnos
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Turnos
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href="/dashboard/turns/new"
-                  passHref
-                >
-                  <Button
-                    disabled={disableNewButton}
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado de Turnos
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Turnos
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
-            <TurnListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              turns={paginatedTurns}
-              turnsCount={filteredTurns.length}
-              rowsPerPage={rowsPerPage}
-              handleBeneficiariesReport={handleBeneficiariesReport}
-            />
-          </Card>
-        </Container>
-      </Box>
-      <Dialog
-        fullScreen
-        open={!!viewBeneficiaryPDF}
+            <Grid item>
+              <NextLink href="/dashboard/turns/new" passHref legacyBehavior>
+                <Button
+                  disabled={disableNewButton}
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <MarketListFilters onChange={handleFiltersChange} />
+          <TurnListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            turns={paginatedTurns}
+            turnsCount={filteredTurns.length}
+            rowsPerPage={rowsPerPage}
+            handleBeneficiariesReport={handleBeneficiariesReport}
+          />
+        </Card>
+      </Container>
+    </Box>
+    <Dialog
+      fullScreen
+      open={!!viewBeneficiaryPDF}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
+            backgroundColor: 'background.default',
+            p: 2,
           }}
         >
           <Box
             sx={{
-              backgroundColor: 'background.default',
-              p: 2,
+              position: 'absolute',
+              top: '20px',
+              left: '20px'
             }}
           >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '20px',
-                left: '20px'
-              }}
+            <Button
+              startIcon={<ArrowLeftIcon fontSize="small" />}
+              onClick={() => setViewBeneficiaryPDF(null)}
+              variant="contained"
             >
-              <Button
-                startIcon={<ArrowLeftIcon fontSize="small" />}
-                onClick={() => setViewBeneficiaryPDF(null)}
-                variant="contained"
-              >
-                Volver
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography variant="h4">
-                Beneficiarios del turno
-              </Typography>
-            </Box>
+              Volver
+            </Button>
           </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <PDFViewer
-              height="100%"
-              style={{ border: 'none' }}
-              width="100%"
-              showToolbar={true}
-            >
-              {
-                viewBeneficiaryPDF && beneficiariesTurnList.length > 0 && (
-                  <TurnBeneficiaryPDF turn={viewBeneficiaryPDF} beneficiaries={beneficiariesTurnList} />
-                )
-              }
-            </PDFViewer>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h4">
+              Beneficiarios del turno
+            </Typography>
           </Box>
         </Box>
-      </Dialog>
-    </>
-  );
+        <Box sx={{ flexGrow: 1 }}>
+          <PDFViewer
+            height="100%"
+            style={{ border: 'none' }}
+            width="100%"
+            showToolbar={true}
+          >
+            {
+              viewBeneficiaryPDF && beneficiariesTurnList.length > 0 && (
+                <TurnBeneficiaryPDF turn={viewBeneficiaryPDF} beneficiaries={beneficiariesTurnList} />
+              )
+            }
+          </PDFViewer>
+        </Box>
+      </Box>
+    </Dialog>
+  </>;
 };
 
 TurnList.getLayout = (page) => (

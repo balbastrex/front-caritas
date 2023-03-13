@@ -121,10 +121,7 @@ export const ChatSidebar = (props) => {
           Chats
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <NextLink
-          href="/dashboard/chat?compose=true"
-          passHref
-        >
+        <NextLink href="/dashboard/chat?compose=true" passHref legacyBehavior>
           <Button
             component="a"
             onClick={handleGroupClick}

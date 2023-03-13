@@ -87,10 +87,7 @@ export const CustomerInvoices = (props) => {
                   </SeverityPill>
                 </TableCell>
                 <TableCell align="right">
-                  <NextLink
-                    href="/dashboard/invoices/1"
-                    passHref
-                  >
+                  <NextLink href="/dashboard/invoices/1" passHref legacyBehavior>
                     <IconButton component="a">
                       <ArrowRightIcon fontSize="small" />
                     </IconButton>

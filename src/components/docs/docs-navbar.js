@@ -20,20 +20,17 @@ export const DocsNavbar = ({ onOpenSidebar }) => (
       href="/"
       passHref
     >
-      <a>
-        <Logo
-          sx={{
-            height: 40,
-            width: 40
-          }}
-        />
-      </a>
+
+      <Logo
+        sx={{
+          height: 40,
+          width: 40
+        }}
+      />
+
     </NextLink>
     <Box sx={{ flexGrow: 1 }} />
-    <NextLink
-      href="/dashboard"
-      passHref
-    >
+    <NextLink href="/dashboard" passHref legacyBehavior>
       <Link
         color="textSecondary"
         underline="none"
@@ -42,10 +39,7 @@ export const DocsNavbar = ({ onOpenSidebar }) => (
         Live Demo
       </Link>
     </NextLink>
-    <NextLink
-      href="/browse"
-      passHref
-    >
+    <NextLink href="/browse" passHref legacyBehavior>
       <Link
         color="textSecondary"
         sx={{ ml: 2 }}

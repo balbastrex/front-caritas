@@ -54,50 +54,45 @@ const OrderCreate = () => {
     }
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Editar Albarán
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/receipts"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Editar Albarán
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/receipts" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Albaranes
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <ReceiptCreateForm receipt={receipt} isEdit={true} updateSummary={updateSummary} />
-        </Container>
-      </Box>
-      <ReceiptSummary quantity={quantity} total={total} totalReceipt={totalReceipt} />
-    </>
-  );
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Albaranes
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <ReceiptCreateForm receipt={receipt} isEdit={true} updateSummary={updateSummary} />
+      </Container>
+    </Box>
+    <ReceiptSummary quantity={quantity} total={total} totalReceipt={totalReceipt} />
+  </>;
 };
 
 OrderCreate.getLayout = (page) => (

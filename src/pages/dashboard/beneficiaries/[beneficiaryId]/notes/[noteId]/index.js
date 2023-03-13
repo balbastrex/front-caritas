@@ -31,96 +31,94 @@ const ProductEdit = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Editar Nota
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: 'background.default',
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href={`/dashboard/beneficiaries/${beneficiaryId}/notes`}
-              passHref
-            >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Notas
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              overflow: 'hidden'
-            }}
-          >
-            <Avatar
-              src={note.avatar}
+  return <>
+    <Head>
+      <title>
+        Dashboard: Editar Nota
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.default',
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink
+            href={`/dashboard/beneficiaries/${beneficiaryId}/notes`}
+            passHref
+            legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
               sx={{
-                height: 64,
-                mr: 2,
-                width: 64
+                alignItems: 'center',
+                display: 'flex'
               }}
             >
-              {getInitials(note.description)}
-            </Avatar>
-            <div>
-              <Typography
-                noWrap
-                variant="h4"
-              >
-                Nota
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Notas
               </Typography>
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                <Typography variant="subtitle2">
-                  note_id:
-                </Typography>
-                <Chip
-                  label={note.id}
-                  size="small"
-                  sx={{ ml: 1 }}
-                />
-              </Box>
-            </div>
-          </Box>
-          <Box mt={3}>
-            <NoteCreateForm isEdit note={note} beneficiaryId={beneficiaryId} />
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+            </Link>
+          </NextLink>
+        </Box>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            overflow: 'hidden'
+          }}
+        >
+          <Avatar
+            src={note.avatar}
+            sx={{
+              height: 64,
+              mr: 2,
+              width: 64
+            }}
+          >
+            {getInitials(note.description)}
+          </Avatar>
+          <div>
+            <Typography
+              noWrap
+              variant="h4"
+            >
+              Nota
+            </Typography>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <Typography variant="subtitle2">
+                note_id:
+              </Typography>
+              <Chip
+                label={note.id}
+                size="small"
+                sx={{ ml: 1 }}
+              />
+            </Box>
+          </div>
+        </Box>
+        <Box mt={3}>
+          <NoteCreateForm isEdit note={note} beneficiaryId={beneficiaryId} />
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 ProductEdit.getLayout = (page) => (

@@ -84,10 +84,7 @@ export const ProviderListTable = (props) => {
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/providers/${provider.id}/edit`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/providers/${provider.id}/edit`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>

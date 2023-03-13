@@ -35,10 +35,7 @@ export const AuthBanner = () => (
         <Typography variant="subtitle2">
           Visit our
           {' '}
-          <NextLink
-            href="/docs/welcome"
-            passHref
-          >
+          <NextLink href="/docs/welcome" passHref legacyBehavior>
             <Link variant="subtitle2">
               docs
             </Link>

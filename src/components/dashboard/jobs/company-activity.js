@@ -39,10 +39,7 @@ const getActivityContent = (activity) => {
             color="primary"
             variant="subtitle2"
           >
-            <NextLink
-              href="/dashboard/jobs"
-              passHref
-            >
+            <NextLink href="/dashboard/jobs" passHref legacyBehavior>
               <Link>
                 {activity.addedJob}
               </Link>

@@ -87,10 +87,7 @@ export const AccountPopover = (props) => {
       </Box>
       <Divider />
       <Box sx={{ my: 1 }}>
-        <NextLink
-          href="/dashboard/social/profile"
-          passHref
-        >
+        <NextLink href="/dashboard/social/profile" passHref legacyBehavior>
           <MenuItem component="a">
             <ListItemIcon>
               <UserCircleIcon fontSize="small" />

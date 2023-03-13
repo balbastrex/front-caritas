@@ -101,10 +101,7 @@ export const HomeHero = (props) => {
             }
           }}
         >
-          <NextLink
-            href="/browse"
-            passHref
-          >
+          <NextLink href="/browse" passHref legacyBehavior>
             <Button
               component="a"
               size="large"
@@ -113,10 +110,7 @@ export const HomeHero = (props) => {
               Browse Components
             </Button>
           </NextLink>
-          <NextLink
-            href="/dashboard"
-            passHref
-          >
+          <NextLink href="/dashboard" passHref legacyBehavior>
             <Button
               component="a"
               size="large"

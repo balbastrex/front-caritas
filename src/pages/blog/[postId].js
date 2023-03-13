@@ -91,138 +91,130 @@ const BlogPostDetails = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Blog: Post Details | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <NextLink
-            href="/dashboard"
-            passHref
+  return <>
+    <Head>
+      <title>
+        Blog: Post Details | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <NextLink href="/dashboard" passHref legacyBehavior>
+          <Button
+            component="a"
+            startIcon={<ArrowLeftIcon fontSize="small" />}
           >
+            Dashboard
+          </Button>
+        </NextLink>
+        <Typography
+          variant="h3"
+          sx={{ mt: 3 }}
+        >
+          Blog Post
+        </Typography>
+        <Card
+          elevation={16}
+          sx={{
+            alignItems: 'center',
+            borderRadius: 1,
+            display: 'flex',
+            justifyContent: 'space-between',
+            mb: 8,
+            mt: 6,
+            px: 3,
+            py: 2
+          }}
+        >
+          <Typography variant="subtitle1">
+            Hello, Admin
+          </Typography>
+          <NextLink href="/blog/new" passHref legacyBehavior>
             <Button
               component="a"
-              startIcon={<ArrowLeftIcon fontSize="small" />}
+              variant="contained"
             >
-              Dashboard
+              Edit Post
             </Button>
           </NextLink>
-          <Typography
-            variant="h3"
-            sx={{ mt: 3 }}
-          >
-            Blog Post
-          </Typography>
-          <Card
-            elevation={16}
-            sx={{
-              alignItems: 'center',
-              borderRadius: 1,
-              display: 'flex',
-              justifyContent: 'space-between',
-              mb: 8,
-              mt: 6,
-              px: 3,
-              py: 2
-            }}
-          >
-            <Typography variant="subtitle1">
-              Hello, Admin
+        </Card>
+        <Chip label={post.category} />
+        <Typography
+          sx={{ mt: 3 }}
+          variant="h3"
+        >
+          {post.title}
+        </Typography>
+        <Typography
+          color="textSecondary"
+          sx={{ mt: 3 }}
+          variant="subtitle1"
+        >
+          {post.shortDescription}
+        </Typography>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            mt: 3
+          }}
+        >
+          <Avatar src={post.author.avatar} />
+          <Box sx={{ ml: 2 }}>
+            <Typography variant="subtitle2">
+              By
+              {' '}
+              {post.author.name}
+              {' '}
+              •
+              {' '}
+              {format(post.publishedAt, 'MMMM d, yyyy')}
             </Typography>
-            <NextLink
-              href="/blog/new"
-              passHref
+            <Typography
+              color="textSecondary"
+              variant="body2"
             >
-              <Button
-                component="a"
-                variant="contained"
-              >
-                Edit Post
-              </Button>
-            </NextLink>
-          </Card>
-          <Chip label={post.category} />
-          <Typography
-            sx={{ mt: 3 }}
-            variant="h3"
-          >
-            {post.title}
-          </Typography>
-          <Typography
-            color="textSecondary"
-            sx={{ mt: 3 }}
-            variant="subtitle1"
-          >
-            {post.shortDescription}
-          </Typography>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              mt: 3
-            }}
-          >
-            <Avatar src={post.author.avatar} />
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2">
-                By
-                {' '}
-                {post.author.name}
-                {' '}
-                •
-                {' '}
-                {format(post.publishedAt, 'MMMM d, yyyy')}
-              </Typography>
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
-                {`${post.readTime} read`}
-              </Typography>
-            </Box>
+              {`${post.readTime} read`}
+            </Typography>
           </Box>
-          <Box
-            sx={{
-              backgroundImage: `url(${post.cover})`,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              borderRadius: 1,
-              height: 380,
-              mt: 3
-            }}
-          />
-          <Box sx={{ py: 3 }}>
-            <MarkdownWrapper>
-              {post.content && (
-                <Markdown children={post.content} />
-              )}
-            </MarkdownWrapper>
-          </Box>
-          <Divider sx={{ my: 3 }} />
-          {comments.map((comment) => (
-            <BlogComment
-              key={comment.id}
-              {...comment} />
-          ))}
-          <Divider sx={{ my: 3 }} />
-          <BlogCommentAdd />
-          <Box sx={{ mt: 8 }}>
-            <BlogNewsletter />
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+        </Box>
+        <Box
+          sx={{
+            backgroundImage: `url(${post.cover})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            borderRadius: 1,
+            height: 380,
+            mt: 3
+          }}
+        />
+        <Box sx={{ py: 3 }}>
+          <MarkdownWrapper>
+            {post.content && (
+              <Markdown children={post.content} />
+            )}
+          </MarkdownWrapper>
+        </Box>
+        <Divider sx={{ my: 3 }} />
+        {comments.map((comment) => (
+          <BlogComment
+            key={comment.id}
+            {...comment} />
+        ))}
+        <Divider sx={{ my: 3 }} />
+        <BlogCommentAdd />
+        <Box sx={{ mt: 8 }}>
+          <BlogNewsletter />
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 export default BlogPostDetails;

@@ -88,137 +88,132 @@ const BeneficiariesList = () => {
   const filteredBeneficiaries = applyFilters(beneficiaries, filters);
   const paginatedBeneficiaries = applyPagination(filteredBeneficiaries, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado Beneficiarios
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Beneficiarios
-                </Typography>
-              </Grid>
-              <Grid item container justifyContent={'right'} spacing={2}>
-                <Grid item>
-                  <Button
-                    disabled={disableNewButton}
-                    component="a"
-                    startIcon={<FileDownloadOutlinedIcon fontSize="small" />}
-                    variant="contained"
-                    onClick={() => { exportBeneficiariesToExcel(beneficiaries) }}
-                  >
-                    Exportar
-                  </Button>
-                </Grid><Grid item>
-                <NextLink
-                  href="/dashboard/beneficiaries/new"
-                  passHref
-                >
-                  <Button
-                    disabled={disableNewButton}
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado Beneficiarios
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Beneficiarios
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <BeneficiaryListFilters onChange={handleFiltersChange} />
-            <BeneficiaryListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              beneficiaries={paginatedBeneficiaries}
-              beneficiariesCount={filteredBeneficiaries.length}
-              rowsPerPage={rowsPerPage}
-              handleBeneficiaryLicense={handleBeneficiaryLicense}
-            />
-          </Card>
-        </Container>
-      </Box>
-      <Dialog
-        fullScreen
-        open={!!viewBeneficiaryLicensePDF}
+            <Grid item container justifyContent={'right'} spacing={2}>
+              <Grid item>
+                <Button
+                  disabled={disableNewButton}
+                  component="a"
+                  startIcon={<FileDownloadOutlinedIcon fontSize="small" />}
+                  variant="contained"
+                  onClick={() => { exportBeneficiariesToExcel(beneficiaries) }}
+                >
+                  Exportar
+                </Button>
+              </Grid><Grid item>
+              <NextLink href="/dashboard/beneficiaries/new" passHref legacyBehavior>
+                <Button
+                  disabled={disableNewButton}
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <BeneficiaryListFilters onChange={handleFiltersChange} />
+          <BeneficiaryListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            beneficiaries={paginatedBeneficiaries}
+            beneficiariesCount={filteredBeneficiaries.length}
+            rowsPerPage={rowsPerPage}
+            handleBeneficiaryLicense={handleBeneficiaryLicense}
+          />
+        </Card>
+      </Container>
+    </Box>
+    <Dialog
+      fullScreen
+      open={!!viewBeneficiaryLicensePDF}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
+            backgroundColor: 'background.default',
+            p: 2,
           }}
         >
           <Box
             sx={{
-              backgroundColor: 'background.default',
-              p: 2,
+              position: 'absolute',
+              top: '20px',
+              left: '20px'
             }}
           >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '20px',
-                left: '20px'
-              }}
+            <Button
+              startIcon={<ArrowLeftIcon fontSize="small" />}
+              onClick={() => setViewBeneficiaryLicensePDF(null)}
+              variant="contained"
             >
-              <Button
-                startIcon={<ArrowLeftIcon fontSize="small" />}
-                onClick={() => setViewBeneficiaryLicensePDF(null)}
-                variant="contained"
-              >
-                Volver
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography variant="h4">
-                Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
-              </Typography>
-            </Box>
+              Volver
+            </Button>
           </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <PDFViewer
-              height="100%"
-              style={{ border: 'none' }}
-              width="100%"
-              showToolbar={true}
-            >
-              {
-                viewBeneficiaryLicensePDF && (
-                  <BeneficiaryLicensePDF beneficiary={viewBeneficiaryLicensePDF} />
-                )
-              }
-            </PDFViewer>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h4">
+              Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
+            </Typography>
           </Box>
         </Box>
-      </Dialog>
-    </>
-  );
+        <Box sx={{ flexGrow: 1 }}>
+          <PDFViewer
+            height="100%"
+            style={{ border: 'none' }}
+            width="100%"
+            showToolbar={true}
+          >
+            {
+              viewBeneficiaryLicensePDF && (
+                <BeneficiaryLicensePDF beneficiary={viewBeneficiaryLicensePDF} />
+              )
+            }
+          </PDFViewer>
+        </Box>
+      </Box>
+    </Dialog>
+  </>;
 };
 
 BeneficiariesList.getLayout = (page) => (

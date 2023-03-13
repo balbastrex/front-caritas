@@ -370,9 +370,9 @@ export const DashboardSidebar = (props) => {
                 href="/"
                 passHref
               >
-                <a>
-                  <img src={'/logo.jpg'} style={{ width: '220px'}} alt='logo'/>
-                </a>
+
+                <img src={'/logo.jpg'} style={{ width: '220px'}} alt='logo'/>
+
               </NextLink>
             </Box>
             {/*<Box sx={{ px: 2 }}>

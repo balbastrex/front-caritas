@@ -115,10 +115,7 @@ export const ReceiptListTable = (props) => {
                       {receipt.amount}
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/receipts/${receipt.id}/edit`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/receipts/${receipt.id}/edit`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>

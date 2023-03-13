@@ -15,49 +15,44 @@ const UserCreate = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Nuevo Usuario
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/users"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Nuevo Usuario
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/users" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Usuarios
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <UserCreateForm />
-        </Container>
-      </Box>
-    </>
-  );
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Usuarios
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <UserCreateForm />
+      </Container>
+    </Box>
+  </>;
 };
 
 UserCreate.getLayout = (page) => (

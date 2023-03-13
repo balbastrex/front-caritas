@@ -106,10 +106,7 @@ export const MailItem = (props) => {
           </IconButton>
         </Tooltip>
       </Box>
-      <NextLink
-        href={href}
-        passHref
-      >
+      <NextLink href={href} passHref legacyBehavior>
         <Box
           component="a"
           sx={{
