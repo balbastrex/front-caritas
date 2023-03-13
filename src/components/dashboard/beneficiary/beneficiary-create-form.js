@@ -1,4 +1,4 @@
-import {DatePicker} from '@mui/lab';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
