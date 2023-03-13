@@ -276,10 +276,7 @@ export const CustomerEditForm = (props) => {
           >
             Update
           </Button>
-          <NextLink
-            href="/dashboard/customers/1"
-            passHref
-          >
+          <NextLink href="/dashboard/customers/1" passHref legacyBehavior>
             <Button
               component="a"
               disabled={formik.isSubmitting}

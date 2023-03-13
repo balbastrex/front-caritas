@@ -18,80 +18,75 @@ const AuthorizationRequired = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Error: Autorización Requerida
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          alignItems: 'center',
-          backgroundColor: 'background.paper',
-          display: 'flex',
-          flexGrow: 1,
-          py: '80px'
-        }}
-      >
-        <Container maxWidth="lg">
-          <Typography
-            align="center"
-            variant={mobileDevice ? 'h4' : 'h1'}
-          >
-            401: Autorización Requerida
-          </Typography>
-          <Typography
-            align="center"
-            color="textSecondary"
-            sx={{ mt: 0.5 }}
-            variant="subtitle2"
-          >
-            Estás intentando acceder a una página que requiere autorización.
-            Intenta usar los botones de navegación.
-          </Typography>
+  return <>
+    <Head>
+      <title>
+        Error: Autorización Requerida
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        alignItems: 'center',
+        backgroundColor: 'background.paper',
+        display: 'flex',
+        flexGrow: 1,
+        py: '80px'
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography
+          align="center"
+          variant={mobileDevice ? 'h4' : 'h1'}
+        >
+          401: Autorización Requerida
+        </Typography>
+        <Typography
+          align="center"
+          color="textSecondary"
+          sx={{ mt: 0.5 }}
+          variant="subtitle2"
+        >
+          Estás intentando acceder a una página que requiere autorización.
+          Intenta usar los botones de navegación.
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 6
+          }}
+        >
           <Box
+            alt="Under development"
+            component="img"
+            src={`/static/error/error401_${theme.palette.mode}.svg`}
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mt: 6
+              height: 'auto',
+              maxWidth: '100%',
+              width: 400
             }}
-          >
-            <Box
-              alt="Under development"
-              component="img"
-              src={`/static/error/error401_${theme.palette.mode}.svg`}
-              sx={{
-                height: 'auto',
-                maxWidth: '100%',
-                width: 400
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mt: 6
-            }}
-          >
-            <NextLink
-              href={backNavigation || '/dashboard'}
-              passHref
+          />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 6
+          }}
+        >
+          <NextLink href={backNavigation || '/dashboard'} passHref legacyBehavior>
+            <Button
+              component="a"
+              variant="outlined"
             >
-              <Button
-                component="a"
-                variant="outlined"
-              >
-                Volver a la página anterior
-              </Button>
-            </NextLink>
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+              Volver a la página anterior
+            </Button>
+          </NextLink>
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 export default AuthorizationRequired;

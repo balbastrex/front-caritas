@@ -73,172 +73,167 @@ export const SocialProfile = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Social Profile | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box
-            style={{ backgroundImage: `url(${profile.cover})` }}
+  return <>
+    <Head>
+      <title>
+        Dashboard: Social Profile | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="lg">
+        <Box
+          style={{ backgroundImage: `url(${profile.cover})` }}
+          sx={{
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            borderRadius: 1,
+            height: 348,
+            position: 'relative',
+            '&:hover': {
+              '& button': {
+                visibility: 'visible'
+              }
+            }
+          }}
+        >
+          <Button
+            startIcon={<AddPhotoIcon fontSize="small" />}
             sx={{
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              borderRadius: 1,
-              height: 348,
-              position: 'relative',
+              backgroundColor: blueGrey[900],
+              bottom: {
+                lg: 24,
+                xs: 'auto'
+              },
+              color: 'common.white',
+              position: 'absolute',
+              right: 24,
+              top: {
+                lg: 'auto',
+                xs: 24
+              },
+              visibility: 'hidden',
               '&:hover': {
-                '& button': {
-                  visibility: 'visible'
-                }
+                backgroundColor: blueGrey[900]
+              }
+            }}
+            variant="contained"
+          >
+            Change Cover
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            mt: 5
+          }}
+        >
+          <Avatar
+            src={profile.avatar}
+            sx={{
+              height: 64,
+              width: 64
+            }}
+          />
+          <Box sx={{ ml: 2 }}>
+            <Typography
+              color="textSecondary"
+              variant="overline"
+            >
+              {profile.bio}
+            </Typography>
+            <Typography variant="h6">
+              {profile.name}
+            </Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box
+            sx={{
+              display: {
+                md: 'block',
+                xs: 'none'
               }
             }}
           >
-            <Button
-              startIcon={<AddPhotoIcon fontSize="small" />}
-              sx={{
-                backgroundColor: blueGrey[900],
-                bottom: {
-                  lg: 24,
-                  xs: 'auto'
-                },
-                color: 'common.white',
-                position: 'absolute',
-                right: 24,
-                top: {
-                  lg: 'auto',
-                  xs: 24
-                },
-                visibility: 'hidden',
-                '&:hover': {
-                  backgroundColor: blueGrey[900]
-                }
-              }}
-              variant="contained"
-            >
-              Change Cover
-            </Button>
+            {connectedStatus === 'not_connected' && (
+              <Button
+                onClick={handleConnectToggle}
+                size="small"
+                startIcon={(
+                  <UserAddIcon fontSize="small" />
+                )}
+                sx={{ ml: 2 }}
+                variant="outlined"
+              >
+                Connect
+              </Button>
+            )}
+            {connectedStatus === 'pending' && (
+              <Button
+                color="primary"
+                onClick={handleConnectToggle}
+                size="small"
+                sx={{ ml: 2 }}
+                variant="outlined"
+              >
+                Pending
+              </Button>
+            )}
+            <NextLink href="/dashboard/chat" passHref legacyBehavior>
+              <Button
+                component="a"
+                size="small"
+                startIcon={(
+                  <ChatIcon fontSize="small" />
+                )}
+                sx={{ ml: 1 }}
+                variant="contained"
+              >
+                Send Message
+              </Button>
+            </NextLink>
           </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              mt: 5
-            }}
+          <Tooltip title="More options">
+            <IconButton sx={{ ml: 1 }}>
+              <DotsHorizontalIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Container>
+      <Box sx={{ mt: 5 }}>
+        <Container maxWidth="lg">
+          <Tabs
+            indicatorColor="primary"
+            onChange={handleTabsChange}
+            scrollButtons="auto"
+            textColor="primary"
+            value={currentTab}
+            variant="scrollable"
           >
-            <Avatar
-              src={profile.avatar}
-              sx={{
-                height: 64,
-                width: 64
-              }}
-            />
-            <Box sx={{ ml: 2 }}>
-              <Typography
-                color="textSecondary"
-                variant="overline"
-              >
-                {profile.bio}
-              </Typography>
-              <Typography variant="h6">
-                {profile.name}
-              </Typography>
-            </Box>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box
-              sx={{
-                display: {
-                  md: 'block',
-                  xs: 'none'
-                }
-              }}
-            >
-              {connectedStatus === 'not_connected' && (
-                <Button
-                  onClick={handleConnectToggle}
-                  size="small"
-                  startIcon={(
-                    <UserAddIcon fontSize="small" />
-                  )}
-                  sx={{ ml: 2 }}
-                  variant="outlined"
-                >
-                  Connect
-                </Button>
-              )}
-              {connectedStatus === 'pending' && (
-                <Button
-                  color="primary"
-                  onClick={handleConnectToggle}
-                  size="small"
-                  sx={{ ml: 2 }}
-                  variant="outlined"
-                >
-                  Pending
-                </Button>
-              )}
-              <NextLink
-                href="/dashboard/chat"
-                passHref
-              >
-                <Button
-                  component="a"
-                  size="small"
-                  startIcon={(
-                    <ChatIcon fontSize="small" />
-                  )}
-                  sx={{ ml: 1 }}
-                  variant="contained"
-                >
-                  Send Message
-                </Button>
-              </NextLink>
-            </Box>
-            <Tooltip title="More options">
-              <IconButton sx={{ ml: 1 }}>
-                <DotsHorizontalIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+              />
+            ))}
+          </Tabs>
+          <Divider />
+          <Box sx={{ py: 3 }}>
+            {currentTab === 'timeline' && <SocialTimeline profile={profile} />}
+            {currentTab === 'connections' && <SocialConnections />}
           </Box>
         </Container>
-        <Box sx={{ mt: 5 }}>
-          <Container maxWidth="lg">
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab
-                  key={tab.value}
-                  label={tab.label}
-                  value={tab.value}
-                />
-              ))}
-            </Tabs>
-            <Divider />
-            <Box sx={{ py: 3 }}>
-              {currentTab === 'timeline' && <SocialTimeline profile={profile} />}
-              {currentTab === 'connections' && <SocialConnections />}
-            </Box>
-          </Container>
-        </Box>
       </Box>
-    </>
-  );
+    </Box>
+  </>;
 };
 
 SocialProfile.getLayout = (page) => (

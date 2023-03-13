@@ -41,10 +41,7 @@ export const MainSidebar = (props) => {
       variant="temporary"
     >
       <Box sx={{ p: 2 }}>
-        <NextLink
-          href="/dashboard"
-          passHref
-        >
+        <NextLink href="/dashboard" passHref legacyBehavior>
           <MainSidebarLink
             color="textSecondary"
             underline="none"
@@ -53,10 +50,7 @@ export const MainSidebar = (props) => {
             Live Demo
           </MainSidebarLink>
         </NextLink>
-        <NextLink
-          href="/browse"
-          passHref
-        >
+        <NextLink href="/browse" passHref legacyBehavior>
           <MainSidebarLink
             color="textSecondary"
             underline="none"
@@ -65,10 +59,7 @@ export const MainSidebar = (props) => {
             Components
           </MainSidebarLink>
         </NextLink>
-        <NextLink
-          href="/docs/welcome"
-          passHref
-        >
+        <NextLink href="/docs/welcome" passHref legacyBehavior>
           <MainSidebarLink
             color="textSecondary"
             underline="none"

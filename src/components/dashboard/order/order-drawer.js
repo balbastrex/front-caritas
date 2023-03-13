@@ -77,10 +77,7 @@ const renderOpenedOrder = ({onApprove, onReject, order, onDelete}) => {
         </Button>
         {
           (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
-            <NextLink
-              href={`/dashboard/orders/${order.id}/edit`}
-              passHref
-            >
+            <NextLink href={`/dashboard/orders/${order.id}/edit`} passHref legacyBehavior>
               <Button
                 size="small"
               >
@@ -102,7 +99,7 @@ const renderOpenedOrder = ({onApprove, onReject, order, onDelete}) => {
         }
       </Box>
     </Box>
-  )
+  );
 }
 
 const OrderPreview = (props) => {

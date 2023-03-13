@@ -89,63 +89,58 @@ const ProductList = () => {
   const filteredProducts = applyFilters(productList, filters);
   const paginatedProducts = applyPagination(filteredProducts, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado Productos
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container>
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Productos
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href="/dashboard/products/new"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado Productos
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container>
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Productos
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
-            <ProductListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              products={paginatedProducts}
-              productsCount={filteredProducts.length}
-              rowsPerPage={rowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+            <Grid item>
+              <NextLink href="/dashboard/products/new" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <MarketListFilters onChange={handleFiltersChange} />
+          <ProductListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            products={paginatedProducts}
+            productsCount={filteredProducts.length}
+            rowsPerPage={rowsPerPage}
+          />
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 ProductList.getLayout = (page) => (

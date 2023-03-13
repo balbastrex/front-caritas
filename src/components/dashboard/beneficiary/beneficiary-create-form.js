@@ -953,10 +953,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/beneficiaries"
-          passHref
-        >
+        <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

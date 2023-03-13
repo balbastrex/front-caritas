@@ -88,63 +88,58 @@ const ProductList = () => {
   const filteredReceipts = applyFilters(receiptList, filters);
   const paginatedReceipts = applyPagination(filteredReceipts, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado Productos
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Albaranes
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href="/dashboard/receipts/new"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado Productos
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Albaranes
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
-            <ReceiptListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              receipts={paginatedReceipts}
-              receiptsCount={filteredReceipts.length}
-              rowsPerPage={rowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+            <Grid item>
+              <NextLink href="/dashboard/receipts/new" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <MarketListFilters onChange={handleFiltersChange} />
+          <ReceiptListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            receipts={paginatedReceipts}
+            receiptsCount={filteredReceipts.length}
+            rowsPerPage={rowsPerPage}
+          />
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 ProductList.getLayout = (page) => (

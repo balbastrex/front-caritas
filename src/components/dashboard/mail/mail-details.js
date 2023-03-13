@@ -79,10 +79,7 @@ export const MailDetails = (props) => {
           p: 2
         }}
       >
-        <NextLink
-          href={backHref}
-          passHref
-        >
+        <NextLink href={backHref} passHref legacyBehavior>
           <Tooltip title="Back">
             <IconButton component="a">
               <ArrowLeftIcon fontSize="small" />

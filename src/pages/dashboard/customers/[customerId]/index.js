@@ -71,185 +71,177 @@ const CustomerDetails = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Customer Details | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <div>
-            <Box sx={{ mb: 4 }}>
-              <NextLink
-                href="/dashboard/customers"
-                passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Customer Details | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <div>
+          <Box sx={{ mb: 4 }}>
+            <NextLink href="/dashboard/customers" passHref legacyBehavior>
+              <Link
+                color="textPrimary"
+                component="a"
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex'
+                }}
               >
-                <Link
-                  color="textPrimary"
-                  component="a"
+                <ArrowBackIcon
+                  fontSize="small"
+                  sx={{ mr: 1 }}
+                />
+                <Typography variant="subtitle2">
+                  Customers
+                </Typography>
+              </Link>
+            </NextLink>
+          </Box>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid
+              item
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                overflow: 'hidden'
+              }}
+            >
+              <Avatar
+                src={customer.avatar}
+                sx={{
+                  height: 64,
+                  mr: 2,
+                  width: 64
+                }}
+              >
+                {getInitials(customer.name)}
+              </Avatar>
+              <div>
+                <Typography variant="h4">
+                  {customer.email}
+                </Typography>
+                <Box
                   sx={{
-                    alignItems: 'center',
-                    display: 'flex'
+                    display: 'flex',
+                    alignItems: 'center'
                   }}
                 >
-                  <ArrowBackIcon
-                    fontSize="small"
-                    sx={{ mr: 1 }}
-                  />
                   <Typography variant="subtitle2">
-                    Customers
+                    user_id:
                   </Typography>
-                </Link>
+                  <Chip
+                    label={customer.id}
+                    size="small"
+                    sx={{ ml: 1 }}
+                  />
+                </Box>
+              </div>
+            </Grid>
+            <Grid
+              item
+              sx={{ m: -1 }}
+            >
+              <NextLink href="/dashboard/customers/1/edit" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  endIcon={(
+                    <PencilAltIcon fontSize="small" />
+                  )}
+                  sx={{ m: 1 }}
+                  variant="outlined"
+                >
+                  Edit
+                </Button>
               </NextLink>
-            </Box>
+              <Button
+                endIcon={(
+                  <ChevronDownIcon fontSize="small" />
+                )}
+                sx={{ m: 1 }}
+                variant="contained"
+              >
+                Actions
+              </Button>
+            </Grid>
+          </Grid>
+          <Tabs
+            indicatorColor="primary"
+            onChange={handleTabsChange}
+            scrollButtons="auto"
+            sx={{ mt: 3 }}
+            textColor="primary"
+            value={currentTab}
+            variant="scrollable"
+          >
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+              />
+            ))}
+          </Tabs>
+        </div>
+        <Divider />
+        <Box sx={{ mt: 3 }}>
+          {currentTab === 'details' && (
             <Grid
               container
-              justifyContent="space-between"
               spacing={3}
             >
               <Grid
                 item
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  overflow: 'hidden'
-                }}
+                xs={12}
               >
-                <Avatar
-                  src={customer.avatar}
-                  sx={{
-                    height: 64,
-                    mr: 2,
-                    width: 64
-                  }}
-                >
-                  {getInitials(customer.name)}
-                </Avatar>
-                <div>
-                  <Typography variant="h4">
-                    {customer.email}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Typography variant="subtitle2">
-                      user_id:
-                    </Typography>
-                    <Chip
-                      label={customer.id}
-                      size="small"
-                      sx={{ ml: 1 }}
-                    />
-                  </Box>
-                </div>
+                <CustomerBasicDetails
+                  address1={customer.address1}
+                  address2={customer.address2}
+                  country={customer.country}
+                  email={customer.email}
+                  isVerified={!!customer.isVerified}
+                  phone={customer.phone}
+                  state={customer.state}
+                />
               </Grid>
               <Grid
                 item
-                sx={{ m: -1 }}
+                xs={12}
               >
-                <NextLink
-                  href="/dashboard/customers/1/edit"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    endIcon={(
-                      <PencilAltIcon fontSize="small" />
-                    )}
-                    sx={{ m: 1 }}
-                    variant="outlined"
-                  >
-                    Edit
-                  </Button>
-                </NextLink>
-                <Button
-                  endIcon={(
-                    <ChevronDownIcon fontSize="small" />
-                  )}
-                  sx={{ m: 1 }}
-                  variant="contained"
-                >
-                  Actions
-                </Button>
+                <CustomerPayment />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <CustomerEmailsSummary />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <CustomerDataManagement />
               </Grid>
             </Grid>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ mt: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab
-                  key={tab.value}
-                  label={tab.label}
-                  value={tab.value}
-                />
-              ))}
-            </Tabs>
-          </div>
-          <Divider />
-          <Box sx={{ mt: 3 }}>
-            {currentTab === 'details' && (
-              <Grid
-                container
-                spacing={3}
-              >
-                <Grid
-                  item
-                  xs={12}
-                >
-                  <CustomerBasicDetails
-                    address1={customer.address1}
-                    address2={customer.address2}
-                    country={customer.country}
-                    email={customer.email}
-                    isVerified={!!customer.isVerified}
-                    phone={customer.phone}
-                    state={customer.state}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                >
-                  <CustomerPayment />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                >
-                  <CustomerEmailsSummary />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                >
-                  <CustomerDataManagement />
-                </Grid>
-              </Grid>
-            )}
-            {currentTab === 'invoices' && <CustomerInvoices />}
-            {currentTab === 'logs' && <CustomerLogs />}
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+          )}
+          {currentTab === 'invoices' && <CustomerInvoices />}
+          {currentTab === 'logs' && <CustomerLogs />}
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 CustomerDetails.getLayout = (page) => (

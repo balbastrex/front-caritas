@@ -121,141 +121,136 @@ const Browse = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Browse | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: 'background.paper',
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="lg">
-          {sections.map((section) => (
+  return <>
+    <Head>
+      <title>
+        Browse | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.paper',
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="lg">
+        {sections.map((section) => (
+          <Grid
+            key={`section-${section.title}`}
+            container
+            spacing={3}
+            sx={{
+              mt: 0,
+              pb: 8,
+              '& + &': {
+                borderTop: 1,
+                borderColor: 'divider',
+                pt: 5
+              }
+            }}
+          >
             <Grid
-              key={`section-${section.title}`}
-              container
-              spacing={3}
-              sx={{
-                mt: 0,
-                pb: 8,
-                '& + &': {
-                  borderTop: 1,
-                  borderColor: 'divider',
-                  pt: 5
-                }
-              }}
+              item
+              lg={3}
+              xs={12}
             >
-              <Grid
-                item
-                lg={3}
-                xs={12}
+              <Typography
+                sx={{ fontWeight: 600 }}
+                variant="h5"
               >
-                <Typography
-                  sx={{ fontWeight: 600 }}
-                  variant="h5"
-                >
-                  {section.title}
-                </Typography>
-              </Grid>
-              <Grid
-                container
-                item
-                lg={9}
-                spacing={3}
-                xs={12}
-              >
-                {section.items.map((item) => (
-                  <Grid
-                    item
-                    key={`item-${item.title}`}
-                    md={4}
-                    sm={6}
-                    xs={12}
-                  >
-                    <NextLink
-                      href={item.path}
-                      passHref
-                    >
-                      <Card
-                        component="a"
-                        target={item.newTab
-                          ? '_blank'
-                          : '_self'}
-                        sx={{
-                          display: 'block',
-                          textDecoration: 'none',
-                          gridColumn: {
-                            xs: 'span 3',
-                            sm: 'span 1'
-                          }
-                        }}
-                        variant="outlined"
-                      >
-                        <Box sx={{ p: 2 }}>
-                          <Box
-                            sx={{
-                              position: 'relative',
-                              pt: 'calc(300 / 500 * 100%)',
-                              '& img': {
-                                height: 'auto',
-                                position: 'absolute',
-                                top: 0,
-                                width: '100%'
-                              }
-                            }}
-                          >
-                            <img
-                              alt=""
-                              src={item.image}
-                            />
-                          </Box>
-                          <Box
-                            sx={{
-                              alignItems: 'flex-end',
-                              display: 'flex'
-                            }}
-                          >
-                            <Typography
-                              sx={{ mt: 2 }}
-                              variant="subtitle2"
-                            >
-                              {item.title}
-                            </Typography>
-                            {item.newTab && (
-                              <ExternalLinkIcon
-                                sx={{
-                                  color: 'text.secondary',
-                                  ml: 1.5
-                                }}
-                                fontSize="small"
-                              />
-                            )}
-                          </Box>
-                          <Typography
-                            color="textSecondary"
-                            variant="body2"
-                          >
-                            {item.subtitle}
-                          </Typography>
-                        </Box>
-                      </Card>
-                    </NextLink>
-                  </Grid>
-                ))}
-              </Grid>
+                {section.title}
+              </Typography>
             </Grid>
-          ))}
-        </Container>
-      </Box>
-    </>
-  );
+            <Grid
+              container
+              item
+              lg={9}
+              spacing={3}
+              xs={12}
+            >
+              {section.items.map((item) => (
+                <Grid
+                  item
+                  key={`item-${item.title}`}
+                  md={4}
+                  sm={6}
+                  xs={12}
+                >
+                  <NextLink href={item.path} passHref legacyBehavior>
+                    <Card
+                      component="a"
+                      target={item.newTab
+                        ? '_blank'
+                        : '_self'}
+                      sx={{
+                        display: 'block',
+                        textDecoration: 'none',
+                        gridColumn: {
+                          xs: 'span 3',
+                          sm: 'span 1'
+                        }
+                      }}
+                      variant="outlined"
+                    >
+                      <Box sx={{ p: 2 }}>
+                        <Box
+                          sx={{
+                            position: 'relative',
+                            pt: 'calc(300 / 500 * 100%)',
+                            '& img': {
+                              height: 'auto',
+                              position: 'absolute',
+                              top: 0,
+                              width: '100%'
+                            }
+                          }}
+                        >
+                          <img
+                            alt=""
+                            src={item.image}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            alignItems: 'flex-end',
+                            display: 'flex'
+                          }}
+                        >
+                          <Typography
+                            sx={{ mt: 2 }}
+                            variant="subtitle2"
+                          >
+                            {item.title}
+                          </Typography>
+                          {item.newTab && (
+                            <ExternalLinkIcon
+                              sx={{
+                                color: 'text.secondary',
+                                ml: 1.5
+                              }}
+                              fontSize="small"
+                            />
+                          )}
+                        </Box>
+                        <Typography
+                          color="textSecondary"
+                          variant="body2"
+                        >
+                          {item.subtitle}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </NextLink>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        ))}
+      </Container>
+    </Box>
+  </>;
 };
 
 Browse.getLayout = (page) => (

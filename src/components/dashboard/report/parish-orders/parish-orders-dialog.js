@@ -9,14 +9,21 @@ import {ParishOrdersPDF} from './parish-orders-pdf';
 export const ParishOrdersDialog = ({ open, close, data }) => {
   const [responseData, setResponseData] = useState(null);
 
-  useEffect(async () => {
-    if (data.startDate === null || data.endDate === null) return;
+  useEffect(() => {
+    async function fetchData() {
+      if (data.startDate !== null && data.endDate !== null) {
+        const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
+        const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
 
-    const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
-    const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
-
-    const response = await axios.post('/api/v1/receipt/parish-report', {startDate: formattedStartDate, endDate: formattedEndDate, parishId: data.parishId});
-    setResponseData(response.data);
+        const response = await axios.post('/api/v1/receipt/parish-report', {
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
+          parishId: data.parishId
+        });
+        setResponseData(response.data);
+      }
+    }
+    fetchData();
   }, [data]);
 
 

@@ -276,10 +276,7 @@ export const ProductCreateForm = ({isEdit, product}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/products"
-          passHref
-        >
+        <NextLink href="/dashboard/products" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

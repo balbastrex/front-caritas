@@ -118,10 +118,7 @@ export const TurnCreateForm = ({isEdit, turn}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/turns"
-          passHref
-        >
+        <NextLink href="/dashboard/turns" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

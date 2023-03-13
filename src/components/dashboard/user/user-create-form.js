@@ -245,10 +245,7 @@ export const UserCreateForm = ({isEdit, user}) => {
         >
           Delete
         </Button>
-        <NextLink
-          href="/dashboard/users"
-          passHref
-        >
+        <NextLink href="/dashboard/users" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

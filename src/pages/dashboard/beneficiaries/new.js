@@ -13,49 +13,44 @@ const ProductCreate = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Nuevo Beneficiario
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/beneficiaries"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Nuevo Beneficiario
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Beneficiarios
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <BeneficiaryCreateForm />
-        </Container>
-      </Box>
-    </>
-  );
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Beneficiarios
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <BeneficiaryCreateForm />
+      </Container>
+    </Box>
+  </>;
 };
 
 ProductCreate.getLayout = (page) => (

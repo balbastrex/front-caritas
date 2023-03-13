@@ -13,10 +13,7 @@ export const SocialComment = (props) => {
         mt: 3
       }}
       {...other}>
-      <NextLink
-        href="#"
-        passHref
-      >
+      <NextLink href="#" passHref legacyBehavior>
         <Avatar
           component="a"
           src={authorAvatar}
@@ -38,10 +35,7 @@ export const SocialComment = (props) => {
             mb: 1
           }}
         >
-          <NextLink
-            href="#"
-            passHref
-          >
+          <NextLink href="#" passHref legacyBehavior>
             <Link
               color="textPrimary"
               variant="subtitle2"

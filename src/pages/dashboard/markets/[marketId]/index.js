@@ -54,117 +54,112 @@ const MarketDetails = () => {
     return null;
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Economato: {market.name}
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <div>
-            <Box sx={{ mb: 4 }}>
-              <NextLink
-                href="/dashboard/markets"
-                passHref
-              >
-                <Link
-                  color="textPrimary"
-                  component="a"
-                  sx={{
-                    alignItems: 'center',
-                    display: 'flex'
-                  }}
-                >
-                  <ArrowBackIcon
-                    fontSize="small"
-                    sx={{ mr: 1 }}
-                  />
-                  <Typography variant="subtitle2">
-                    Economatos
-                  </Typography>
-                </Link>
-              </NextLink>
-            </Box>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid
-                item
+  return <>
+    <Head>
+      <title>
+        Economato: {market.name}
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <div>
+          <Box sx={{ mb: 4 }}>
+            <NextLink href="/dashboard/markets" passHref legacyBehavior>
+              <Link
+                color="textPrimary"
+                component="a"
                 sx={{
                   alignItems: 'center',
-                  display: 'flex',
-                  overflow: 'hidden'
+                  display: 'flex'
                 }}
               >
-                <Avatar
+                <ArrowBackIcon
+                  fontSize="small"
+                  sx={{ mr: 1 }}
+                />
+                <Typography variant="subtitle2">
+                  Economatos
+                </Typography>
+              </Link>
+            </NextLink>
+          </Box>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid
+              item
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                overflow: 'hidden'
+              }}
+            >
+              <Avatar
+                sx={{
+                  height: 64,
+                  mr: 2,
+                  width: 64
+                }}
+              >
+                {getInitials(market.name)}
+              </Avatar>
+              <div>
+                <Typography variant="h4">
+                  {market.name}
+                </Typography>
+                <Box
                   sx={{
-                    height: 64,
-                    mr: 2,
-                    width: 64
+                    display: 'flex',
+                    alignItems: 'center'
                   }}
                 >
-                  {getInitials(market.name)}
-                </Avatar>
-                <div>
-                  <Typography variant="h4">
-                    {market.name}
+                  <Typography variant="subtitle2">
+                    id:
                   </Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Typography variant="subtitle2">
-                      id:
-                    </Typography>
-                    <Chip
-                      label={market.id}
-                      size="small"
-                      sx={{ ml: 1 }}
-                    />
-                  </Box>
-                </div>
-              </Grid>
+                  <Chip
+                    label={market.id}
+                    size="small"
+                    sx={{ ml: 1 }}
+                  />
+                </Box>
+              </div>
             </Grid>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ mt: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab
-                  key={tab.value}
-                  label={tab.label}
-                  value={tab.value}
-                />
-              ))}
-            </Tabs>
-          </div>
-          <Divider />
-          <Box sx={{ mt: 3 }}>
-            {currentTab === 'details' && <MarketBasicDetails market={market}/>}
-            {currentTab === 'parish' && <MarketParish market={market} />}
-            {currentTab === 'inventory' && <MarketProduct market={market} />}
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+          </Grid>
+          <Tabs
+            indicatorColor="primary"
+            onChange={handleTabsChange}
+            scrollButtons="auto"
+            sx={{ mt: 3 }}
+            textColor="primary"
+            value={currentTab}
+            variant="scrollable"
+          >
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+              />
+            ))}
+          </Tabs>
+        </div>
+        <Divider />
+        <Box sx={{ mt: 3 }}>
+          {currentTab === 'details' && <MarketBasicDetails market={market}/>}
+          {currentTab === 'parish' && <MarketParish market={market} />}
+          {currentTab === 'inventory' && <MarketProduct market={market} />}
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 MarketDetails.getLayout = (page) => (

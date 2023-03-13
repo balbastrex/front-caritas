@@ -53,231 +53,223 @@ const JobBrowse = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Job Browse | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
+  return <>
+    <Head>
+      <title>
+        Dashboard: Job Browse | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Grid
+          alignItems="center"
+          container
+          sx={{
+            backgroundColor: 'neutral.900',
+            borderRadius: 1,
+            color: '#FFFFFF',
+            px: 4,
+            py: 8
+          }}
+        >
           <Grid
-            alignItems="center"
-            container
+            item
+            xs={12}
+            sm={7}
+          >
+            <Typography
+              color="inherit"
+              variant="h3"
+            >
+              Reach 50K+ potential candidates.
+            </Typography>
+            <Typography
+              color="neutral.500"
+              sx={{ mt: 2 }}
+              variant="body1"
+            >
+              Post your job today for free. Promotions start at $99.
+            </Typography>
+            <Button
+              color="secondary"
+              size="large"
+              sx={{ mt: 3 }}
+              variant="contained"
+            >
+              Post a job
+            </Button>
+          </Grid>
+          <Grid
+            item
+            sm={5}
             sx={{
-              backgroundColor: 'neutral.900',
-              borderRadius: 1,
-              color: '#FFFFFF',
-              px: 4,
-              py: 8
+              display: {
+                xs: 'none',
+                sm: 'block'
+              }
             }}
           >
-            <Grid
-              item
-              xs={12}
-              sm={7}
-            >
-              <Typography
-                color="inherit"
-                variant="h3"
-              >
-                Reach 50K+ potential candidates.
-              </Typography>
-              <Typography
-                color="neutral.500"
-                sx={{ mt: 2 }}
-                variant="body1"
-              >
-                Post your job today for free. Promotions start at $99.
-              </Typography>
-              <Button
-                color="secondary"
-                size="large"
-                sx={{ mt: 3 }}
-                variant="contained"
-              >
-                Post a job
-              </Button>
-            </Grid>
-            <Grid
-              item
-              sm={5}
-              sx={{
-                display: {
-                  xs: 'none',
-                  sm: 'block'
-                }
-              }}
-            >
-              <img
-                alt=""
-                src="/static/mock-images/jobs/job_browse_header.svg"
-              />
-            </Grid>
+            <img
+              alt=""
+              src="/static/mock-images/jobs/job_browse_header.svg"
+            />
           </Grid>
-          <Box sx={{ mt: 4 }}>
-            <JobsBrowseFilter />
-          </Box>
-          <div>
-            {companies.map((company) => (
-              <Card
-                key={company.id}
-                sx={{ mt: 4 }}
-              >
-                <CardContent>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: {
-                        xs: 'column',
-                        sm: 'row'
-                      }
-                    }}
-                  >
-                    <NextLink
-                      href="/dashboard/jobs/companies/1"
-                      passHref
+        </Grid>
+        <Box sx={{ mt: 4 }}>
+          <JobsBrowseFilter />
+        </Box>
+        <div>
+          {companies.map((company) => (
+            <Card
+              key={company.id}
+              sx={{ mt: 4 }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: {
+                      xs: 'column',
+                      sm: 'row'
+                    }
+                  }}
+                >
+                  <NextLink href="/dashboard/jobs/companies/1" passHref legacyBehavior>
+                    <Avatar
+                      component="a"
+                      src={company.logo}
+                      sx={{
+                        background: 'transparent',
+                        mr: 2,
+                        mb: {
+                          xs: 2,
+                          md: 0
+                        }
+                      }}
+                      variant="rounded"
                     >
-                      <Avatar
-                        component="a"
-                        src={company.logo}
-                        sx={{
-                          background: 'transparent',
-                          mr: 2,
-                          mb: {
-                            xs: 2,
-                            md: 0
-                          }
-                        }}
-                        variant="rounded"
+                      {getInitials(company.name)}
+                    </Avatar>
+                  </NextLink>
+                  <div>
+                    <NextLink href="/dashboard/jobs/companies/1" passHref legacyBehavior>
+                      <Link
+                        color="textPrimary"
+                        variant="h6"
                       >
-                        {getInitials(company.name)}
-                      </Avatar>
+                        {company.name}
+                      </Link>
                     </NextLink>
-                    <div>
-                      <NextLink
-                        href="/dashboard/jobs/companies/1"
-                        passHref
-                      >
-                        <Link
-                          color="textPrimary"
-                          variant="h6"
-                        >
-                          {company.name}
-                        </Link>
-                      </NextLink>
-                      <Typography variant="body2">
-                        {company.shortDescription}
-                      </Typography>
+                    <Typography variant="body2">
+                      {company.shortDescription}
+                    </Typography>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        ml: -3,
+                        '& > *': {
+                          ml: 3,
+                          mt: 1
+                        }
+                      }}
+                    >
                       <Box
                         sx={{
                           alignItems: 'center',
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          ml: -3,
-                          '& > *': {
-                            ml: 3,
-                            mt: 1
-                          }
+                          display: 'flex'
                         }}
                       >
-                        <Box
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex'
-                          }}
+                        <UsersIcon
+                          color="action"
+                          fontSize="small"
+                          sx={{ mr: 1 }}
+                        />
+                        <Typography
+                          color="textSecondary"
+                          noWrap
+                          variant="overline"
                         >
-                          <UsersIcon
-                            color="action"
-                            fontSize="small"
-                            sx={{ mr: 1 }}
-                          />
-                          <Typography
-                            color="textSecondary"
-                            noWrap
-                            variant="overline"
-                          >
-                            {company.employees}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex'
-                          }}
-                        >
-                          <StarIcon
-                            color="action"
-                            fontSize="small"
-                            sx={{ mr: 1 }}
-                          />
-                          <Typography
-                            color="textSecondary"
-                            noWrap
-                            variant="overline"
-                          >
-                            {company.averageRating}
-                            /5
-                          </Typography>
-                        </Box>
-                        {company.isVerified && (
-                          <Box
-                            sx={{
-                              alignItems: 'center',
-                              display: 'flex'
-                            }}
-                          >
-                            <BadgeCheckOutlinedIcon
-                              color="success"
-                              fontSize="small"
-                              sx={{ mr: 1 }}
-                            />
-                            <Typography
-                              color="success"
-                              noWrap
-                              variant="overline"
-                            >
-                              Verified
-                            </Typography>
-                          </Box>
-                        )}
+                          {company.employees}
+                        </Typography>
                       </Box>
-                    </div>
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <CompanyJobs jobs={company.jobs} />
-                  </Box>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              mt: 4,
-              px: 3,
-              py: 2
-            }}
-          >
-            <IconButton disabled>
-              <ChevronLeftIcon fontSize="small" />
-            </IconButton>
-            <IconButton>
-              <ChevronRightIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </Container>
-      </Box>
-    </>
-  );
+                      <Box
+                        sx={{
+                          alignItems: 'center',
+                          display: 'flex'
+                        }}
+                      >
+                        <StarIcon
+                          color="action"
+                          fontSize="small"
+                          sx={{ mr: 1 }}
+                        />
+                        <Typography
+                          color="textSecondary"
+                          noWrap
+                          variant="overline"
+                        >
+                          {company.averageRating}
+                          /5
+                        </Typography>
+                      </Box>
+                      {company.isVerified && (
+                        <Box
+                          sx={{
+                            alignItems: 'center',
+                            display: 'flex'
+                          }}
+                        >
+                          <BadgeCheckOutlinedIcon
+                            color="success"
+                            fontSize="small"
+                            sx={{ mr: 1 }}
+                          />
+                          <Typography
+                            color="success"
+                            noWrap
+                            variant="overline"
+                          >
+                            Verified
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  </div>
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <CompanyJobs jobs={company.jobs} />
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            mt: 4,
+            px: 3,
+            py: 2
+          }}
+        >
+          <IconButton disabled>
+            <ChevronLeftIcon fontSize="small" />
+          </IconButton>
+          <IconButton>
+            <ChevronRightIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      </Container>
+    </Box>
+  </>;
 };
 
 JobBrowse.getLayout = (page) => (

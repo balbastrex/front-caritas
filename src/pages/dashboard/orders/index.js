@@ -224,171 +224,166 @@ const OrderList = () => {
   const sortedOrders = applySort(filteredOrders, sort);
   const paginatedOrders = applyPagination(sortedOrders, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Ventas
-        </title>
-      </Head>
-      <Box
-        component="main"
-        ref={rootRef}
-        sx={{
-          backgroundColor: 'background.paper',
-          display: 'flex',
-          flexGrow: 1,
-          overflow: 'hidden'
-        }}
-      >
-        <OrderListInner open={drawer.isOpen}>
-          <Box sx={{ px: 3 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Ventas Diarias
-                </Typography>
-              </Grid>
-              <Grid item>
-                {
-                  (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
-                    <Button
-                      startIcon={<RemoveShoppingCartIcon fontSize="small" />}
-                      variant="contained"
-                      color="warning"
-                      onClick={() => handleOpenCloseCart()}
-                    >
-                      Cierre de Caja
-                    </Button>
-                  )
-                }
-                  <NextLink
-                    href={`/dashboard/orders/new`}
-                    passHref
-                  >
-                    <Button
-                      sx={{ ml: 2 }}
-                      startIcon={<PlusIcon fontSize="small" />}
-                      variant="contained"
-                    >
-                      Nueva Venta
-                    </Button>
-                  </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Dashboard: Ventas
+      </title>
+    </Head>
+    <Box
+      component="main"
+      ref={rootRef}
+      sx={{
+        backgroundColor: 'background.paper',
+        display: 'flex',
+        flexGrow: 1,
+        overflow: 'hidden'
+      }}
+    >
+      <OrderListInner open={drawer.isOpen}>
+        <Box sx={{ px: 3 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Ventas Diarias
+              </Typography>
             </Grid>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              textColor="primary"
-              value={currentTab}
-              sx={{ mt: 3 }}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab
-                  key={tab.value}
-                  label={tab.label}
-                  value={tab.value}
-                />
-              ))}
-            </Tabs>
-          </Box>
-          <Divider />
+            <Grid item>
+              {
+                (user?.profileId === UserProfiles.DIRECTOR_ECONOMATO || user?.profileId === UserProfiles.CAJA_PEDIDOS) && (
+                  <Button
+                    startIcon={<RemoveShoppingCartIcon fontSize="small" />}
+                    variant="contained"
+                    color="warning"
+                    onClick={() => handleOpenCloseCart()}
+                  >
+                    Cierre de Caja
+                  </Button>
+                )
+              }
+                <NextLink href={`/dashboard/orders/new`} passHref legacyBehavior>
+                  <Button
+                    sx={{ ml: 2 }}
+                    startIcon={<PlusIcon fontSize="small" />}
+                    variant="contained"
+                  >
+                    Nueva Venta
+                  </Button>
+                </NextLink>
+            </Grid>
+          </Grid>
+          <Tabs
+            indicatorColor="primary"
+            onChange={handleTabsChange}
+            scrollButtons="auto"
+            textColor="primary"
+            value={currentTab}
+            sx={{ mt: 3 }}
+            variant="scrollable"
+          >
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+              />
+            ))}
+          </Tabs>
+        </Box>
+        <Divider />
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexWrap: 'wrap',
+            m: -1.5,
+            p: 3
+          }}
+        >
           <Box
+            component="form"
+            onSubmit={handleQueryChange}
             sx={{
-              alignItems: 'center',
-              display: 'flex',
-              flexWrap: 'wrap',
-              m: -1.5,
-              p: 3
+              flexGrow: 1,
+              m: 1.5
             }}
           >
-            <Box
-              component="form"
-              onSubmit={handleQueryChange}
-              sx={{
-                flexGrow: 1,
-                m: 1.5
-              }}
-            >
-              <TextField
-                defaultValue=""
-                fullWidth
-                inputProps={{ ref: queryRef }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon fontSize="small" />
-                    </InputAdornment>
-                  )
-                }}
-                placeholder="Buscar por Beneficiario o Carnet"
-              />
-            </Box>
             <TextField
-              label="Ordenar por"
-              name="order"
-              onChange={handleSortChange}
-              select
-              SelectProps={{ native: true }}
-              sx={{ m: 1.5 }}
-              value={sort}
-            >
-              {sortOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </TextField>
+              defaultValue=""
+              fullWidth
+              inputProps={{ ref: queryRef }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" />
+                  </InputAdornment>
+                )
+              }}
+              placeholder="Buscar por Beneficiario o Carnet"
+            />
           </Box>
-          <Divider />
-          <OrderListTable
-            onOpenDrawer={handleOpenDrawer}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            orders={paginatedOrders}
-            ordersCount={filteredOrders.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-          />
-        </OrderListInner>
-        <OrderDrawer
-          containerRef={rootRef}
-          onClose={handleCloseDrawer}
-          onPreviewPDF={onPreviewOrder}
-          open={drawer.isOpen}
-          order={orderList.find((order) => order.id === drawer.orderId)}
-          onApprove={handleApprove}
-          onDelete={handleDelete}
-          actions={true}
+          <TextField
+            label="Ordenar por"
+            name="order"
+            onChange={handleSortChange}
+            select
+            SelectProps={{ native: true }}
+            sx={{ m: 1.5 }}
+            value={sort}
+          >
+            {sortOptions.map((option) => (
+              <option
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </option>
+            ))}
+          </TextField>
+        </Box>
+        <Divider />
+        <OrderListTable
+          onOpenDrawer={handleOpenDrawer}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          orders={paginatedOrders}
+          ordersCount={filteredOrders.length}
+          page={page}
+          rowsPerPage={rowsPerPage}
         />
-      </Box>
-      <OrderPdfDialog
-        viewPDF={viewPDF}
-        setViewPDF={setViewPDF}
+      </OrderListInner>
+      <OrderDrawer
+        containerRef={rootRef}
+        onClose={handleCloseDrawer}
+        onPreviewPDF={onPreviewOrder}
+        open={drawer.isOpen}
+        order={orderList.find((order) => order.id === drawer.orderId)}
+        onApprove={handleApprove}
+        onDelete={handleDelete}
+        actions={true}
       />
-      {
-        openCloseCart && (
-          <CloseCartModal
-            handleClose={handleCloseModal}
-            handleCloseCart={handleCloseCart}
-          />
-        )
-      }
-      <CloseCartPdfDialog
-        viewCloseCartPDF={viewCloseCartPDF}
-        setViewCloseCartPDF={setViewCloseCartPDF}
-      />
-    </>
-  );
+    </Box>
+    <OrderPdfDialog
+      viewPDF={viewPDF}
+      setViewPDF={setViewPDF}
+    />
+    {
+      openCloseCart && (
+        <CloseCartModal
+          handleClose={handleCloseModal}
+          handleCloseCart={handleCloseCart}
+        />
+      )
+    }
+    <CloseCartPdfDialog
+      viewCloseCartPDF={viewCloseCartPDF}
+      setViewCloseCartPDF={setViewCloseCartPDF}
+    />
+  </>;
 };
 
 OrderList.getLayout = (page) => (

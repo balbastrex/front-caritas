@@ -381,10 +381,7 @@ export const ReceiptCreateForm = ({isEdit, receipt, updateSummary}) => {
           mt: 3
         }}
       >
-        <NextLink
-          href="/dashboard/receipts"
-          passHref
-        >
+        <NextLink href="/dashboard/receipts" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
             variant="outlined"

@@ -15,49 +15,44 @@ const ProviderCreate = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Nuevo Proveedor
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="md">
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/turns"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Nuevo Proveedor
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="md">
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/turns" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Proveedores
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <ProviderCreateForm />
-        </Container>
-      </Box>
-    </>
-  );
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Proveedores
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <ProviderCreateForm />
+      </Container>
+    </Box>
+  </>;
 };
 
 ProviderCreate.getLayout = (page) => (

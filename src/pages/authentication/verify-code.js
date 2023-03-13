@@ -26,133 +26,131 @@ const VerifyCode = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Verify Code | Material Kit Pro
-        </title>
-      </Head>
-      <Box
-        component="main"
+  return <>
+    <Head>
+      <title>
+        Verify Code | Material Kit Pro
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh'
+      }}
+    >
+      <AuthBanner />
+      <Container
+        maxWidth="sm"
         sx={{
-          backgroundColor: 'background.default',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh'
+          py: {
+            xs: '60px',
+            md: '120px'
+          }
         }}
       >
-        <AuthBanner />
-        <Container
-          maxWidth="sm"
+        <Box
           sx={{
-            py: {
-              xs: '60px',
-              md: '120px'
+            alignItems: 'center',
+            backgroundColor: (theme) => theme.palette.mode === 'dark'
+              ? 'neutral.900'
+              : 'neutral.100',
+            borderColor: 'divider',
+            borderRadius: 1,
+            borderStyle: 'solid',
+            borderWidth: 1,
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            mb: 4,
+            p: 2,
+            '& > img': {
+              height: 32,
+              width: 'auto',
+              flexGrow: 0,
+              flexShrink: 0
             }
           }}
+        >
+          <Typography
+            color="textSecondary"
+            variant="caption"
+          >
+            The app authenticates via {platform}
+          </Typography>
+          <img
+            alt="Auth platform"
+            src={platformIcons[platform]}
+          />
+        </Box>
+        <Card
+          elevation={16}
+          sx={{ p: 4 }}
         >
           <Box
             sx={{
               alignItems: 'center',
-              backgroundColor: (theme) => theme.palette.mode === 'dark'
-                ? 'neutral.900'
-                : 'neutral.100',
-              borderColor: 'divider',
-              borderRadius: 1,
-              borderStyle: 'solid',
-              borderWidth: 1,
               display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              mb: 4,
-              p: 2,
-              '& > img': {
-                height: 32,
-                width: 'auto',
-                flexGrow: 0,
-                flexShrink: 0
-              }
+              flexDirection: 'column',
+              justifyContent: 'center'
             }}
           >
+            <NextLink
+              href="/"
+              passHref
+            >
+
+              <Logo
+                sx={{
+                  height: 40,
+                  width: 40
+                }}
+              />
+
+            </NextLink>
+            <Typography variant="h4">
+              Verify Code
+            </Typography>
             <Typography
               color="textSecondary"
-              variant="caption"
+              sx={{ mt: 2 }}
+              variant="body2"
             >
-              The app authenticates via {platform}
+              Confirm registration using your verification code
             </Typography>
-            <img
-              alt="Auth platform"
-              src={platformIcons[platform]}
-            />
           </Box>
-          <Card
-            elevation={16}
-            sx={{ p: 4 }}
+          <Box
+            sx={{
+              flexGrow: 1,
+              mt: 3
+            }}
           >
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}
-            >
+            {platform === 'Amplify' && <AmplifyVerifyCode />}
+          </Box>
+          <Divider sx={{ my: 3 }} />
+          {platform === 'Amplify' && (
+            <div>
               <NextLink
-                href="/"
+                href={disableGuard
+                  ? `/authentication/login?disableGuard=${disableGuard}`
+                  : '/authentication/login'}
                 passHref
-              >
-                <a>
-                  <Logo
-                    sx={{
-                      height: 40,
-                      width: 40
-                    }}
-                  />
-                </a>
-              </NextLink>
-              <Typography variant="h4">
-                Verify Code
-              </Typography>
-              <Typography
-                color="textSecondary"
-                sx={{ mt: 2 }}
-                variant="body2"
-              >
-                Confirm registration using your verification code
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                mt: 3
-              }}
-            >
-              {platform === 'Amplify' && <AmplifyVerifyCode />}
-            </Box>
-            <Divider sx={{ my: 3 }} />
-            {platform === 'Amplify' && (
-              <div>
-                <NextLink
-                  href={disableGuard
-                    ? `/authentication/login?disableGuard=${disableGuard}`
-                    : '/authentication/login'}
-                  passHref
+                legacyBehavior>
+                <Link
+                  color="textSecondary"
+                  variant="body2"
                 >
-                  <Link
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    Did you not receive the code?
-                  </Link>
-                </NextLink>
-              </div>
-            )}
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+                  Did you not receive the code?
+                </Link>
+              </NextLink>
+            </div>
+          )}
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 VerifyCode.getLayout = (page) => (

@@ -52,10 +52,7 @@ const InvoiceRow = (props) => {
       }}
     >
       <TableCell width="25%">
-        <NextLink
-          href="/dashboard/invoices/1"
-          passHref
-        >
+        <NextLink href="/dashboard/invoices/1" passHref legacyBehavior>
           <Box
             component="a"
             sx={{
@@ -133,10 +130,7 @@ const InvoiceRow = (props) => {
         </Box>
       </TableCell>
       <TableCell align="right">
-        <NextLink
-          href="/dashboard/invoices/1"
-          passHref
-        >
+        <NextLink href="/dashboard/invoices/1" passHref legacyBehavior>
           <IconButton component="a">
             <ArrowRightIcon fontSize="small" />
           </IconButton>

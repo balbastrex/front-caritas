@@ -53,94 +53,89 @@ export const NoteCreateForm = ({isEdit, note, beneficiaryId}) => {
     }
   });
 
-  return (
-    <>
-      <form
-        onSubmit={formik.handleSubmit}
-      >
-        <Card sx={{ mt: 3 }}>
-          <CardContent>
+  return <>
+    <form
+      onSubmit={formik.handleSubmit}
+    >
+      <Card sx={{ mt: 3 }}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+          >
             <Grid
-              container
-              spacing={3}
+              item
+              md={4}
+              xs={12}
             >
-              <Grid
-                item
-                md={4}
-                xs={12}
-              >
-                <Typography variant="h6">
-                  Detalle Nota
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                md={8}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.description && formik.errors.description)}
-                  fullWidth
-                  label="Descripción"
-                  name="description"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  sx={{ mt: 2 }}
-                  type="text"
-                  value={formik.values.description}
-                />
-              </Grid>
+              <Typography variant="h6">
+                Detalle Nota
+              </Typography>
             </Grid>
-          </CardContent>
-        </Card>
+            <Grid
+              item
+              md={8}
+              xs={12}
+            >
+              <TextField
+                error={Boolean(formik.touched.description && formik.errors.description)}
+                fullWidth
+                label="Descripción"
+                name="description"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                sx={{ mt: 2 }}
+                type="text"
+                value={formik.values.description}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
 
-        <Box
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          mx: -1,
+          mb: -1,
+          mt: 3
+        }}
+      >
+        <Button
+          onClick={() => setOpenDeleteDialog(true)}
+          color="error"
           sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            mx: -1,
-            mb: -1,
-            mt: 3
+            m: 1,
+            mr: 'auto'
           }}
         >
-          <Button
-            onClick={() => setOpenDeleteDialog(true)}
-            color="error"
-            sx={{
-              m: 1,
-              mr: 'auto'
-            }}
-          >
-            Borrar
-          </Button>
-          <NextLink
-            href="/dashboard/turns"
-            passHref
-          >
-            <Button
-              sx={{ m: 1 }}
-              variant="outlined"
-              component="a"
-              disabled={formik.isSubmitting}
-            >
-              Cancelar
-            </Button>
-          </NextLink>
+          Borrar
+        </Button>
+        <NextLink href="/dashboard/turns" passHref legacyBehavior>
           <Button
             sx={{ m: 1 }}
-            type="submit"
-            variant="contained"
+            variant="outlined"
+            component="a"
+            disabled={formik.isSubmitting}
           >
-            { isEdit ? 'Actualizar' : 'Crear'}
+            Cancelar
           </Button>
-        </Box>
-      </form>
-      <DeleteNoteModal
-        handleDelete={handleDelete}
-        open={openDeleteDialog}
-        handleClose={() => setOpenDeleteDialog(false)}
-      />
-  </>
-  )
+        </NextLink>
+        <Button
+          sx={{ m: 1 }}
+          type="submit"
+          variant="contained"
+        >
+          { isEdit ? 'Actualizar' : 'Crear'}
+        </Button>
+      </Box>
+    </form>
+    <DeleteNoteModal
+      handleDelete={handleDelete}
+      open={openDeleteDialog}
+      handleClose={() => setOpenDeleteDialog(false)}
+    />
+</>;
 };

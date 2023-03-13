@@ -58,10 +58,7 @@ export const MailLabel = (props) => {
         }
       }}
       {...other}>
-      <NextLink
-        href={href}
-        passHref
-      >
+      <NextLink href={href} passHref legacyBehavior>
         <ButtonBase
           component="a"
           href={href}

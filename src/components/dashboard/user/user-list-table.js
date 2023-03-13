@@ -117,10 +117,7 @@ export const UserListTable = (props) => {
                       </SeverityPill>
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/users/${user.id}/edit`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/users/${user.id}/edit`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>

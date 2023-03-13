@@ -61,7 +61,7 @@ export const BeneficiaryNotesTable = (props) => {
                       <NextLink
                         href={`/dashboard/beneficiaries/${beneficiaryId}/notes/${note.id}`}
                         passHref
-                      >
+                        legacyBehavior>
                         <Tooltip title="Editar">
                           <IconButton component="a">
                             <EditIcon fontSize="small" />

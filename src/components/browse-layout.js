@@ -19,76 +19,71 @@ export const BrowseLayout = (props) => {
     ? 'Browse components'
     : getTitle(router.pathname);
 
-  return (
-    <>
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          py: 6
-        }}
-      >
-        <Container maxWidth="lg">
+  return <>
+    <Box
+      sx={{
+        backgroundColor: 'background.default',
+        py: 6
+      }}
+    >
+      <Container maxWidth="lg">
+        <Grid
+          alignItems="center"
+          container
+          spacing={3}
+        >
           <Grid
-            alignItems="center"
-            container
-            spacing={3}
+            item
+            md={6}
+            xs={12}
           >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              {!isBase && (
-                <NextLink
-                  href="/browse"
-                  passHref
+            {!isBase && (
+              <NextLink href="/browse" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<ArrowLeftIcon fontSize="small" />}
+                  sx={{ mb: 3 }}
                 >
-                  <Button
-                    component="a"
-                    startIcon={<ArrowLeftIcon fontSize="small" />}
-                    sx={{ mb: 3 }}
-                  >
-                    Back to components
-                  </Button>
-                </NextLink>
-              )}
-              <Typography variant="h1">
-                {title}
+                  Back to components
+                </Button>
+              </NextLink>
+            )}
+            <Typography variant="h1">
+              {title}
+            </Typography>
+            {isBase && (
+              <Typography
+                color="textSecondary"
+                sx={{ mt: 1 }}
+                variant="body1"
+              >
+                Browse through over 100 individual components and over 35 screens
               </Typography>
-              {isBase && (
-                <Typography
-                  color="textSecondary"
-                  sx={{ mt: 1 }}
-                  variant="body1"
-                >
-                  Browse through over 100 individual components and over 35 screens
-                </Typography>
-              )}
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-              sx={{
-                display: {
-                  md: 'flex',
-                  xs: 'none'
-                },
-                justifyContent: 'center'
-              }}
-            >
-              <img
-                alt="Components"
-                src="/static/browse/hero.svg"
-              />
-            </Grid>
+            )}
           </Grid>
-        </Container>
-      </Box>
-      <Divider />
-      {children}
-    </>
-  );
+          <Grid
+            item
+            md={6}
+            xs={12}
+            sx={{
+              display: {
+                md: 'flex',
+                xs: 'none'
+              },
+              justifyContent: 'center'
+            }}
+          >
+            <img
+              alt="Components"
+              src="/static/browse/hero.svg"
+            />
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
+    <Divider />
+    {children}
+  </>;
 };
 
 BrowseLayout.propTypes = {

@@ -165,10 +165,7 @@ export const ParishListTable = (props) => {
                       {parish.phone}
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/parishes/${parish.id}`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/parishes/${parish.id}`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>

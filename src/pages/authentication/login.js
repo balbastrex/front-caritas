@@ -17,91 +17,89 @@ const Login = () => {
     gtm.push({ event: 'page_view' });
   }, []);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Login | Gestión Cáritas
-        </title>
-      </Head>
-      <Box
-        component="main"
+  return <>
+    <Head>
+      <title>
+        Login | Gestión Cáritas
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        backgroundColor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh'
+      }}
+    >
+      <Container
+        maxWidth="sm"
         sx={{
-          backgroundColor: 'background.default',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh'
+          py: {
+            xs: '60px',
+            md: '120px'
+          }
         }}
       >
-        <Container
-          maxWidth="sm"
-          sx={{
-            py: {
-              xs: '60px',
-              md: '120px'
-            }
-          }}
+        <Card
+          elevation={16}
+          sx={{ p: 4 }}
         >
-          <Card
-            elevation={16}
-            sx={{ p: 4 }}
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
           >
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}
-            >
-              <img src={'/logo.jpg'} alt='logo'/>
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                mt: 3
-              }}
-            >
-              {platform === 'JWT' && <JWTLogin />}
-            </Box>
-            <Divider sx={{ my: 3 }} />
-            <div>
+            <img src={'/logo.jpg'} alt='logo'/>
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              mt: 3
+            }}
+          >
+            {platform === 'JWT' && <JWTLogin />}
+          </Box>
+          <Divider sx={{ my: 3 }} />
+          <div>
+            <NextLink
+              href={disableGuard
+                ? `/authentication/register?disableGuard=${disableGuard}`
+                : '/authentication/register'}
+              passHref
+              legacyBehavior>
+              <Link
+                color="textSecondary"
+                variant="body2"
+              >
+                ©Cáritas Valencia
+              </Link>
+            </NextLink>
+          </div>
+          {platform === 'Amplify' && (
+            <Box sx={{ mt: 1 }}>
               <NextLink
                 href={disableGuard
-                  ? `/authentication/register?disableGuard=${disableGuard}`
-                  : '/authentication/register'}
+                  ? `/authentication/password-recovery?disableGuard=${disableGuard}`
+                  : '/authentication/password-recovery'}
                 passHref
-              >
+                legacyBehavior>
                 <Link
                   color="textSecondary"
                   variant="body2"
                 >
-                  ©Cáritas Valencia
+                  Forgot password
                 </Link>
               </NextLink>
-            </div>
-            {platform === 'Amplify' && (
-              <Box sx={{ mt: 1 }}>
-                <NextLink
-                  href={disableGuard
-                    ? `/authentication/password-recovery?disableGuard=${disableGuard}`
-                    : '/authentication/password-recovery'}
-                  passHref
-                >
-                  <Link
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    Forgot password
-                  </Link>
-                </NextLink>
-              </Box>
-            )}
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+            </Box>
+          )}
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 Login.getLayout = (page) => (

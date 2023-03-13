@@ -33,50 +33,45 @@ const OrderCreate = () => {
     }
   }
 
-  return (
-    <>
-      <Head>
-        <title>
-          Dashboard: Nueva Venta
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-        }}
-      >
-        <Container sx={{ mx: { md: 0, lg: 8}, maxWidth: { md: "md", lg: "lg" } }}>
-          <Box sx={{ mb: 4 }}>
-            <NextLink
-              href="/dashboard/orders"
-              passHref
+  return <>
+    <Head>
+      <title>
+        Dashboard: Nueva Venta
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8,
+      }}
+    >
+      <Container sx={{ mx: { md: 0, lg: 8}, maxWidth: { md: "md", lg: "lg" } }}>
+        <Box sx={{ mb: 4 }}>
+          <NextLink href="/dashboard/orders" passHref legacyBehavior>
+            <Link
+              color="textPrimary"
+              component="a"
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
             >
-              <Link
-                color="textPrimary"
-                component="a"
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex'
-                }}
-              >
-                <ArrowBackIcon
-                  fontSize="small"
-                  sx={{ mr: 1 }}
-                />
-                <Typography variant="subtitle2">
-                  Ventas
-                </Typography>
-              </Link>
-            </NextLink>
-          </Box>
-          <OrderCreateForm updateSummary={updateSummary} />
-        </Container>
-        <OrderSummary quantity={quantity} total={total} budget={budget} lastDateOrder={lastDateOrder} />
-      </Box>
-    </>
-  );
+              <ArrowBackIcon
+                fontSize="small"
+                sx={{ mr: 1 }}
+              />
+              <Typography variant="subtitle2">
+                Ventas
+              </Typography>
+            </Link>
+          </NextLink>
+        </Box>
+        <OrderCreateForm updateSummary={updateSummary} />
+      </Container>
+      <OrderSummary quantity={quantity} total={total} budget={budget} lastDateOrder={lastDateOrder} />
+    </Box>
+  </>;
 };
 
 OrderCreate.getLayout = (page) => (

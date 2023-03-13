@@ -25,10 +25,7 @@ export const BlogPostCard = (props) => {
         }
       }}
       {...other}>
-      <NextLink
-        href="/blog/1"
-        passHref
-      >
+      <NextLink href="/blog/1" passHref legacyBehavior>
         <CardMedia
           component="a"
           image={cover}
@@ -39,10 +36,7 @@ export const BlogPostCard = (props) => {
         <Box sx={{ mb: 2 }}>
           <Chip label={category} />
         </Box>
-        <NextLink
-          href="/blog/1"
-          passHref
-        >
+        <NextLink href="/blog/1" passHref legacyBehavior>
           <Link
             color="textPrimary"
             component="a"

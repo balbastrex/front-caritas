@@ -69,10 +69,7 @@ export const CompanyOverview = (props) => {
         <Typography variant="h6">
           Jobs
         </Typography>
-        <NextLink
-          href="dashboard/jobs/companies/1"
-          passHref
-        >
+        <NextLink href="dashboard/jobs/companies/1" passHref legacyBehavior>
           <Link
             color="inherit"
             variant="subtitle2"
@@ -105,10 +102,7 @@ export const CompanyOverview = (props) => {
         <Typography variant="h6">
           Members
         </Typography>
-        <NextLink
-          href="dashboard/jobs/companies/1"
-          passHref
-        >
+        <NextLink href="dashboard/jobs/companies/1" passHref legacyBehavior>
           <Link
             color="inherit"
             variant="subtitle2"

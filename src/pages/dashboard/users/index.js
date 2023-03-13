@@ -91,63 +91,58 @@ const UserList = () => {
   const filteredUsers = applyFilters(userList, filters);
   const paginatedUsers = applyPagination(filteredUsers, page, rowsPerPage);
 
-  return (
-    <>
-      <Head>
-        <title>
-          Listado de Usuarios
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
-            <Grid
-              container
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography variant="h4">
-                  Usuarios
-                </Typography>
-              </Grid>
-              <Grid item>
-                <NextLink
-                  href="/dashboard/users/new"
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    startIcon={<PlusIcon fontSize="small" />}
-                    variant="contained"
-                  >
-                    Nuevo
-                  </Button>
-                </NextLink>
-              </Grid>
+  return <>
+    <Head>
+      <title>
+        Listado de Usuarios
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ mb: 4 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={3}
+          >
+            <Grid item>
+              <Typography variant="h4">
+                Usuarios
+              </Typography>
             </Grid>
-          </Box>
-          <Card>
-            <MarketListFilters onChange={handleFiltersChange} />
-            <UserListTable
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              users={paginatedUsers}
-              usersCount={filteredUsers.length}
-              rowsPerPage={rowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Box>
-    </>
-  );
+            <Grid item>
+              <NextLink href="/dashboard/users/new" passHref legacyBehavior>
+                <Button
+                  component="a"
+                  startIcon={<PlusIcon fontSize="small" />}
+                  variant="contained"
+                >
+                  Nuevo
+                </Button>
+              </NextLink>
+            </Grid>
+          </Grid>
+        </Box>
+        <Card>
+          <MarketListFilters onChange={handleFiltersChange} />
+          <UserListTable
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            users={paginatedUsers}
+            usersCount={filteredUsers.length}
+            rowsPerPage={rowsPerPage}
+          />
+        </Card>
+      </Container>
+    </Box>
+  </>;
 };
 
 UserList.getLayout = (page) => (

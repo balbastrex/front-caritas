@@ -125,10 +125,7 @@ export const ProductListTable = (props) => {
                       {product.salesPrice} €
                     </TableCell>
                     <TableCell align="right">
-                      <NextLink
-                        href={`/dashboard/products/${product.id}/edit`}
-                        passHref
-                      >
+                      <NextLink href={`/dashboard/products/${product.id}/edit`} passHref legacyBehavior>
                         <IconButton component="a">
                           <ArrowRightIcon fontSize="small" />
                         </IconButton>
