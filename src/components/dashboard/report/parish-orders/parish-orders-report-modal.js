@@ -24,12 +24,12 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
     dispatch(getParishes());
   }, []);
 
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
+  const handleStartDateChange = (startDate) => {
+    setStartDate(startDate);
   };
 
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
+  const handleEndDateChange = (endDate) => {
+    setEndDate(endDate);
   };
 
   return (
@@ -79,26 +79,26 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
         <Box sx={{mt: 2}}>
           <DatePicker
             label="Desde"
+            inputFormat="dd/MM/yyyy"
             onChange={handleStartDateChange}
             renderInput={(inputProps) => (
               <TextField
                 fullWidth
                 {...inputProps} />
             )}
-            inputFormat="dd/MM/yyyy"
             value={startDate}
           />
         </Box>
         <Box sx={{mt: 2}}>
           <DatePicker
             label="Hasta"
+            inputFormat="dd/MM/yyyy"
             onChange={handleEndDateChange}
             renderInput={(inputProps) => (
               <TextField
                 fullWidth
                 {...inputProps} />
             )}
-            inputFormat="dd/MM/yyyy"
             value={endDate}
           />
         </Box>

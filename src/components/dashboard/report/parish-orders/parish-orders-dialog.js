@@ -1,5 +1,6 @@
 import {Box, Button, Dialog, Typography} from '@mui/material';
 import {PDFViewer} from '@react-pdf/renderer';
+import {format} from 'date-fns';
 import {useEffect, useState} from 'react';
 import {ArrowLeft as ArrowLeftIcon} from '../../../../icons/arrow-left';
 import axios from '../../../../utils/axios';
@@ -11,7 +12,10 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
   useEffect(async () => {
     if (data.startDate === null || data.endDate === null) return;
 
-    const response = await axios.post('/api/v1/receipt/parish-report', {startDate: data.startDate, endDate: data.endDate, parishId: data.parishId});
+    const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
+    const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
+
+    const response = await axios.post('/api/v1/receipt/parish-report', {startDate: formattedStartDate, endDate: formattedEndDate, parishId: data.parishId});
     setResponseData(response.data);
   }, [data]);
 
