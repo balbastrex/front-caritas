@@ -22,10 +22,9 @@ const styles = StyleSheet.create({
     lineHeight: 1.6
   },
   title: {
-    fontSize: 14,
-    fontWeight: 600,
+    fontSize: 11,
+    fontWeight: 800,
     lineHeight: 1.235,
-    textDecoration: 'underline'
   },
   subtitle2: {
     fontSize: 10,
@@ -141,7 +140,7 @@ export const OrderPDF = (props) => {
                 <strong>Nº de Beneficiario: {order.beneficiaryLicense}</strong>
               </Text>
               <Text style={styles.body2}>
-                Nombre: <Text style={styles.title}><strong>{order.beneficiaryName}</strong></Text>
+                Nombre: <Text style={styles.title}>{order.beneficiaryName}</Text>
               </Text>
             </View>
           </View>
