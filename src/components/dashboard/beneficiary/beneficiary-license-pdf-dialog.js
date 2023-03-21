@@ -1,13 +1,13 @@
 import {Box, Button, Dialog, Typography} from '@mui/material';
 import {PDFViewer} from '@react-pdf/renderer';
 import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
-import {CloseCartPDF} from './close-cart-pdf';
+import {BeneficiaryLicensePDF} from './beneficiary-license-pdf';
 
-export const CloseCartPdfDialog = ({ viewCloseCartPDF, setViewCloseCartPDF }) => {
+export const BeneficiaryLicensePdfDialog = ({ viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF }) => {
   return (
     <Dialog
       fullScreen
-      open={!!viewCloseCartPDF}
+      open={!!viewBeneficiaryLicensePDF}
     >
       <Box
         sx={{
@@ -31,7 +31,7 @@ export const CloseCartPdfDialog = ({ viewCloseCartPDF, setViewCloseCartPDF }) =>
           >
             <Button
               startIcon={<ArrowLeftIcon fontSize="small" />}
-              onClick={() => setViewCloseCartPDF(null)}
+              onClick={() => setViewBeneficiaryLicensePDF(null)}
               variant="contained"
             >
               Volver
@@ -45,7 +45,7 @@ export const CloseCartPdfDialog = ({ viewCloseCartPDF, setViewCloseCartPDF }) =>
             }}
           >
             <Typography variant="h4">
-              Cierre de Caja
+              Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
             </Typography>
           </Box>
         </Box>
@@ -57,8 +57,8 @@ export const CloseCartPdfDialog = ({ viewCloseCartPDF, setViewCloseCartPDF }) =>
             showToolbar={true}
           >
             {
-              viewCloseCartPDF && (
-                <CloseCartPDF orders={viewCloseCartPDF} />
+              viewBeneficiaryLicensePDF && (
+                <BeneficiaryLicensePDF beneficiary={viewBeneficiaryLicensePDF} />
               )
             }
           </PDFViewer>

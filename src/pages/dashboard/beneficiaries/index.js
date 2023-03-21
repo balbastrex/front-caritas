@@ -6,6 +6,7 @@ import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {exportBeneficiariesToExcel} from '../../../components/dashboard/beneficiary/beneficiary-export-excel';
 import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf';
+import {BeneficiaryLicensePdfDialog} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf-dialog';
 import {BeneficiaryListFilters} from '../../../components/dashboard/beneficiary/beneficiary-list-filters';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
@@ -153,66 +154,10 @@ const BeneficiariesList = () => {
         </Card>
       </Container>
     </Box>
-    <Dialog
-      fullScreen
-      open={!!viewBeneficiaryLicensePDF}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%'
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: 'background.default',
-            p: 2,
-          }}
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '20px',
-              left: '20px'
-            }}
-          >
-            <Button
-              startIcon={<ArrowLeftIcon fontSize="small" />}
-              onClick={() => setViewBeneficiaryLicensePDF(null)}
-              variant="contained"
-            >
-              Volver
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="h4">
-              Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ flexGrow: 1 }}>
-          <PDFViewer
-            height="100%"
-            style={{ border: 'none' }}
-            width="100%"
-            showToolbar={true}
-          >
-            {
-              viewBeneficiaryLicensePDF && (
-                <BeneficiaryLicensePDF beneficiary={viewBeneficiaryLicensePDF} />
-              )
-            }
-          </PDFViewer>
-        </Box>
-      </Box>
-    </Dialog>
+    <BeneficiaryLicensePdfDialog
+      viewBeneficiaryLicensePDF={viewBeneficiaryLicensePDF}
+      setViewBeneficiaryLicensePDF={setViewBeneficiaryLicensePDF}
+    />
   </>;
 };
 

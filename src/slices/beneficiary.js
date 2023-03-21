@@ -12,6 +12,7 @@ const initialState = {
   beneficiary: null,
   beneficiariesTurnList: [],
   beneficiaryAndNotesList: { beneficiaryName: '', notes: [] },
+  BeneficiaryNeedsPrintList: [],
 };
 
 const slice = createSlice({
@@ -54,6 +55,10 @@ const slice = createSlice({
     getBeneficiaryNotesListSuccess(state, action) {
       state.isLoading = false;
       state.beneficiaryAndNotesList = action.payload;
+    },
+    getBeneficiaryNeedsPrintSuccess(state, action) {
+      state.isLoading = false;
+      state.BeneficiaryNeedsPrintList = action.payload;
     },
   }
 });
@@ -141,6 +146,31 @@ export function getBeneficiaryNotes(beneficiaryId) {
     try {
       const response = await axios.get(`/api/v1/beneficiary/${beneficiaryId}/notes`);
       dispatch(slice.actions.getBeneficiaryNotesListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiaryNeedsPrint() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/beneficiary-license`);
+      dispatch(slice.actions.getBeneficiaryNeedsPrintSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function updateBeneficiariesPrinted() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.put(`/api/v1/beneficiaries-printed`)
+
+      dispatch(slice.actions.getBeneficiaryNeedsPrintSuccess([]));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
