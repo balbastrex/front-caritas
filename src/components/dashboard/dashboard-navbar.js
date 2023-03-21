@@ -1,30 +1,22 @@
-import {useRouter} from 'next/router';
-import { useRef, useState } from 'react';
+import {AppBar, Avatar, Badge, Box, ButtonBase, IconButton, Toolbar, Tooltip, Typography} from '@mui/material';
+import {styled} from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
-import {
-  AppBar,
-  Avatar,
-  Badge,
-  Box,
-  ButtonBase,
-  IconButton,
-  Toolbar,
-  Tooltip, Typography,
-} from '@mui/material';
-import {alpha, styled} from '@mui/material/styles';
+import {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useAuth} from '../../hooks/use-auth';
-import { Menu as MenuIcon } from '../../icons/menu';
-import { Bell as BellIcon } from '../../icons/bell';
-import { Search as SearchIcon } from '../../icons/search';
-import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
-import { Users as UsersIcon } from '../../icons/users';
+import {Bell as BellIcon} from '../../icons/bell';
+import {Menu as MenuIcon} from '../../icons/menu';
+import {Search as SearchIcon} from '../../icons/search';
+import {UserCircle as UserCircleIcon} from '../../icons/user-circle';
+import {Users as UsersIcon} from '../../icons/users';
+import {getBeneficiaryNeedsPrint} from '../../slices/beneficiary';
+import {useDispatch, useSelector} from '../../store';
 import {getProfileName} from '../../utils/constants';
-import { AccountPopover } from './account-popover';
-import { ContactsPopover } from './contacts-popover';
-import { ContentSearchDialog } from './content-search-dialog';
-import { NotificationsPopover } from './notifications-popover';
-import { LanguagePopover } from './language-popover';
+import {AccountPopover} from './account-popover';
+import {ContactsPopover} from './contacts-popover';
+import {ContentSearchDialog} from './content-search-dialog';
+import {LanguagePopover} from './language-popover';
+import {NotificationsPopover} from './notifications-popover';
 
 const languages = {
   en: '/static/icons/uk_flag.svg',
@@ -121,7 +113,7 @@ const ContentSearchButton = () => {
   );
 };
 
-const ContactsButton = () => {
+const ContactsButton = ({beneficiaries = []}) => {
   const anchorRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -135,16 +127,22 @@ const ContactsButton = () => {
 
   return (
     <>
-      <Tooltip title="Contacts">
+      <Tooltip title="Imprimir Carnets">
         <IconButton
           onClick={handleOpenPopover}
           sx={{ ml: 1 }}
           ref={anchorRef}
         >
-          <UsersIcon fontSize="small" />
+          <Badge
+            color="error"
+            badgeContent={beneficiaries.length}
+          >
+            <UsersIcon fontSize="small" />
+          </Badge>
         </IconButton>
       </Tooltip>
       <ContactsPopover
+        beneficiaries={beneficiaries}
         anchorEl={anchorRef.current}
         onClose={handleClosePopover}
         open={openPopover}
@@ -250,6 +248,14 @@ const AccountButton = () => {
 export const DashboardNavbar = (props) => {
   const { user } = useAuth();
   const { onOpenSidebar, ...other } = props;
+  const dispatch = useDispatch();
+  const { BeneficiaryNeedsPrintList } = useSelector((state) => state.beneficiary);
+
+  useEffect(() => {
+      dispatch(getBeneficiaryNeedsPrint());
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
 
   return (
     <>
@@ -286,10 +292,10 @@ export const DashboardNavbar = (props) => {
             Usuario: {user?.name} {user?.lastName} / Perfil: {getProfileName(user?.profileId)}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <LanguageButton />
-          <ContentSearchButton />
-          <ContactsButton />
-          <NotificationsButton />
+          {/*<LanguageButton />*/}
+          {/*<ContentSearchButton />*/}
+          <ContactsButton beneficiaries={BeneficiaryNeedsPrintList} />
+          {/*<NotificationsButton />*/}
           <AccountButton />
         </Toolbar>
       </DashboardNavbarRoot>

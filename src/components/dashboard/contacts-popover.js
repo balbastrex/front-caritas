@@ -1,31 +1,27 @@
-import { useEffect } from 'react';
-import { formatDistanceToNowStrict } from 'date-fns';
+import PrintIcon from '@mui/icons-material/Print';
+import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   Box,
+  Button,
   Link,
   List,
   ListItem,
-  ListItemAvatar,
+  IconButton,
   ListItemText,
-  Popover,
-  Typography
+  Popover, Grid, Tooltip,
 } from '@mui/material';
-import { getContacts } from '../../slices/chat';
-import { useDispatch, useSelector } from '../../store';
-import { StatusIndicator } from '../status-indicator';
+import {useState} from 'react';
+import {updateBeneficiariesPrinted} from '../../slices/beneficiary';
+import {useDispatch} from '../../store';
+import {BeneficiaryLicensePdfDialog} from './beneficiary/beneficiary-license-pdf-dialog';
+import {BeneficiaryMultipleLicensePdfDialog} from './beneficiary/beneficiary-multiple-license-pdf-dialog';
 
 export const ContactsPopover = (props) => {
-  const { anchorEl, onClose, open, ...other } = props;
   const dispatch = useDispatch();
-  const { contacts } = useSelector((state) => state.chat);
-
-  useEffect(() => {
-      dispatch(getContacts());
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+  const { anchorEl, beneficiaries, onClose, open, ...other } = props;
+  const [viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF] = useState(null);
+  const [viewBeneficiaryMultipleLicensePDF, setViewBeneficiaryMultipleLicensePDF] = useState(null);
 
   return (
     <Popover
@@ -44,25 +40,42 @@ export const ContactsPopover = (props) => {
       }}
       transitionDuration={0}
       {...other}>
-      <Typography variant="h6">
-        Contacts
-      </Typography>
+      <Grid container justifyContent="space-between">
+        <Button
+          disabled={beneficiaries.length === 0}
+          component="a"
+          startIcon={<PrintIcon fontSize="small" />}
+          variant="contained"
+          onClick={() => setViewBeneficiaryMultipleLicensePDF(beneficiaries)}
+        >
+          Imprimir Todos
+        </Button>
+        <Tooltip title="Borrar TODAS las notificaciones">
+          <IconButton
+            onClick={() => dispatch(updateBeneficiariesPrinted())}
+            sx={{ mr: 2 }}
+          >
+            <GroupRemoveIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Grid>
       <Box sx={{ mt: 2 }}>
         <List disablePadding>
-          {contacts.allIds.map((contactId) => {
-            const contact = contacts.byId[contactId];
+          {beneficiaries.map((beneficiary) => {
 
             return (
               <ListItem
                 disableGutters
-                key={contact.id}
+                key={beneficiary.id}
               >
-                <ListItemAvatar>
-                  <Avatar
-                    src={contact.avatar}
-                    sx={{ cursor: 'pointer' }}
-                  />
-                </ListItemAvatar>
+                <Tooltip title="Imprimir carnet">
+                  <IconButton
+                    onClick={() => setViewBeneficiaryLicensePDF(beneficiary)}
+                    sx={{ mr: 2 }}
+                  >
+                    <PrintIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
                 <ListItemText
                   disableTypography
                   primary={(
@@ -73,33 +86,23 @@ export const ContactsPopover = (props) => {
                       underline="none"
                       variant="subtitle2"
                     >
-                      {contact.name}
+                      {beneficiary.name}
                     </Link>
                   )}
                 />
-                {contact.isActive
-                  ? (
-                    <StatusIndicator
-                      size="small"
-                      status="online"
-                    />
-                  )
-                  : contact.lastActivity && (
-                  <Typography
-                    color="textSecondary"
-                    noWrap
-                    variant="caption"
-                  >
-                    {formatDistanceToNowStrict(contact.lastActivity)}
-                    {' '}
-                    ago
-                  </Typography>
-                )}
               </ListItem>
             );
           })}
         </List>
       </Box>
+      <BeneficiaryLicensePdfDialog
+        viewBeneficiaryLicensePDF={viewBeneficiaryLicensePDF}
+        setViewBeneficiaryLicensePDF={setViewBeneficiaryLicensePDF}
+      />
+      <BeneficiaryMultipleLicensePdfDialog
+        viewBeneficiaryMultipleLicensePDF={viewBeneficiaryMultipleLicensePDF}
+        setViewBeneficiaryMultipleLicensePDF={setViewBeneficiaryMultipleLicensePDF}
+      />
     </Popover>
   );
 };
