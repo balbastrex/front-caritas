@@ -4,9 +4,9 @@ import {format} from 'date-fns';
 import {useEffect, useState} from 'react';
 import {ArrowLeft as ArrowLeftIcon} from '../../../../icons/arrow-left';
 import axios from '../../../../utils/axios';
-import {ParishOrdersPDF} from './parish-orders-pdf';
+import {OrdersReportPDF} from './orders-report-pdf';
 
-export const ParishOrdersDialog = ({ open, close, data }) => {
+export const OrdersReportDialog = ({ open, close, data }) => {
   const [responseData, setResponseData] = useState(null);
 
   useEffect(() => {
@@ -15,12 +15,12 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
         const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
         const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
 
-        const response = await axios.post('/api/v1/receipt/parish-report', {
+        const response = await axios.post('/api/v1/order-report', {
           startDate: formattedStartDate,
           endDate: formattedEndDate,
-          parishId: data.parishId
+          type: data.type
         });
-        setResponseData(response.data);
+        setResponseData({ orders: response.data, startDate: data.startDate, endDate: data.endDate, type: data.type});
       }
     }
     fetchData();
@@ -68,7 +68,7 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
             }}
           >
             <Typography variant="h4">
-              Pedidos por parroquia
+              Informe de Ventas
             </Typography>
           </Box>
         </Box>
@@ -81,7 +81,12 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
                 width="100%"
                 showToolbar={true}
               >
-                <ParishOrdersPDF parishOrders={responseData} />
+                <OrdersReportPDF
+                  orders={responseData.orders}
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  type={responseData.type}
+                />
               </PDFViewer>
             </Box>
           )
