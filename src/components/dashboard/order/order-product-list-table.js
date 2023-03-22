@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import {useState} from 'react';
+import {orderLineCompare, orderLineCompareName} from '../../../utils/sorting';
 import {Scrollbar} from '../../scrollbar';
 import { SeverityPill } from '../../severity-pill';
 import {ExceedCartModal} from './exceed-cart-modal';
@@ -78,7 +79,7 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
+            {products.sort(orderLineCompareName).map((product) => (
               <TableRow
                 hover
                 key={product.id}

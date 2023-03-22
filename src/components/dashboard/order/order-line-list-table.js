@@ -14,6 +14,7 @@ import {
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {Trash as TrashIcon} from '../../../icons/trash';
+import {orderLineCompare, orderLineCompareDescription} from '../../../utils/sorting';
 
 export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
   return (
@@ -22,6 +23,9 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
         <Table sx={{ minWidth: 700}}>
           <TableHead>
             <TableRow>
+              <TableCell>
+                Producto Id
+              </TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip
                   enterDelay={300}
@@ -31,12 +35,9 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
                     active
                     direction="desc"
                   >
-                    Producto Id
+                    Producto
                   </TableSortLabel>
                 </Tooltip>
-              </TableCell>
-              <TableCell>
-                Producto
               </TableCell>
               <TableCell>
                 Cantidad
@@ -53,7 +54,7 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderLines.map((orderLine) => {
+            {orderLines.sort(orderLineCompareDescription).map((orderLine) => {
               return (
                 <TableRow
                   key={orderLine.productId}
