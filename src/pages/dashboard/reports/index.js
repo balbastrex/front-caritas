@@ -3,6 +3,8 @@ import Head from 'next/head';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
+import {OrdersReportDialog} from '../../../components/dashboard/report/order-reports/orders-report-dialog';
+import {OrdersReportModal} from '../../../components/dashboard/report/order-reports/orders-report-modal';
 import {OrderSheetDialog} from '../../../components/dashboard/report/order-sheet/order-sheet-dialog';
 import {ParishOrdersDialog} from '../../../components/dashboard/report/parish-orders/parish-orders-dialog';
 import {ParishOrdersReportModal} from '../../../components/dashboard/report/parish-orders/parish-orders-report-modal';
@@ -15,6 +17,9 @@ const Overview = () => {
   const [parishOrdersListReportOpen, setParishOrdersListReportOpen] = useState(false);
   const [parishOrdersListModalOpen, setParishOrdersListModalOpen] = useState(false);
   const [parishOrdersListReportData, setParishOrdersListReportData] = useState({ startDate: null, endDate: null, parishId: null });
+  const [ordersReportModalOpen, setOrdersReportModalOpen] = useState(false);
+  const [ordersReportData, setOrdersReportData] = useState({ startDate: null, endDate: null, type: 'all' });
+  const [ordersReportOpen, setOrdersReportOpen] = useState(false);
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -30,8 +35,11 @@ const Overview = () => {
     case 'parish-orders-list':
       setParishOrdersListModalOpen(true);
       break;
-      default:
+    case 'orders-reports':
+      setOrdersReportModalOpen(true);
         break;
+    default:
+      break;
     }
   }
 
@@ -39,7 +47,12 @@ const Overview = () => {
     setParishOrdersListReportData({ startDate, endDate, parishId });
     setParishOrdersListModalOpen(false);
     setParishOrdersListReportOpen(true);
+  }
 
+  const handleOrdersReport = ({ startDate, endDate, type }) => {
+    setOrdersReportData({ startDate, endDate, type });
+    setOrdersReportModalOpen(false);
+    setOrdersReportOpen(true);
   }
 
   return (
@@ -87,6 +100,13 @@ const Overview = () => {
         handleClose={() => setParishOrdersListModalOpen(false)}
       />
       <ParishOrdersDialog open={parishOrdersListReportOpen} close={() => setParishOrdersListReportOpen(false)} data={parishOrdersListReportData} />
+
+      <OrdersReportModal
+        handleSelect={handleOrdersReport}
+        open={ordersReportModalOpen}
+        handleClose={() => setOrdersReportModalOpen(false)}
+      />
+      <OrdersReportDialog open={ordersReportOpen} close={() => setOrdersReportOpen(false)} data={ordersReportData} />
     </>
   );
 };

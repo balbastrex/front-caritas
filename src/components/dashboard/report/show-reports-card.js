@@ -39,12 +39,18 @@ const reports = [
     id: 'parish-orders-list',
     cover: '/static/report/parish-orders.png',
     title: 'Pedidos por Parroquia',
+  },
+  {
+    id: 'orders-reports',
+    cover: '/static/report/parish-orders.png',
+    title: 'Informes de Ventas',
   }
 ];
 
 const reportPermissions = {
   'order-sheet': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   'parish-orders-list': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
+  'orders-reports': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
 }
 
 const hasPermissionReport = (reportId) => {
