@@ -42,7 +42,7 @@ const reports = [
   },
   {
     id: 'orders-reports',
-    cover: '/static/report/parish-orders.png',
+    cover: '/static/report/orders-report.png',
     title: 'Informes de Ventas',
   }
 ];

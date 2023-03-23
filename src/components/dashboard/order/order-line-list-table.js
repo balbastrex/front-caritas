@@ -17,6 +17,10 @@ import {Trash as TrashIcon} from '../../../icons/trash';
 import {orderLineCompare, orderLineCompareDescription} from '../../../utils/sorting';
 
 export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
+  console.log("-> orderLines", orderLines);
+
+  if (!orderLines || orderLines.length === 0) { return null; }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -54,7 +58,7 @@ export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderLines.sort(orderLineCompareDescription).map((orderLine) => {
+            {[...orderLines].sort(orderLineCompareDescription).map((orderLine) => {
               return (
                 <TableRow
                   key={orderLine.productId}

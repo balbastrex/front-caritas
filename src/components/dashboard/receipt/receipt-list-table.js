@@ -127,16 +127,16 @@ export const ReceiptListTable = (props) => {
             })}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={receiptsCount}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
       </Scrollbar>
-      <TablePagination
-        component="div"
-        count={receiptsCount}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
     </div>
   );
 };
