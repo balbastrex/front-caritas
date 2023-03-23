@@ -121,7 +121,7 @@ export const BeneficiaryListTable = (props) => {
                           component="a"
                           onClick={() => handleBeneficiaryLicense(beneficiary)}
                         >
-                          <PrintIcon fontSize="small" />
+                          <PrintIcon fontSize="small" style={{ color: beneficiary.needsPrint ? 'red' : 'gray' }} />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Mostrar ventas">
@@ -147,16 +147,16 @@ export const BeneficiaryListTable = (props) => {
             })}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={beneficiariesCount}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
       </Scrollbar>
-      <TablePagination
-        component="div"
-        count={beneficiariesCount}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
     </div>
   );
 };

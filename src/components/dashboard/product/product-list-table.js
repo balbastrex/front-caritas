@@ -137,16 +137,16 @@ export const ProductListTable = (props) => {
             })}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={productsCount}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
       </Scrollbar>
-      <TablePagination
-        component="div"
-        count={productsCount}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
     </div>
   );
 };
