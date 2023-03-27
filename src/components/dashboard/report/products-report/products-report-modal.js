@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import {useEffect, useState} from 'react';
 import {getParishes} from '../../../../slices/parish';
+import {getProducts} from '../../../../slices/product';
 import {useDispatch, useSelector} from '../../../../store';
 
 const optionsDate = [
@@ -24,26 +25,30 @@ const optionsDate = [
   }
 ];
 
-const optionsType = [
+const optionsProduct = [
   {
-    id: 'all',
-    label: 'Todas las ventas'
+    id: 'allProducts',
+    label: 'Todos los productos'
   },
   {
-    id: 'withDiscount',
-    label: 'Con descuento'
-  },
-  {
-    id: 'withoutDiscount',
-    label: 'Sin descuento'
+    id: 'product',
+    label: 'Un Producto específico'
   }
 ];
 
-export const OrdersReportModal = ({ open, handleSelect, handleClose }) => {
+export const ProductsReportModal = ({ open, handleSelect, handleClose }) => {
+  const dispatch = useDispatch();
+  const { productList } = useSelector((state) => state.product);
+
   const [optionDate, setOptionDate] = useState('onService');
-  const [optionType, setOptionType] = useState('all');
+  const [optionProduct, setOptionProduct] = useState(optionsProduct[0].id);
+  const [productSelected, setProductSelected] = useState({ productId: 0, productName: '' });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, []);
 
   const handleStartDateChange = (startDate) => {
     setStartDate(startDate);
@@ -61,7 +66,7 @@ export const OrdersReportModal = ({ open, handleSelect, handleClose }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Informes de Venta
+        Informes de Producto
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
@@ -108,18 +113,18 @@ export const OrdersReportModal = ({ open, handleSelect, handleClose }) => {
         {
           optionDate === 'onDate' && (
           <Box sx={{mt: 2}}>
-          <DatePicker
-            label="Hasta"
-            inputFormat="dd/MM/yyyy"
-            onChange={handleEndDateChange}
-            renderInput={(inputProps) => (
-              <TextField
-                fullWidth
-                {...inputProps} />
-            )}
-            value={endDate}
-          />
-        </Box>)
+            <DatePicker
+              label="Hasta"
+              inputFormat="dd/MM/yyyy"
+              onChange={handleEndDateChange}
+              renderInput={(inputProps) => (
+                <TextField
+                  fullWidth
+                  {...inputProps} />
+              )}
+              value={endDate}
+            />
+          </Box>)
         }
         <Grid
           mt={2}
@@ -133,10 +138,10 @@ export const OrdersReportModal = ({ open, handleSelect, handleClose }) => {
             label="Tipo de Venta"
             select
             name="optionType"
-            value={optionType}
-            onChange={(event) => { setOptionType(event.target.value) }}
+            value={optionProduct}
+            onChange={(event) => { setOptionProduct(event.target.value) }}
           >
-            {optionsType.map((option) => (
+            {optionsProduct.map((option) => (
               <MenuItem
                 key={option.id}
                 value={option.id}
@@ -146,13 +151,43 @@ export const OrdersReportModal = ({ open, handleSelect, handleClose }) => {
             ))}
           </TextField>
         </Grid>
+        {
+          optionProduct === 'product' && (
+            <Grid
+              mt={2}
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                defaultValue={0}
+                fullWidth
+                label="Producto"
+                select
+                name="optionType"
+                value={productSelected.productId}
+                onChange={(event) => {
+                  setProductSelected({ productId: event.target.value, productName: productList.find((product) => product.id === event.target.value).name })
+                }}
+              >
+                {productList.map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    value={option.id}
+                  >
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>)
+        }
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cerrar</Button>
         <Button
           color="primary"
           variant="contained"
-          onClick={() => handleSelect({startDate, endDate: optionDate === 'onService' ? startDate : endDate, type: optionType})}
+          onClick={() => handleSelect({startDate, endDate: optionDate === 'onService' ? startDate : endDate, type: optionProduct, product: productSelected})}
           autoFocus
         >
           Seleccionar

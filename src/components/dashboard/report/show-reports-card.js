@@ -44,6 +44,11 @@ const reports = [
     id: 'orders-reports',
     cover: '/static/report/orders-report.png',
     title: 'Informes de Ventas',
+  },
+  {
+    id: 'product-reports',
+    cover: '/static/report/products-report.png',
+    title: 'Ventas por Producto',
   }
 ];
 
@@ -51,6 +56,7 @@ const reportPermissions = {
   'order-sheet': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   'parish-orders-list': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
   'orders-reports': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  'product-reports': [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
 }
 
 const hasPermissionReport = (reportId) => {

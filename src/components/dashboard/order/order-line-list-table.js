@@ -14,10 +14,9 @@ import {
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {Trash as TrashIcon} from '../../../icons/trash';
-import {orderLineCompare, orderLineCompareDescription} from '../../../utils/sorting';
+import {orderLineCompareDescription} from '../../../utils/sorting';
 
 export const OrderLineListTable = ({ orderLines, handleRemoveLine }) => {
-  console.log("-> orderLines", orderLines);
 
   if (!orderLines || orderLines.length === 0) { return null; }
 
