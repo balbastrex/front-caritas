@@ -9,7 +9,7 @@ import {defaultURLProfile} from './allowed-route-profiles';
 export const JWTLogin = (props) => {
   const isMounted = useMounted();
   const router = useRouter();
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: '',

@@ -8,6 +8,8 @@ import {OrdersReportModal} from '../../../components/dashboard/report/order-repo
 import {OrderSheetDialog} from '../../../components/dashboard/report/order-sheet/order-sheet-dialog';
 import {ParishOrdersDialog} from '../../../components/dashboard/report/parish-orders/parish-orders-dialog';
 import {ParishOrdersReportModal} from '../../../components/dashboard/report/parish-orders/parish-orders-report-modal';
+import {ProductsReportDialog} from '../../../components/dashboard/report/products-report/products-report-dialog';
+import {ProductsReportModal} from '../../../components/dashboard/report/products-report/products-report-modal';
 import {ShowReportsCard} from '../../../components/dashboard/report/show-reports-card';
 import {gtm} from '../../../lib/gtm';
 
@@ -20,6 +22,9 @@ const Overview = () => {
   const [ordersReportModalOpen, setOrdersReportModalOpen] = useState(false);
   const [ordersReportData, setOrdersReportData] = useState({ startDate: null, endDate: null, type: 'all' });
   const [ordersReportOpen, setOrdersReportOpen] = useState(false);
+  const [productsReportModalOpen, setProductsReportModalOpen] = useState(false);
+  const [productsReportData, setProductsReportData] = useState({ startDate: null, endDate: null, type: 'all' });
+  const [productsReportOpen, setProductsReportOpen] = useState(false);
 
   useEffect(() => {
     gtm.push({ event: 'page_view' });
@@ -37,7 +42,10 @@ const Overview = () => {
       break;
     case 'orders-reports':
       setOrdersReportModalOpen(true);
-        break;
+      break;
+    case 'product-reports':
+      setProductsReportModalOpen(true);
+      break;
     default:
       break;
     }
@@ -53,6 +61,12 @@ const Overview = () => {
     setOrdersReportData({ startDate, endDate, type });
     setOrdersReportModalOpen(false);
     setOrdersReportOpen(true);
+  }
+
+  const handleProductsReport = ({ startDate, endDate, type, product }) => {
+    setProductsReportData({ startDate, endDate, type, product });
+    setProductsReportModalOpen(false);
+    setProductsReportOpen(true);
   }
 
   return (
@@ -107,6 +121,13 @@ const Overview = () => {
         handleClose={() => setOrdersReportModalOpen(false)}
       />
       <OrdersReportDialog open={ordersReportOpen} close={() => setOrdersReportOpen(false)} data={ordersReportData} />
+
+      <ProductsReportModal
+        handleSelect={handleProductsReport}
+        open={productsReportModalOpen}
+        handleClose={() => setProductsReportModalOpen(false)}
+      />
+      <ProductsReportDialog open={productsReportOpen} close={() => setProductsReportOpen(false)} data={productsReportData} />
     </>
   );
 };

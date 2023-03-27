@@ -6,12 +6,9 @@ import { Avatar, Box, Chip, Container, Link, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { AuthGuard } from '../../../../components/authentication/auth-guard';
 import { DashboardLayout } from '../../../../components/dashboard/dashboard-layout';
-import {ProductCreateForm} from '../../../../components/dashboard/product/product-create-form';
 import {ProviderCreateForm} from '../../../../components/dashboard/provider/provider-create-form';
-import {TurnCreateForm} from '../../../../components/dashboard/turn/turn-create-form';
 import { gtm } from '../../../../lib/gtm';
 import {getProviderById} from '../../../../slices/provider';
-import {getTurnById} from '../../../../slices/turn';
 import {useDispatch, useSelector} from '../../../../store';
 import { getInitials } from '../../../../utils/get-initials';
 

@@ -40,7 +40,7 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Fechas del reporte
+        Informes de Pedidos por Parroquia
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
