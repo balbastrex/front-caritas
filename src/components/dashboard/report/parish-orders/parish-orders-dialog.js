@@ -5,22 +5,27 @@ import {useEffect, useState} from 'react';
 import {ArrowLeft as ArrowLeftIcon} from '../../../../icons/arrow-left';
 import axios from '../../../../utils/axios';
 import {ParishOrdersPDF} from './parish-orders-pdf';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const ParishOrdersDialog = ({ open, close, data }) => {
   const [responseData, setResponseData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       if (data.startDate !== null && data.endDate !== null) {
+        setLoading(true);
         const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
         const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
 
         const response = await axios.post('/api/v1/receipt/parish-report', {
           startDate: formattedStartDate,
           endDate: formattedEndDate,
-          parishId: data.parishId
+          parishId: data.parishId,
+          type: data.type
         });
         setResponseData(response.data);
+        setLoading(false)
       }
     }
     fetchData();
@@ -73,7 +78,14 @@ export const ParishOrdersDialog = ({ open, close, data }) => {
           </Box>
         </Box>
         {
-          !!responseData && (
+          loading && (
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )
+        }
+        {
+          !!responseData && loading === false && (
             <Box sx={{ flexGrow: 1 }}>
               <PDFViewer
                 height="100%"

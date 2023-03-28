@@ -13,12 +13,28 @@ import {useEffect, useState} from 'react';
 import {getParishes} from '../../../../slices/parish';
 import {useDispatch, useSelector} from '../../../../store';
 
+const optionsType = [
+  {
+    id: 'all',
+    label: 'Todas las ventas'
+  },
+  {
+    id: 'withDiscount',
+    label: 'Con descuento'
+  },
+  {
+    id: 'withoutDiscount',
+    label: 'Sin descuento'
+  }
+];
+
 export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => {
   const dispatch = useDispatch();
   const { parishList } = useSelector((state) => state.parish);
   const [selectedParish, setSelectedParish] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [optionType, setOptionType] = useState('all');
 
   useEffect(() => {
     dispatch(getParishes());
@@ -102,13 +118,38 @@ export const ParishOrdersReportModal = ({ open, handleSelect, handleClose }) => 
             value={endDate}
           />
         </Box>
+        <Grid
+          mt={2}
+          item
+          md={6}
+          xs={12}
+        >
+          <TextField
+            defaultValue={0}
+            fullWidth
+            label="Tipo de Venta"
+            select
+            name="optionType"
+            value={optionType}
+            onChange={(event) => { setOptionType(event.target.value) }}
+          >
+            {optionsType.map((option) => (
+              <MenuItem
+                key={option.id}
+                value={option.id}
+              >
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cerrar</Button>
         <Button
           color="primary"
           variant="contained"
-          onClick={() => handleSelect({startDate, endDate, parishId: selectedParish})}
+          onClick={() => handleSelect({startDate, endDate, parishId: selectedParish, type: optionType})}
           autoFocus
         >
           Seleccionar

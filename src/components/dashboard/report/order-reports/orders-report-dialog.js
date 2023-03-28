@@ -1,4 +1,5 @@
 import {Box, Button, Dialog, Typography} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import {PDFViewer} from '@react-pdf/renderer';
 import {format} from 'date-fns';
 import {useEffect, useState} from 'react';
@@ -8,10 +9,12 @@ import {OrdersReportPDF} from './orders-report-pdf';
 
 export const OrdersReportDialog = ({ open, close, data }) => {
   const [responseData, setResponseData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       if (data.startDate !== null && data.endDate !== null) {
+        setLoading(true);
         const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
         const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
 
@@ -21,6 +24,7 @@ export const OrdersReportDialog = ({ open, close, data }) => {
           type: data.type
         });
         setResponseData({ orders: response.data, startDate: data.startDate, endDate: data.endDate, type: data.type});
+        setLoading(false)
       }
     }
     fetchData();
@@ -73,7 +77,14 @@ export const OrdersReportDialog = ({ open, close, data }) => {
           </Box>
         </Box>
         {
-          !!responseData && (
+          loading && (
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )
+        }
+        {
+          !!responseData && loading === false && (
             <Box sx={{ flexGrow: 1 }}>
               <PDFViewer
                 height="100%"
