@@ -206,7 +206,12 @@ export const ProductsReportPDF = (props) => {
                   </View>
                   <View style={[styles.tableCellMid, styles.alignRight]}>
                     <Text style={styles.h5}>
-                      Total
+                      Coste
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCellMid, styles.alignRight]}>
+                    <Text style={styles.h5}>
+                      Venta
                     </Text>
                   </View>
                 </View>
@@ -219,7 +224,12 @@ export const ProductsReportPDF = (props) => {
                     </View>
                     <View style={[styles.tableCellMid, styles.alignRight]}>
                       <Text style={styles.body2}>
-                        {numeral(order.totalQuantity).format(`0,0.00`)}€
+                        {order.totalQuantity}
+                      </Text>
+                    </View>
+                    <View style={[styles.tableCellMid, styles.alignRight]}>
+                      <Text style={styles.body2}>
+                        {numeral(order.totalCostAmount).format(`0,0.00`)}€
                       </Text>
                     </View>
                     <View style={[styles.tableCellMid, styles.alignRight]}>
@@ -250,7 +260,12 @@ export const ProductsReportPDF = (props) => {
                   </View>
                   <View style={[styles.tableCellShort, styles.alignRight]}>
                     <Text style={styles.h5}>
-                      Importe
+                      Coste Total
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCellShort, styles.alignRight]}>
+                    <Text style={styles.h5}>
+                      Venta Total
                     </Text>
                   </View>
                 </View>
@@ -270,6 +285,11 @@ export const ProductsReportPDF = (props) => {
                       <View style={[styles.tableCellShort, styles.alignRight]}>
                         <Text style={styles.body2}>
                           {orderLine.totalQuantity}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCellShort, styles.alignRight]}>
+                        <Text style={styles.body2}>
+                          {orderLine.totalCostAmount} €
                         </Text>
                       </View>
                       <View style={[styles.tableCellShort, styles.alignRight]}>
@@ -302,8 +322,8 @@ ProductsReportPDF.propTypes = {
       totalAmount: PropTypes.string.isRequired,
     }))
   })).isRequired,
-  startDate: PropTypes.string.isRequired,
-  endDate: PropTypes.string.isRequired,
+  startDate: PropTypes.any,
+  endDate: PropTypes.any,
   type: PropTypes.string.isRequired,
   productName: PropTypes.string.isRequired,
 };

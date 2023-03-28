@@ -51,8 +51,8 @@ const Overview = () => {
     }
   }
 
-  const handleParishOrdersListReport = ({ startDate, endDate, parishId }) => {
-    setParishOrdersListReportData({ startDate, endDate, parishId });
+  const handleParishOrdersListReport = ({ startDate, endDate, parishId, type }) => {
+    setParishOrdersListReportData({ startDate, endDate, parishId, type });
     setParishOrdersListModalOpen(false);
     setParishOrdersListReportOpen(true);
   }

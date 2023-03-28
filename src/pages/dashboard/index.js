@@ -1,11 +1,23 @@
-import {Box, Container, Grid, Typography} from '@mui/material';
+import {Box, Button, Card, CardActions, CardContent, Container, Divider, Grid, Typography} from '@mui/material';
 import Head from 'next/head';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../components/authentication/auth-guard';
 import {DashboardLayout} from '../../components/dashboard/dashboard-layout';
 import {OverviewBanner} from '../../components/dashboard/overview/overview-banner';
+import {OverviewCryptoWallet} from '../../components/dashboard/overview/overview-crypto-wallet';
+import {OverviewInbox} from '../../components/dashboard/overview/overview-inbox';
+import {OverviewLatestTransactions} from '../../components/dashboard/overview/overview-latest-transactions';
+import {OverviewPrivateWallet} from '../../components/dashboard/overview/overview-private-wallet';
+import {OverviewTotalBalance} from '../../components/dashboard/overview/overview-total-balance';
+import {OverviewTotalTransactions} from '../../components/dashboard/overview/overview-total-transactions';
 import {useAuth} from '../../hooks/use-auth';
 import {gtm} from '../../lib/gtm';
+import { InformationCircleOutlined as InformationCircleOutlinedIcon } from '../../icons/information-circle-outlined';
+import {ArrowRight as ArrowRightIcon} from '../../icons/arrow-right';
+import { Briefcase as BriefcaseIcon } from '../../icons/briefcase';
+import { ExternalLink as ExternalLinkIcon } from '../../icons/external-link';
+import { Download as DownloadIcon } from '../../icons/download';
+import { Users as UsersIcon } from '../../icons/users';
 
 const Overview = () => {
   const [displayBanner, setDisplayBanner] = useState(true);
@@ -41,11 +53,11 @@ const Overview = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
+          <Box sx={{mb: 4}}>
             <Grid
               container
               justifyContent="space-between"
@@ -122,7 +134,7 @@ const Overview = () => {
                   <Box
                     sx={{
                       alignItems: 'center',
-                      display: 'flex'
+                      display: 'flex',
                     }}
                   >
                     <BriefcaseIcon
@@ -131,7 +143,7 @@ const Overview = () => {
                     />
                     <Typography
                       color="primary.main"
-                      sx={{ pl: 1 }}
+                      sx={{pl: 1}}
                       variant="subtitle2"
                     >
                       Jobs
@@ -139,7 +151,7 @@ const Overview = () => {
                   </Box>
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2 }}
+                    sx={{mt: 2}}
                   >
                     Find your dream job
                   </Typography>
@@ -172,20 +184,20 @@ const Overview = () => {
                   <Box
                     sx={{
                       alignItems: 'center',
-                      display: 'flex'
+                      display: 'flex',
                     }}
                   >
                     <InformationCircleOutlinedIcon color="primary" />
                     <Typography
                       color="primary.main"
-                      sx={{ pl: 1 }}
+                      sx={{pl: 1}}
                       variant="subtitle2"
                     >
                       Help Center
                     </Typography>
                   </Box>
                   <Typography
-                    sx={{ mt: 2 }}
+                    sx={{mt: 2}}
                     variant="h6"
                   >
                     Need help figuring things out?
@@ -219,20 +231,20 @@ const Overview = () => {
                   <Box
                     sx={{
                       alignItems: 'center',
-                      display: 'flex'
+                      display: 'flex',
                     }}
                   >
                     <DownloadIcon color="primary" />
                     <Typography
                       color="primary.main"
-                      sx={{ pl: 1 }}
+                      sx={{pl: 1}}
                       variant="subtitle2"
                     >
                       Download
                     </Typography>
                   </Box>
                   <Typography
-                    sx={{ mt: 2 }}
+                    sx={{mt: 2}}
                     variant="h6"
                   >
                     Download our Free PDF and learn how to
@@ -268,20 +280,20 @@ const Overview = () => {
                   <Box
                     sx={{
                       alignItems: 'center',
-                      display: 'flex'
+                      display: 'flex',
                     }}
                   >
                     <UsersIcon color="primary" />
                     <Typography
                       color="primary.main"
-                      sx={{ pl: 1 }}
+                      sx={{pl: 1}}
                       variant="subtitle2"
                     >
                       Contacts
                     </Typography>
                   </Box>
                   <Typography
-                    sx={{ mt: 2 }}
+                    sx={{mt: 2}}
                     variant="h6"
                   >
                     Contacts allow you to manage your company contracts
