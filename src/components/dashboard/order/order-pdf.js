@@ -137,7 +137,7 @@ export const OrderPDF = (props) => {
                 Parroquia: {order.parishName}
               </Text>
               <Text style={styles.body2}>
-                <strong>Nº de Beneficiario: {order.beneficiaryLicense}</strong>
+                Nº de Beneficiario: {order.beneficiaryLicense}
               </Text>
               <Text style={styles.body2}>
                 Nombre: <Text style={styles.title}>{order.beneficiaryName}</Text>

@@ -1,21 +1,19 @@
 import {Box, Button, Card, Container, Dialog, Grid, Typography} from '@mui/material';
-import {PDFViewer} from '@react-pdf/renderer';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {useEffect, useState} from 'react';
 import {AuthGuard} from '../../../components/authentication/auth-guard';
 import {exportBeneficiariesToExcel} from '../../../components/dashboard/beneficiary/beneficiary-export-excel';
-import {BeneficiaryLicensePDF} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf';
 import {BeneficiaryLicensePdfDialog} from '../../../components/dashboard/beneficiary/beneficiary-license-pdf-dialog';
 import {BeneficiaryListFilters} from '../../../components/dashboard/beneficiary/beneficiary-list-filters';
 import {BeneficiaryListTable} from '../../../components/dashboard/beneficiary/beneficiary-list-table';
 import {DashboardLayout} from '../../../components/dashboard/dashboard-layout';
 import {useAuth} from '../../../hooks/use-auth';
-import {ArrowLeft as ArrowLeftIcon} from '../../../icons/arrow-left';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {gtm} from '../../../lib/gtm';
 import {getBeneficiaries} from '../../../slices/beneficiary';
 import {useDispatch, useSelector} from '../../../store/index';
+import axios from '../../../utils/axios';
 import {UserProfiles} from '../../../utils/constants';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
@@ -85,6 +83,13 @@ const BeneficiariesList = () => {
     setViewBeneficiaryLicensePDF(beneficiary);
   }
 
+  const handleExportBeneficiariesToExcel = () => {
+    axios.get('/api/v1/beneficiary-excel-report')
+      .then((response) => {
+        exportBeneficiariesToExcel(response.data);
+      })
+  }
+
   // Usually query is done on backend with indexing solutions
   const filteredBeneficiaries = applyFilters(beneficiaries, filters);
   const paginatedBeneficiaries = applyPagination(filteredBeneficiaries, page, rowsPerPage);
@@ -121,7 +126,7 @@ const BeneficiariesList = () => {
                   component="a"
                   startIcon={<FileDownloadOutlinedIcon fontSize="small" />}
                   variant="contained"
-                  onClick={() => { exportBeneficiariesToExcel(beneficiaries) }}
+                  onClick={handleExportBeneficiariesToExcel}
                 >
                   Exportar
                 </Button>

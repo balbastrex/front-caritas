@@ -24,6 +24,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const { beneficiarySelector } = useSelector((state) => state.beneficiary);
   const [beneficiaryUF, setBeneficiaryUF] = useState(1)
   const [showExceedModal, setShowExceedModal] = useState(false)
+  const [exceedStock, setExceedStock] = useState(false)
   const [showNotesModal, setShowNotesModal] = useState(false)
   const [notes, setNotes] = useState([])
   const [prodLine, setProdLine] = useState(null)
@@ -46,11 +47,17 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
     let orderLine = {...originalOrderLine}
     const units  = orderLine.units ? orderLine.units + 1 : 1;
 
-    if(units > productLine.maxUnits){
+    if (units > productLine.maxUnits){
       setProdLine(productLine);
       setShowExceedModal(true);
     } else {
-      handleNewProduct(productLine)
+      if (productLine.stock < 1) {
+        setProdLine(productLine);
+        setExceedStock(true)
+        setShowExceedModal(true);
+      } else {
+        handleNewProduct(productLine)
+      }
     }
   }
 
@@ -151,7 +158,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
 
   return <>
     {showNotesModal && (<ShowBeneficiaryNotesModal notes={notes} handleClose={() => setShowNotesModal(false) } />)}
-    {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } />)}
+    {showExceedModal && (<ExceedCartModal handleCloseCart={handleNewProduct} handleClose={() => setShowExceedModal(false) } stock={exceedStock} />)}
     <form
       onSubmit={formik.handleSubmit}
     >
@@ -193,6 +200,7 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                   const value = newValue ? newValue.id : null;
                   formik.setFieldValue('beneficiaryId', value);
                   const beneficiary = beneficiarySelector.find((beneficiary) => beneficiary.id === value);
+
                   if (beneficiary) {
                     setBeneficiaryUF(beneficiary.familyUnit);
                     updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});

@@ -2,16 +2,16 @@ import { Avatar, Box, Button, Container, Paper, Typography } from '@mui/material
 import { alpha } from '@mui/material/styles';
 import WarningIcon from '@mui/icons-material/WarningOutlined';
 
-export const ExceedCartModal = ({ handleClose, handleCloseCart, stock = false }) => (
+export const BeneficiaryLicenseModal = ({ handleClose, license }) => (
 <Box
   sx={{
     position: 'absolute',
-    minHeight: '100%',
+    minHeight: '50%',
     top: {
-      md: '75%',
-      lg: '67%'
+      md: '35%',
+      lg: '35%'
     },
-    height: '100%',
+    height: '50%',
     width: {
       md: '75%',
       lg: '50%',
@@ -41,19 +41,14 @@ export const ExceedCartModal = ({ handleClose, handleCloseCart, stock = false })
         </Avatar>
         <div>
           <Typography variant="h5">
-            {
-              stock ? 'Stock insuficiente' : 'Cantidad excedida'
-            }
+            Beneficiario creado con éxito.
           </Typography>
           <Typography
             color="contrastText"
             sx={{ mt: 1 }}
             variant="body2"
           >
-            {
-              stock ? 'No hay suficiente stock para este producto.' : 'Este producto ya excede la cantidad permitida para este beneficiario.'
-            }
-           ¿Quieres añadir otra unidad?
+            Licencia: {license}
           </Typography>
         </div>
       </Box>
@@ -66,23 +61,10 @@ export const ExceedCartModal = ({ handleClose, handleCloseCart, stock = false })
         }}
       >
         <Button
-          sx={{ mr: 2 }}
-          variant="outlined"
+          variant="contained"
           onClick={handleClose}
         >
-          Cancelar
-        </Button>
-        <Button
-          sx={{
-            backgroundColor: 'error.main',
-            '&:hover': {
-              backgroundColor: 'error.dark'
-            }
-          }}
-          variant="contained"
-          onClick={handleCloseCart}
-        >
-          Añadir exceso
+          Cerrar
         </Button>
       </Box>
     </Paper>
