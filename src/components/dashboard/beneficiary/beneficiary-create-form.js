@@ -29,6 +29,8 @@ import {getParishes} from '../../../slices/parish';
 import {getTurns} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store';
 import axios from '../../../utils/axios';
+import {ExceedCartModal} from '../order/exceed-cart-modal';
+import {BeneficiaryLicenseModal} from './beneficiary-license-modal';
 
 const genderType = [
   {
@@ -43,6 +45,8 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showBeneficiaryLicenseModal, setShowBeneficiaryLicenseModal] = useState(false)
+  const [newLicense, setNewLicense] = useState(0)
 
   const { countryList } = useSelector((state) => state.countries);
   const { familyTypeList } = useSelector((state) => state.familytype);
@@ -134,12 +138,14 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
           toast.success('Beneficiario actualizado!');
         } else {
             // dispatch(createBeneficiary({...formik.values}));
-            await axios.post('/api/v1/beneficiary', {
+            axios.post('/api/v1/beneficiary', {
               ...formik.values
+            }).then((response) => {
+              setNewLicense(response.data.license);
+              setShowBeneficiaryLicenseModal(true);
             })
-            toast.success('Beneficiario Creado!');
+            toast.success('Beneficiario Creado.');
         }
-        router.push('/dashboard/beneficiaries').catch(console.error);
       } catch (err) {
         setIsSubmitting(false);
         console.error(err);
@@ -151,827 +157,839 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
     }
   });
 
+  const handleCloseModal = () => {
+    setShowBeneficiaryLicenseModal(false)
+    router.push('/dashboard/beneficiaries').catch(console.error);
+  }
+
   return (
-    <form
-      onSubmit={formik.handleSubmit}
-    >
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
+    <>
+      {showBeneficiaryLicenseModal && (<BeneficiaryLicenseModal handleClose={handleCloseModal} license={newLicense} />)}
+      {
+        showBeneficiaryLicenseModal ? null : (
+          <form
+            onSubmit={formik.handleSubmit}
           >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Identificación
-              </Typography>
-              <Typography variant="subtitle2">
-                Si dejas un 0 en el carnet, se generará automáticamente
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              spacing={3}
-              md={8}
-              xs={12}
-            >
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.license && formik.errors.license)}
-                  helperText={formik.touched.license && formik.errors.license}
-                  fullWidth
-                  label="Carnet"
-                  name="license"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="number"
-                  value={formik.values.license}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.sice && formik.errors.sice)}
-                  helperText={formik.touched.sice && formik.errors.sice}
-                  fullWidth
-                  label="SICE"
-                  name="sice"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.sice}
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <DatePicker
-                  error={Boolean(formik.touched.expires && formik.errors.expires)}
-                  helperText={formik.touched.expires && formik.errors.expires}
-                  inputFormat="dd/MM/yyyy"
-                  label="Expiración (dd/mm/yyyy)"
-                  name="expires"
-                  onChange={(value) => {
-                    formik.setFieldValue('expires', value);
-                  }}
-                  renderInput={(inputProps) => <TextField {...inputProps} />}
-                  value={formik.values.expires}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Detalles Personales
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              spacing={3}
-              md={8}
-              xs={12}
-            >
-              <Grid
-                item
-                md={12}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.name && formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                  fullWidth
-                  label="Nombre"
-                  name="name"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.name}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.lastname1 && formik.errors.lastname1)}
-                  helperText={formik.touched.lastname1 && formik.errors.lastname1}
-                  fullWidth
-                  label="Apellido 1"
-                  name="lastname1"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.lastname1}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  label="Apellido 2"
-                  name="lastname2"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.lastname2}
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.cif && formik.errors.cif)}
-                  helperText={formik.touched.cif && formik.errors.cif}
-                  fullWidth
-                  label="NIF/NIE"
-                  name="cif"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.cif}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.nationalityId}
-                  fullWidth
-                  label="Nacionalidad"
-                  select
-                  name="nationalityId"
-                  onChange={formik.handleChange}
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
                 >
-                  {countryList.map((country) => (
-                    <MenuItem
-                      key={country.id}
-                      value={country.id}
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Identificación
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Si dejas un 0 en el carnet, se generará automáticamente
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    spacing={3}
+                    md={8}
+                    xs={12}
+                  >
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
                     >
-                      {country.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.gender}
-                  fullWidth
-                  label="Sexo"
-                  select
-                  name="gender"
-                  onChange={formik.handleChange}
-                >
-                  {genderType.map((gender) => (
-                    <MenuItem
-                      key={gender.value}
-                      value={gender.value}
-                    >
-                      {gender.value}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <DatePicker
-                  required
-                  error={Boolean(formik.touched.birthDate && formik.errors.birthDate)}
-                  helperText={formik.touched.birthDate && formik.errors.birthDate}
-                  inputFormat="dd/MM/yyyy"
-                  label="F.Nacimiento(dd/mm/yyyy) *"
-                  name="birthDate"
-                  onChange={(value) => {
-                    formik.setFieldValue('birthDate', value);
-                  }}
-                  renderInput={(inputProps) => <TextField {...inputProps} />}
-                  value={formik.values.birthDate}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Datos de Contacto
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              md={8}
-              xs={12}
-              spacing={3}
-            >
-              <Grid
-                item
-                md={12}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.address && formik.errors.address)}
-                  helperText={formik.touched.address && formik.errors.address}
-                  fullWidth
-                  label="Dirección"
-                  name="address"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.address}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.state && formik.errors.state)}
-                  helperText={formik.touched.state && formik.errors.state}
-                  fullWidth
-                  label="Provincia"
-                  name="state"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.state}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.city && formik.errors.city)}
-                  helperText={formik.touched.city && formik.errors.city}
-                  fullWidth
-                  label="Localidad"
-                  name="city"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.city}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.zip && formik.errors.zip)}
-                  helperText={formik.touched.zip && formik.errors.zip}
-                  fullWidth
-                  label="Código Postal"
-                  name="zip"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.zip}
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.email && formik.errors.email)}
-                  helperText={formik.touched.email && formik.errors.email}
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.email}
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.phone && formik.errors.phone)}
-                  helperText={formik.touched.phone && formik.errors.phone}
-                  fullWidth
-                  label="Teléfono"
-                  name="phone"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="number"
-                  value={formik.values.phone}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Situación 1
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              md={8}
-              xs={12}
-              spacing={3}
-            >
-               <Grid
-                item
-                md={6}
-                xs={12}
-                >
-                  <Box sx={{ mt: 2 }}>
-                      <FormControlLabel
-                        control={<Switch onChange={(event) => formik.setFieldValue('free', event.target.checked)}
-                                         checked={formik.values.free} />}
-                        label="Libertad"
+                      <TextField
+                        error={Boolean(formik.touched.license && formik.errors.license)}
+                        helperText={formik.touched.license && formik.errors.license}
+                        fullWidth
+                        label="Carnet"
+                        name="license"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="number"
+                        value={formik.values.license}
+                        required
                       />
-                  </Box>
-               </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <Box sx={{ mt: 2 }}>
-                  <FormControlLabel
-                    control={<Switch onChange={(event) => formik.setFieldValue('homeless', event.target.checked)}
-                                     checked={formik.values.homeless} />}
-                    label="Sin techo"
-                  />
-                </Box>
-              </Grid>
-
-              <Grid
-                item
-                md={12}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.familyTypeId}
-                  fullWidth
-                  label="Tipo de Familia"
-                  select
-                  name="familyTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {familyTypeList.map((familyType) => (
-                    <MenuItem
-                      key={familyType.id}
-                      value={familyType.id}
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
                     >
-                      {familyType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.adults && formik.errors.adults)}
-                  helperText={formik.touched.adults && formik.errors.adults}
-                  fullWidth
-                  label="Adultos"
-                  name="adults"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.adults}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.minors && formik.errors.minors)}
-                  helperText={formik.touched.minors && formik.errors.minors}
-                  fullWidth
-                  label="Menores"
-                  name="minors"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.minors}
-                  required
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.childrenUnder18 && formik.errors.childrenUnder18)}
-                  helperText={formik.touched.childrenUnder18 && formik.errors.childrenUnder18}
-                  fullWidth
-                  label="Mayores de 2 años"
-                  name="childrenUnder18"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.childrenUnder18}
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.childrenOver18 && formik.errors.childrenOver18)}
-                  helperText={formik.touched.childrenOver18 && formik.errors.childrenOver18}
-                  fullWidth
-                  label="Menores de 2 años"
-                  name="childrenOver18"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.childrenOver18}
-                />
-              </Grid>
-              <Grid
-                item
-                md={12}
-                xs={12}
-              >
-                <TextField
-                  error={Boolean(formik.touched.gratuitous && formik.errors.gratuitous)}
-                  helperText={formik.touched.gratuitous && formik.errors.gratuitous}
-                  fullWidth
-                  label="Gratuito (%)"
-                  name="gratuitous"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.gratuitous}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
+                      <TextField
+                        error={Boolean(formik.touched.sice && formik.errors.sice)}
+                        helperText={formik.touched.sice && formik.errors.sice}
+                        fullWidth
+                        label="SICE"
+                        name="sice"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.sice}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <DatePicker
+                        error={Boolean(formik.touched.expires && formik.errors.expires)}
+                        helperText={formik.touched.expires && formik.errors.expires}
+                        inputFormat="dd/MM/yyyy"
+                        label="Expiración (dd/mm/yyyy)"
+                        name="expires"
+                        onChange={(value) => {
+                          formik.setFieldValue('expires', value);
+                        }}
+                        renderInput={(inputProps) => <TextField {...inputProps} />}
+                        value={formik.values.expires}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Detalles Personales
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    spacing={3}
+                    md={8}
+                    xs={12}
+                  >
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.name && formik.errors.name)}
+                        helperText={formik.touched.name && formik.errors.name}
+                        fullWidth
+                        label="Nombre"
+                        name="name"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.name}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.lastname1 && formik.errors.lastname1)}
+                        helperText={formik.touched.lastname1 && formik.errors.lastname1}
+                        fullWidth
+                        label="Apellido 1"
+                        name="lastname1"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.lastname1}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        fullWidth
+                        label="Apellido 2"
+                        name="lastname2"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.lastname2}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.cif && formik.errors.cif)}
+                        helperText={formik.touched.cif && formik.errors.cif}
+                        fullWidth
+                        label="NIF/NIE"
+                        name="cif"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.cif}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.nationalityId}
+                        fullWidth
+                        label="Nacionalidad"
+                        select
+                        name="nationalityId"
+                        onChange={formik.handleChange}
+                      >
+                        {countryList.map((country) => (
+                          <MenuItem
+                            key={country.id}
+                            value={country.id}
+                          >
+                            {country.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.gender}
+                        fullWidth
+                        label="Sexo"
+                        select
+                        name="gender"
+                        onChange={formik.handleChange}
+                      >
+                        {genderType.map((gender) => (
+                          <MenuItem
+                            key={gender.value}
+                            value={gender.value}
+                          >
+                            {gender.value}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <DatePicker
+                        required
+                        error={Boolean(formik.touched.birthDate && formik.errors.birthDate)}
+                        helperText={formik.touched.birthDate && formik.errors.birthDate}
+                        inputFormat="dd/MM/yyyy"
+                        label="F.Nacimiento(dd/mm/yyyy) *"
+                        name="birthDate"
+                        onChange={(value) => {
+                          formik.setFieldValue('birthDate', value);
+                        }}
+                        renderInput={(inputProps) => <TextField {...inputProps} />}
+                        value={formik.values.birthDate}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Datos de Contacto
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    md={8}
+                    xs={12}
+                    spacing={3}
+                  >
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.address && formik.errors.address)}
+                        helperText={formik.touched.address && formik.errors.address}
+                        fullWidth
+                        label="Dirección"
+                        name="address"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.address}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.state && formik.errors.state)}
+                        helperText={formik.touched.state && formik.errors.state}
+                        fullWidth
+                        label="Provincia"
+                        name="state"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.state}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.city && formik.errors.city)}
+                        helperText={formik.touched.city && formik.errors.city}
+                        fullWidth
+                        label="Localidad"
+                        name="city"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.city}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.zip && formik.errors.zip)}
+                        helperText={formik.touched.zip && formik.errors.zip}
+                        fullWidth
+                        label="Código Postal"
+                        name="zip"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.zip}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.email && formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                        fullWidth
+                        label="Email"
+                        name="email"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.email}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.phone && formik.errors.phone)}
+                        helperText={formik.touched.phone && formik.errors.phone}
+                        fullWidth
+                        label="Teléfono"
+                        name="phone"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="number"
+                        value={formik.values.phone}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Situación 1
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    md={8}
+                    xs={12}
+                    spacing={3}
+                  >
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <Box sx={{ mt: 2 }}>
+                        <FormControlLabel
+                          control={<Switch onChange={(event) => formik.setFieldValue('free', event.target.checked)}
+                                           checked={formik.values.free} />}
+                          label="Libertad"
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <Box sx={{ mt: 2 }}>
+                        <FormControlLabel
+                          control={<Switch onChange={(event) => formik.setFieldValue('homeless', event.target.checked)}
+                                           checked={formik.values.homeless} />}
+                          label="Sin techo"
+                        />
+                      </Box>
+                    </Grid>
+
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.familyTypeId}
+                        fullWidth
+                        label="Tipo de Familia"
+                        select
+                        name="familyTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {familyTypeList.map((familyType) => (
+                          <MenuItem
+                            key={familyType.id}
+                            value={familyType.id}
+                          >
+                            {familyType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.adults && formik.errors.adults)}
+                        helperText={formik.touched.adults && formik.errors.adults}
+                        fullWidth
+                        label="Adultos"
+                        name="adults"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.adults}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.minors && formik.errors.minors)}
+                        helperText={formik.touched.minors && formik.errors.minors}
+                        fullWidth
+                        label="Menores"
+                        name="minors"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.minors}
+                        required
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.childrenUnder18 && formik.errors.childrenUnder18)}
+                        helperText={formik.touched.childrenUnder18 && formik.errors.childrenUnder18}
+                        fullWidth
+                        label="Mayores de 2 años"
+                        name="childrenUnder18"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.childrenUnder18}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.childrenOver18 && formik.errors.childrenOver18)}
+                        helperText={formik.touched.childrenOver18 && formik.errors.childrenOver18}
+                        fullWidth
+                        label="Menores de 2 años"
+                        name="childrenOver18"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.childrenOver18}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={12}
+                      xs={12}
+                    >
+                      <TextField
+                        error={Boolean(formik.touched.gratuitous && formik.errors.gratuitous)}
+                        helperText={formik.touched.gratuitous && formik.errors.gratuitous}
+                        fullWidth
+                        label="Gratuito (%)"
+                        name="gratuitous"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        type="text"
+                        value={formik.values.gratuitous}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Situación 2
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    md={8}
+                    xs={12}
+                    spacing={3}
+                  >
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.citizenTypeId}
+                        fullWidth
+                        label="Ciudadania"
+                        select
+                        name="citizenTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {citizenTypeList.map((citizenType) => (
+                          <MenuItem
+                            key={citizenType.id}
+                            value={citizenType.id}
+                          >
+                            {citizenType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.civilStateTypeId}
+                        fullWidth
+                        label="Estado civil"
+                        select
+                        name="civilStateTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {civilStateTypeList.map((civilState) => (
+                          <MenuItem
+                            key={civilState.id}
+                            value={civilState.id}
+                          >
+                            {civilState.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.employmentTypeId}
+                        fullWidth
+                        label="Situación laboral"
+                        select
+                        name="employmentTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {employmentTypeList.map((employmentType) => (
+                          <MenuItem
+                            key={employmentType.id}
+                            value={employmentType.id}
+                          >
+                            {employmentType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.guardianshipTypeId}
+                        fullWidth
+                        label="Custodia"
+                        select
+                        name="guardianshipTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {guardianshipTypeList.map((guardianshipType) => (
+                          <MenuItem
+                            key={guardianshipType.id}
+                            value={guardianshipType.id}
+                          >
+                            {guardianshipType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.educationTypeId}
+                        fullWidth
+                        label="Nivel de estudios"
+                        select
+                        name="educationTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {educationTypeList.map((educationType) => (
+                          <MenuItem
+                            key={educationType.id}
+                            value={educationType.id}
+                          >
+                            {educationType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.authorizationTypeId}
+                        fullWidth
+                        label="Autorización"
+                        select
+                        name="authorizationTypeId"
+                        onChange={formik.handleChange}
+                      >
+                        {authorizationTypeList.map((authorizationType) => (
+                          <MenuItem
+                            key={authorizationType.id}
+                            value={authorizationType.id}
+                          >
+                            {authorizationType.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                  <Grid
+                    item
+                    md={4}
+                    xs={12}
+                  >
+                    <Typography variant="h6">
+                      Parroquia
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    md={8}
+                    xs={12}
+                    spacing={3}
+                  >
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.parishId}
+                        fullWidth
+                        label="Parroquia asociada"
+                        select
+                        name="parishId"
+                        onChange={formik.handleChange}
+                      >
+                        {parishList.map((parish) => (
+                          <MenuItem
+                            key={parish.id}
+                            value={parish.id}
+                          >
+                            {parish.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <TextField
+                        defaultValue={formik.values.turnId}
+                        fullWidth
+                        label="Turno"
+                        name="turnId"
+                        select
+                        onChange={formik.handleChange}
+                      >
+                        {turnList.filter(turn => {
+                          const marketId = parishList.find(parish => parish.id === formik.values.parishId)?.marketId;
+
+                          if (turn.marketId === marketId) return turn;
+                        })?.map((turn) => (
+                          <MenuItem
+                            key={turn.id}
+                            value={turn.id}
+                          >
+                            {turn.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+
+
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                mx: -1,
+                mb: -1,
+                mt: 3
+              }}
             >
-              <Typography variant="h6">
-                Situación 2
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              md={8}
-              xs={12}
-              spacing={3}
-            >
-              <Grid
-                item
-                md={6}
-                xs={12}
+              <Button
+                color="error"
+                sx={{
+                  m: 1,
+                  mr: 'auto'
+                }}
               >
-                <TextField
-                  defaultValue={formik.values.citizenTypeId}
-                  fullWidth
-                  label="Ciudadania"
-                  select
-                  name="citizenTypeId"
-                  onChange={formik.handleChange}
+                Delete
+              </Button>
+              <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
+                <Button
+                  sx={{ m: 1 }}
+                  variant="outlined"
+                  component="a"
+                  disabled={formik.isSubmitting}
                 >
-                  {citizenTypeList.map((citizenType) => (
-                    <MenuItem
-                      key={citizenType.id}
-                      value={citizenType.id}
-                    >
-                      {citizenType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
+                  Cancelar
+                </Button>
+              </NextLink>
+              <Button
+                sx={{ m: 1 }}
+                type="submit"
+                variant="contained"
+                onClick={() => console.log(formik.values)}
               >
-                <TextField
-                  defaultValue={formik.values.civilStateTypeId}
-                  fullWidth
-                  label="Estado civil"
-                  select
-                  name="civilStateTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {civilStateTypeList.map((civilState) => (
-                    <MenuItem
-                      key={civilState.id}
-                      value={civilState.id}
-                    >
-                      {civilState.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.employmentTypeId}
-                  fullWidth
-                  label="Situación laboral"
-                  select
-                  name="employmentTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {employmentTypeList.map((employmentType) => (
-                    <MenuItem
-                      key={employmentType.id}
-                      value={employmentType.id}
-                    >
-                      {employmentType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.guardianshipTypeId}
-                  fullWidth
-                  label="Custodia"
-                  select
-                  name="guardianshipTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {guardianshipTypeList.map((guardianshipType) => (
-                    <MenuItem
-                      key={guardianshipType.id}
-                      value={guardianshipType.id}
-                    >
-                      {guardianshipType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.educationTypeId}
-                  fullWidth
-                  label="Nivel de estudios"
-                  select
-                  name="educationTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {educationTypeList.map((educationType) => (
-                    <MenuItem
-                      key={educationType.id}
-                      value={educationType.id}
-                    >
-                      {educationType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.authorizationTypeId}
-                  fullWidth
-                  label="Autorización"
-                  select
-                  name="authorizationTypeId"
-                  onChange={formik.handleChange}
-                >
-                  {authorizationTypeList.map((authorizationType) => (
-                    <MenuItem
-                      key={authorizationType.id}
-                      value={authorizationType.id}
-                    >
-                      {authorizationType.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 3 }}>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={4}
-              xs={12}
-            >
-              <Typography variant="h6">
-                Parroquia
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              md={8}
-              xs={12}
-              spacing={3}
-            >
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.parishId}
-                  fullWidth
-                  label="Parroquia asociada"
-                  select
-                  name="parishId"
-                  onChange={formik.handleChange}
-                >
-                  {parishList.map((parish) => (
-                    <MenuItem
-                      key={parish.id}
-                      value={parish.id}
-                    >
-                      {parish.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  defaultValue={formik.values.turnId}
-                  fullWidth
-                  label="Turno"
-                  name="turnId"
-                  select
-                  onChange={formik.handleChange}
-                >
-                  {turnList.filter(turn => {
-                    const marketId = parishList.find(parish => parish.id === formik.values.parishId)?.marketId;
-
-                    if (turn.marketId === marketId) return turn;
-                  })?.map((turn) => (
-                    <MenuItem
-                      key={turn.id}
-                      value={turn.id}
-                    >
-                      {turn.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          mx: -1,
-          mb: -1,
-          mt: 3
-        }}
-      >
-        <Button
-          color="error"
-          sx={{
-            m: 1,
-            mr: 'auto'
-          }}
-        >
-          Delete
-        </Button>
-        <NextLink href="/dashboard/beneficiaries" passHref legacyBehavior>
-          <Button
-            sx={{ m: 1 }}
-            variant="outlined"
-            component="a"
-            disabled={formik.isSubmitting}
-          >
-            Cancelar
-          </Button>
-        </NextLink>
-        <Button
-          sx={{ m: 1 }}
-          type="submit"
-          variant="contained"
-          onClick={() => console.log(formik.values)}
-        >
-          { isEdit ? 'Actualizar' : 'Crear'}
-        </Button>
-      </Box>
-    </form>
+                { isEdit ? 'Actualizar' : 'Crear'}
+              </Button>
+            </Box>
+          </form>
+        )
+      }
+    </>
   );
 };
