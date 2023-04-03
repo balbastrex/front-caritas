@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Container, Paper, Typography } from '@mui/material
 import { alpha } from '@mui/material/styles';
 import WarningIcon from '@mui/icons-material/WarningOutlined';
 
-export const ExceedCartModal = ({ handleClose, handleCloseCart }) => (
+export const ExceedCartModal = ({ handleClose, handleCloseCart, stock = false }) => (
 <Box
   sx={{
     position: 'absolute',
@@ -41,14 +41,18 @@ export const ExceedCartModal = ({ handleClose, handleCloseCart }) => (
         </Avatar>
         <div>
           <Typography variant="h5">
-            Cantidad excedida
+            {
+              stock ? 'Stock insuficiente' : 'Cantidad excedida'
+            }
           </Typography>
           <Typography
             color="contrastText"
             sx={{ mt: 1 }}
             variant="body2"
           >
-            Este producto ya excede la cantidad permitida para este beneficiario.
+            {
+              stock ? 'No hay suficiente stock para este producto.' : 'Este producto ya excede la cantidad permitida para este beneficiario.'
+            }
            ¿Quieres añadir otra unidad?
           </Typography>
         </div>

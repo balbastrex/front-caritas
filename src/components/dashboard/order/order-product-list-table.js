@@ -29,7 +29,7 @@ const calculateColumn = (uf) => {
     case 4: return 'q4';
     case 5: return 'q5';
     case 6: return 'q6';
-    default: return 'q1';
+    default: return 'q6';
   }
 }
 
@@ -37,6 +37,10 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
 
   const getQuantity = (productId) => {
     return orderLines.find((orderLine) => orderLine.productId === productId)?.units || 0;
+  }
+
+  const getStock = (productId, stock) => {
+    return stock - (orderLines.find((orderLine) => orderLine.productId === productId)?.units || 0);
   }
 
   return (
@@ -85,7 +89,7 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
                 key={product.id}
                 sx={{ cursor: 'pointer' }}
                 disabled={true}
-                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.free ? 0 : product.salesPrice, cost: product.costPrice, units: 1, maxUnits: product[calculateColumn(beneficiaryUF)] })}
+                onClick={() => handleAddProduct({ productId: product.id, description: product.name, price: product.free ? 0 : product.salesPrice, cost: product.costPrice, units: 1, maxUnits: product[calculateColumn(beneficiaryUF)], stock: product.stock })}
               >
                 <TableCell>
                   <Typography
@@ -99,7 +103,7 @@ export const OrderProductListTable = ({ products, handleAddProduct, beneficiaryU
                   {product.name}
                 </TableCell>
                 <TableCell align="right">
-                  {product.stock}
+                  {getStock(product.id, product.stock)}
                 </TableCell>
                 <TableCell align="center">
                   <SeverityPill color={getQuantity(product.id) === 0 ? 'warning' : 'success'}>
