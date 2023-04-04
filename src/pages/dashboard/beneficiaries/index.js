@@ -1,3 +1,4 @@
+import {LoadingButton} from '@mui/lab';
 import {Box, Button, Card, Container, Dialog, Grid, Typography} from '@mui/material';
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -44,6 +45,7 @@ const BeneficiariesList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF] = useState(null);
+  const [isExporting, setIsExporting] = useState(false);
   const [filters, setFilters] = useState({
     name: undefined,
     category: [],
@@ -84,9 +86,11 @@ const BeneficiariesList = () => {
   }
 
   const handleExportBeneficiariesToExcel = () => {
+    setIsExporting(true)
     axios.get('/api/v1/beneficiary-excel-report')
       .then((response) => {
         exportBeneficiariesToExcel(response.data);
+        setIsExporting(false);
       })
   }
 
@@ -121,15 +125,15 @@ const BeneficiariesList = () => {
             </Grid>
             <Grid item container justifyContent={'right'} spacing={2}>
               <Grid item>
-                <Button
+                <LoadingButton
                   disabled={disableNewButton}
-                  component="a"
                   startIcon={<FileDownloadOutlinedIcon fontSize="small" />}
                   variant="contained"
+                  loading={isExporting}
                   onClick={handleExportBeneficiariesToExcel}
                 >
                   Exportar
-                </Button>
+                </LoadingButton>
               </Grid><Grid item>
               <NextLink href="/dashboard/beneficiaries/new" passHref legacyBehavior>
                 <Button
