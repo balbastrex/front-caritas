@@ -86,7 +86,13 @@ const styles = StyleSheet.create({
   summaryTable: {
     marginTop: 5,
     display: 'flex',
-    width: '50%'
+    justifyContent: 'center',
+    alignContent: 'flex-end',
+    width: '60%'
+  },
+  summaryTableHeader: {
+    backgroundColor: '#EEEEEE',
+    flexDirection: 'row'
   },
   tableHeader: {
     backgroundColor: '#EEEEEE',
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     padding: 6,
     // width: `${COLN_WIDTH}%`
   },
-  tableCellSmall: {padding: 6, width: '50'},
+  tableCellSmall: {padding: 6, width: '70'},
   tableCellShort: {padding: 6, width: '100'},
   tableCellMid: {padding: 6, width: '170'},
   tableCellLong: {padding: 6, width: '35%'},
@@ -196,7 +202,7 @@ export const OrdersReportPDF = (props) => {
             <View style={styles.tableHeader} fixed>
               <View style={[styles.tableCellSmall, styles.alignRight]}>
                 <Text style={styles.h5}>
-                  Nº
+                  Carnet
                 </Text>
               </View>
               <View style={styles.tableCellLong}>
@@ -231,11 +237,11 @@ export const OrdersReportPDF = (props) => {
               </View>
             </View>
             <View style={styles.tableBody}>
-              {(orders || []).map((order) => (
+              {(orders.orders || []).map((order) => (
                 <View style={styles.tableRow} key={order.id}>
                   <View style={[styles.tableCellSmall, styles.alignRight]}>
                     <Text style={styles.body2}>
-                      {order.id}
+                      {order.beneficiaryId}
                     </Text>
                   </View>
                   <View style={styles.tableCellLong}>
@@ -274,6 +280,59 @@ export const OrdersReportPDF = (props) => {
           </View>
         </View>
 
+        <View>
+          <View style={styles.summaryTable}>
+            <View style={styles.summaryTableHeader}>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  Número de servicios:
+                </Text>
+              </View>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  {orders.totalServices}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.summaryTableHeader}>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  Total Parroquia:
+                </Text>
+              </View>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  {orders.totalParish} €
+                </Text>
+              </View>
+            </View>
+            <View style={styles.summaryTableHeader}>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  Total Beneficiario:
+                </Text>
+              </View>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  {orders.totalBeneficiary} €
+                </Text>
+              </View>
+            </View>
+            <View style={styles.summaryTableHeader}>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  Total:
+                </Text>
+              </View>
+              <View style={[styles.tableSummaryCell, styles.alignRight]}>
+                <Text style={styles.h4}>
+                  {orders.total} €
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
       </Page>
     </Document>
   );
@@ -281,7 +340,7 @@ export const OrdersReportPDF = (props) => {
 
 OrdersReportPDF.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    beneficiaryId: PropTypes.number.isRequired,
     amount: PropTypes.number.isRequired,
     gratuitous: PropTypes.number,
     beneficiaryName: PropTypes.string.isRequired,
