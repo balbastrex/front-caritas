@@ -260,6 +260,11 @@ export const ProductsReportPDF = (props) => {
                   </View>
                   <View style={[styles.tableCellShort, styles.alignRight]}>
                     <Text style={styles.h5}>
+                      Coste
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCellShort, styles.alignRight]}>
+                    <Text style={styles.h5}>
                       Coste Total
                     </Text>
                   </View>
@@ -285,6 +290,11 @@ export const ProductsReportPDF = (props) => {
                       <View style={[styles.tableCellShort, styles.alignRight]}>
                         <Text style={styles.body2}>
                           {orderLine.totalQuantity}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCellShort, styles.alignRight]}>
+                        <Text style={styles.body2}>
+                          {orderLine.cost} €
                         </Text>
                       </View>
                       <View style={[styles.tableCellShort, styles.alignRight]}>
