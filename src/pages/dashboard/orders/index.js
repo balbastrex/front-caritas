@@ -15,7 +15,7 @@ import {useAuth} from '../../../hooks/use-auth';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
-import {getDeleteOrderById, getOrders, updateStatusOrder} from '../../../slices/order';
+import {getDeleteOrderById, getOrderById, getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
 import {UserProfiles} from '../../../utils/constants';
 
@@ -107,7 +107,7 @@ const OrderListInner = styled('div',
 
 const OrderList = () => {
   const dispatch = useDispatch();
-  const { orderList } = useSelector((state) => state.order);
+  const { orderList, isLoading, order } = useSelector((state) => state.order);
   const { user } = useAuth();
   const rootRef = useRef(null);
   const queryRef = useRef(null);
@@ -124,7 +124,7 @@ const OrderList = () => {
   });
   const [drawer, setDrawer] = useState({
     isOpen: false,
-    orderId: undefined
+    order: undefined
   });
 
   useEffect(() => {
@@ -134,6 +134,15 @@ const OrderList = () => {
   useEffect(() => {
     dispatch(getOrders());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (order) {
+      setDrawer({
+        isOpen: true,
+        order: order
+      })
+    }
+  }, [order]);
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
@@ -165,16 +174,13 @@ const OrderList = () => {
   };
 
   const handleOpenDrawer = (orderId) => {
-    setDrawer({
-      isOpen: true,
-      orderId
-    });
+    dispatch(getOrderById(orderId));
   };
 
   const handleCloseDrawer = () => {
     setDrawer({
       isOpen: false,
-      orderId: undefined
+      order: null
     });
   };
 
@@ -182,7 +188,7 @@ const OrderList = () => {
     dispatch(updateStatusOrder(orderId, 'Pagado'));
     setDrawer({
       isOpen: false,
-      orderId: undefined
+      order: null
     });
   };
 
@@ -190,7 +196,7 @@ const OrderList = () => {
     dispatch(getDeleteOrderById(orderId));
     setDrawer({
       isOpen: false,
-      orderId: undefined
+      order: null
     });
   }
 
@@ -361,7 +367,7 @@ const OrderList = () => {
         onClose={handleCloseDrawer}
         onPreviewPDF={onPreviewOrder}
         open={drawer.isOpen}
-        order={orderList.find((order) => order.id === drawer.orderId)}
+        order={drawer.order}
         onApprove={handleApprove}
         onDelete={handleDelete}
         actions={true}

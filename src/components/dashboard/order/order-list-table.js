@@ -78,19 +78,6 @@ export const OrderListTable = (props) => {
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 6 }}>
-                  <Typography
-                    variant="subtitle2"
-                  >
-                    {order.marketName}
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    NºEconomato: {order.marketId}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 6 }}>
                   <Typography variant="subtitle2">
                     Usuario:
                   </Typography>
@@ -99,17 +86,6 @@ export const OrderListTable = (props) => {
                     variant="body2"
                   >
                     {order.userName}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 6 }}>
-                  <Typography variant="subtitle2">
-                    NºProductos:
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    {order.orderLines.length}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 6 }}>
