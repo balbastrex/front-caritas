@@ -6,7 +6,11 @@ import {useRouter} from 'next/router';
 import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
-import {getBeneficiariesSelector} from '../../../slices/beneficiary';
+import {
+  clearBeneficiaryOrderOptions,
+  getBeneficiariesSelector,
+  getBeneficiaryOrderOptions,
+} from '../../../slices/beneficiary';
 import {useDispatch, useSelector} from '../../../store';
 import axios from '../../../utils/axios';
 import {ExceedCartModal} from './exceed-cart-modal';
@@ -21,7 +25,7 @@ function isEmpty(obj) {
 export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { beneficiarySelector } = useSelector((state) => state.beneficiary);
+  const { beneficiarySelector, beneficiaryOrderOptions } = useSelector((state) => state.beneficiary);
   const [beneficiaryUF, setBeneficiaryUF] = useState(1)
   const [showExceedModal, setShowExceedModal] = useState(false)
   const [exceedStock, setExceedStock] = useState(false)
@@ -31,15 +35,36 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    dispatch(getBeneficiariesSelector());
+    return () => dispatch(clearBeneficiaryOrderOptions())
+  }, [])
+
+  useEffect(() => {
+    if (isEdit) {
+      dispatch(getBeneficiaryOrderOptions(order.beneficiaryId));
+    }
+  }, [isEdit])
+
+  useEffect(() => {
+    if (beneficiarySelector.length === 0) {
+      dispatch(getBeneficiariesSelector());
+    }
   }, [dispatch]);
 
   useEffect(() => {
-    if (beneficiarySelector && isEdit) {
-      const beneficiary = beneficiarySelector.find(b => b.id === order.beneficiaryId);
-      updateSummary({budget: beneficiary?.budget, lastDateOrder: beneficiary?.lastDateOrder});
+    updateSummary({budget: beneficiaryOrderOptions ? beneficiaryOrderOptions.budget : 0, lastDateOrder: beneficiaryOrderOptions ? beneficiaryOrderOptions.lastDateOrder : null});
+
+    if (beneficiaryOrderOptions) {
+      setBeneficiaryUF(beneficiaryOrderOptions.familyUnit);
+      setNotes(beneficiaryOrderOptions.notes);
+      const expires = new Date(beneficiaryOrderOptions.expires);
+      const expiresDifference = compareAsc(expires, Date.now());
+      expiresDifference < 0 && toast.error('El beneficiario tiene el carnet expirado');
     }
-  }, [beneficiarySelector])
+  }, [beneficiaryOrderOptions])
+
+  useEffect(() => {
+
+  }, )
 
   const handleShowExceedModal = (productLine) => {
     const orderLines = [...formik.values.orderLines];
@@ -198,17 +223,8 @@ export const OrderCreateForm = ({isEdit, order, updateSummary}) => {
                 }
                 onChange={(event, newValue) => {
                   const value = newValue ? newValue.id : null;
+                  dispatch(getBeneficiaryOrderOptions(value))
                   formik.setFieldValue('beneficiaryId', value);
-                  const beneficiary = beneficiarySelector.find((beneficiary) => beneficiary.id === value);
-
-                  if (beneficiary) {
-                    setBeneficiaryUF(beneficiary.familyUnit);
-                    updateSummary({budget: beneficiary.budget, lastDateOrder: beneficiary.lastDateOrder});
-                    setNotes(beneficiary.notes);
-                    const expires = new Date(beneficiary.expires);
-                    const expiresDifference = compareAsc(expires, Date.now());
-                    expiresDifference < 0 && toast.error('El beneficiario tiene el carnet expirado');
-                  }
                 }}
                 renderInput={(params) => (
                   <TextField

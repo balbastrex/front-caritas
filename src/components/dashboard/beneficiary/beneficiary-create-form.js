@@ -982,7 +982,6 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
                 sx={{ m: 1 }}
                 type="submit"
                 variant="contained"
-                onClick={() => console.log(formik.values)}
               >
                 { isEdit ? 'Actualizar' : 'Crear'}
               </Button>

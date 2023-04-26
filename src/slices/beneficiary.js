@@ -9,6 +9,7 @@ const initialState = {
   error: false,
   beneficiaryList: [],
   beneficiarySelector: [],
+  beneficiaryOrderOptions: null,
   beneficiary: null,
   beneficiariesTurnList: [],
   beneficiaryAndNotesList: { beneficiaryName: '', notes: [] },
@@ -45,6 +46,11 @@ const slice = createSlice({
     getBeneficiariesSelectorSuccess(state, action) {
       state.isLoading = false;
       state.beneficiarySelector = action.payload;
+    },
+
+    getBeneficiaryOrderOptionsSuccess(state, action) {
+      state.isLoading = false;
+      state.beneficiaryOrderOptions = action.payload;
     },
 
     getBeneficiariesTurnSuccess(state, action) {
@@ -122,6 +128,29 @@ export function getBeneficiariesSelector() {
     try {
       const response = await axios.get('/api/v1/beneficiary-selector');
       dispatch(slice.actions.getBeneficiariesSelectorSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiaryOrderOptions(beneficiaryId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/beneficiary-selector/${beneficiaryId}`);
+      dispatch(slice.actions.getBeneficiaryOrderOptionsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function clearBeneficiaryOrderOptions() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      dispatch(slice.actions.getBeneficiaryOrderOptionsSuccess(null));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

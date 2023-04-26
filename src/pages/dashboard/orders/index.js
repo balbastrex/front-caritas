@@ -15,6 +15,7 @@ import {useAuth} from '../../../hooks/use-auth';
 import {Plus as PlusIcon} from '../../../icons/plus';
 import {Search as SearchIcon} from '../../../icons/search';
 import {gtm} from '../../../lib/gtm';
+import {getBeneficiariesSelector} from '../../../slices/beneficiary';
 import {getDeleteOrderById, getOrderById, getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
 import {UserProfiles} from '../../../utils/constants';
@@ -133,6 +134,7 @@ const OrderList = () => {
 
   useEffect(() => {
     dispatch(getOrders());
+    dispatch(getBeneficiariesSelector())
   }, [dispatch]);
 
   useEffect(() => {
