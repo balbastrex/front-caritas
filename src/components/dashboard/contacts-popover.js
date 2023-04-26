@@ -14,6 +14,7 @@ import {
 import {useState} from 'react';
 import {updateBeneficiariesPrinted} from '../../slices/beneficiary';
 import {useDispatch} from '../../store';
+import axios from '../../utils/axios';
 import {BeneficiaryLicensePdfDialog} from './beneficiary/beneficiary-license-pdf-dialog';
 import {BeneficiaryMultipleLicensePdfDialog} from './beneficiary/beneficiary-multiple-license-pdf-dialog';
 
@@ -22,6 +23,11 @@ export const ContactsPopover = (props) => {
   const { anchorEl, beneficiaries, onClose, open, ...other } = props;
   const [viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF] = useState(null);
   const [viewBeneficiaryMultipleLicensePDF, setViewBeneficiaryMultipleLicensePDF] = useState(null);
+
+  const printAll = async () => {
+    const response = await axios.get(`/api/v1/beneficiary-license/print`);
+    setViewBeneficiaryMultipleLicensePDF(response.data);
+  }
 
   return (
     <Popover
@@ -46,7 +52,7 @@ export const ContactsPopover = (props) => {
           component="a"
           startIcon={<PrintIcon fontSize="small" />}
           variant="contained"
-          onClick={() => setViewBeneficiaryMultipleLicensePDF(beneficiaries)}
+          onClick={printAll}
         >
           Imprimir Todos
         </Button>
