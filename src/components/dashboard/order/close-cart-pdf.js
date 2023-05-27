@@ -201,11 +201,11 @@ export const CloseCartPDF = (props) => {
                 Carnet
               </Text>
             </View>
-            <View style={styles.tableCellLong}>
+            {/*<View style={styles.tableCellLong}>
               <Text style={[styles.h5, styles.alignLeft]}>
                 Parroquia
               </Text>
-            </View>
+            </View>*/}
             <View style={styles.tableCellShort}>
               <Text style={[styles.h5, styles.alignRight]}>
                 Max.
@@ -237,7 +237,7 @@ export const CloseCartPDF = (props) => {
                 </View>
                 <View style={styles.tableCellLong}>
                   <Text style={[styles.body2, styles.alignLeft]}>
-                    {order.beneficiaryName.substring(0, 18)}
+                    {order.beneficiaryName.substring(0, 25)}
                   </Text>
                 </View>
                 <View style={styles.tableCellShort}>
@@ -245,11 +245,11 @@ export const CloseCartPDF = (props) => {
                     {order.beneficiaryLicense}
                   </Text>
                 </View>
-                <View style={styles.tableCellLong}>
+                {/*<View style={styles.tableCellLong}>
                   <Text style={[styles.body2, styles.alignLeft]}>
                     {order.parishName.substring(0, 20)}
                   </Text>
-                </View>
+                </View>*/}
                 <View style={styles.tableCellShort}>
                   <Text style={[styles.body2, styles.alignRight]}>
                     {numeral(order.budget).format(`0,0.00`)}€
