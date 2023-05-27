@@ -17,6 +17,7 @@ import {ContactsPopover} from './contacts-popover';
 import {ContentSearchDialog} from './content-search-dialog';
 import {LanguagePopover} from './language-popover';
 import {NotificationsPopover} from './notifications-popover';
+import getConfig from 'next/config';
 
 const languages = {
   en: '/static/icons/uk_flag.svg',
@@ -125,8 +126,12 @@ const ContactsButton = ({beneficiaries = []}) => {
     setOpenPopover(false);
   };
 
+  const { publicRuntimeConfig } = getConfig();
+  const version = publicRuntimeConfig?.version
+
   return (
     <>
+      V.{version}
       <Tooltip title="Imprimir Carnets">
         <IconButton
           onClick={handleOpenPopover}

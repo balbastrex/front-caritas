@@ -1,3 +1,4 @@
+const { version } = require('./package.json');
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: false,
@@ -7,6 +8,9 @@ const config = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  publicRuntimeConfig: {
+    version,
   }
 };
 
