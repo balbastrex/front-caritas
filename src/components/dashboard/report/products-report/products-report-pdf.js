@@ -196,7 +196,7 @@ export const ProductsReportPDF = (props) => {
                 <View style={styles.tableHeader} fixed>
                   <View style={styles.tableCellLong}>
                     <Text style={styles.h5}>
-                      Fecha
+
                     </Text>
                   </View>
                   <View style={[styles.tableCellMid, styles.alignRight]}>
@@ -219,7 +219,7 @@ export const ProductsReportPDF = (props) => {
                   <View style={styles.tableRow} key={order.id}>
                     <View style={styles.tableCellLong}>
                       <Text style={styles.body2}>
-                        {format(new Date(order.date), 'dd/MM/yyyy')}
+                        {/*{format(new Date(order.date), 'dd/MM/yyyy')}*/}
                       </Text>
                     </View>
                     <View style={[styles.tableCellMid, styles.alignRight]}>
