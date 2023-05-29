@@ -10,6 +10,8 @@ import {OverviewLatestTransactions} from '../../components/dashboard/overview/ov
 import {OverviewPrivateWallet} from '../../components/dashboard/overview/overview-private-wallet';
 import {OverviewTotalBalance} from '../../components/dashboard/overview/overview-total-balance';
 import {OverviewTotalTransactions} from '../../components/dashboard/overview/overview-total-transactions';
+import {WidgetPreviewer} from '../../components/widget-previewer';
+import {QuickStats1} from '../../components/widgets/quick-stats/quick-stats-1';
 import {useAuth} from '../../hooks/use-auth';
 import {gtm} from '../../lib/gtm';
 import { InformationCircleOutlined as InformationCircleOutlinedIcon } from '../../icons/information-circle-outlined';
@@ -18,6 +20,7 @@ import { Briefcase as BriefcaseIcon } from '../../icons/briefcase';
 import { ExternalLink as ExternalLinkIcon } from '../../icons/external-link';
 import { Download as DownloadIcon } from '../../icons/download';
 import { Users as UsersIcon } from '../../icons/users';
+import BrowseQuickStats from '../browse/data-display/quick-stats';
 
 const Overview = () => {
   const [displayBanner, setDisplayBanner] = useState(true);
@@ -82,6 +85,7 @@ const Overview = () => {
                 <OverviewBanner onDismiss={handleDismissBanner} />
               </Grid>
             )}
+            <BrowseQuickStats />
             {/*<Grid
               item
               md={6}

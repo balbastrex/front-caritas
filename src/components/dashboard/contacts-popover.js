@@ -20,7 +20,7 @@ import {BeneficiaryMultipleLicensePdfDialog} from './beneficiary/beneficiary-mul
 
 export const ContactsPopover = (props) => {
   const dispatch = useDispatch();
-  const { anchorEl, beneficiaries, onClose, open, ...other } = props;
+  const { anchorEl, beneficiariesResult, onClose, open, ...other } = props;
   const [viewBeneficiaryLicensePDF, setViewBeneficiaryLicensePDF] = useState(null);
   const [viewBeneficiaryMultipleLicensePDF, setViewBeneficiaryMultipleLicensePDF] = useState(null);
 
@@ -48,7 +48,7 @@ export const ContactsPopover = (props) => {
       {...other}>
       <Grid container justifyContent="space-between">
         <Button
-          disabled={beneficiaries.length === 0}
+          disabled={beneficiariesResult.beneficiaries.length === 0}
           component="a"
           startIcon={<PrintIcon fontSize="small" />}
           variant="contained"
@@ -67,7 +67,7 @@ export const ContactsPopover = (props) => {
       </Grid>
       <Box sx={{ mt: 2 }}>
         <List disablePadding>
-          {beneficiaries.map((beneficiary) => {
+          {beneficiariesResult.beneficiaries.map((beneficiary) => {
 
             return (
               <ListItem
