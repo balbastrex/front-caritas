@@ -114,7 +114,7 @@ const ContentSearchButton = () => {
   );
 };
 
-const ContactsButton = ({beneficiaries = []}) => {
+const ContactsButton = ({beneficiariesResult}) => {
   const anchorRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -140,14 +140,14 @@ const ContactsButton = ({beneficiaries = []}) => {
         >
           <Badge
             color="error"
-            badgeContent={beneficiaries.length}
+            badgeContent={beneficiariesResult.expired}
           >
             <UsersIcon fontSize="small" />
           </Badge>
         </IconButton>
       </Tooltip>
       <ContactsPopover
-        beneficiaries={beneficiaries}
+        beneficiariesResult={beneficiariesResult}
         anchorEl={anchorRef.current}
         onClose={handleClosePopover}
         open={openPopover}
@@ -299,7 +299,7 @@ export const DashboardNavbar = (props) => {
           <Box sx={{ flexGrow: 1 }} />
           {/*<LanguageButton />*/}
           {/*<ContentSearchButton />*/}
-          <ContactsButton beneficiaries={BeneficiaryNeedsPrintList} />
+          <ContactsButton beneficiariesResult={BeneficiaryNeedsPrintList} />
           {/*<NotificationsButton />*/}
           <AccountButton />
         </Toolbar>

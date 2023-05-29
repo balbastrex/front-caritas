@@ -13,7 +13,11 @@ const initialState = {
   beneficiary: null,
   beneficiariesTurnList: [],
   beneficiaryAndNotesList: { beneficiaryName: '', notes: [] },
-  BeneficiaryNeedsPrintList: [],
+  BeneficiaryNeedsPrintList: {
+    total: 0,
+    expired: 0,
+    beneficiaries: [],
+  }
 };
 
 const slice = createSlice({
