@@ -19,6 +19,7 @@ import {Fragment} from 'react';
 import {Scrollbar} from '../../scrollbar';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import NoteAltOutlinedIcon from '@mui/icons-material/NoteAltOutlined';
+import {useTheme} from "@mui/material/styles";
 
 export const BeneficiaryListTable = (props) => {
   const {
@@ -32,6 +33,7 @@ export const BeneficiaryListTable = (props) => {
     ...other
   } = props;
   const router = useRouter();
+  const theme = useTheme();
 
   return (
     <div {...other}>
@@ -87,7 +89,7 @@ export const BeneficiaryListTable = (props) => {
                         }}
                       >
                         <Box sx={{ ml: 0}}>
-                          <Typography variant="subtitle1">
+                          <Typography variant="subtitle1" style={{ color: beneficiary.needsPrint ? 'red' : theme.typography.body1 }}>
                             {`${beneficiary.name} ${beneficiary.lastname1} ${beneficiary.lastname2}`}
                           </Typography>
                         </Box>

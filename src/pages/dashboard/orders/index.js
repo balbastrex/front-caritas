@@ -19,6 +19,7 @@ import {getBeneficiariesSelector} from '../../../slices/beneficiary';
 import {getDeleteOrderById, getOrderById, getOrders, updateStatusOrder} from '../../../slices/order';
 import {useDispatch, useSelector} from '../../../store';
 import {UserProfiles} from '../../../utils/constants';
+import axios from "../../../utils/axios";
 
 const tabs = [
   {
@@ -217,7 +218,12 @@ const OrderList = () => {
   const handleCloseCart = () => {
     setOpenCloseCart(false);
     closeOpenedOrders();
-    setViewCloseCartPDF(orderList)
+    getCloseCartOrders();
+  }
+
+  const getCloseCartOrders = async () => {
+    const response = await axios.get('/api/v1/order/close-cart');
+    setViewCloseCartPDF(response.data)
   }
 
   const closeOpenedOrders = () => {
