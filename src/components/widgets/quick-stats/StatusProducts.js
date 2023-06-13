@@ -34,7 +34,7 @@ export const StatusProducts = () => (
           color="textPrimary"
           variant="h5"
         >
-          457
+          x unidades
         </Typography>
         <Typography
           color="textSecondary"
@@ -65,7 +65,7 @@ export const StatusProducts = () => (
           color="textPrimary"
           variant="h5"
         >
-          Café
+          "Producto"
         </Typography>
         <Typography
           color="textSecondary"
@@ -96,7 +96,7 @@ export const StatusProducts = () => (
           color="textPrimary"
           variant="h5"
         >
-          230
+          x beneficiarios
         </Typography>
         <Typography
           color="textSecondary"
@@ -128,7 +128,7 @@ export const StatusProducts = () => (
             component="span"
             variant="h5"
           >
-            5568.24€
+            x €uros
           </Typography>
         </Box>
         <Typography
