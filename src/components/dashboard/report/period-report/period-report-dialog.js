@@ -18,7 +18,7 @@ export const PeriodReportDialog = ({ open, close, data }) => {
         const formattedStartDate = format(data.startDate, "yyyy-MM-dd")
         const formattedEndDate = format(data.endDate, "yyyy-MM-dd")
 
-        const response = await axios.get('/api/v1/report/memory-period', {
+        const response = await axios.post('/api/v1/report/memory-period', {
           startDate: formattedStartDate,
           endDate: formattedEndDate,
         });
