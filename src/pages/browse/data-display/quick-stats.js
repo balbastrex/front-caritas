@@ -14,6 +14,7 @@ import { QuickStats7 } from '../../../components/widgets/quick-stats/quick-stats
 import { QuickStats8 } from '../../../components/widgets/quick-stats/quick-stats-8';
 import {StatusProducts} from '../../../components/widgets/quick-stats/StatusProducts';
 import { gtm } from '../../../lib/gtm';
+import {ParishOrdersWeek} from "../../../components/widgets/quick-stats/ParishOrdersWeek";
 
 const BrowseQuickStats = () => {
   useEffect(() => {
@@ -24,7 +25,7 @@ const BrowseQuickStats = () => {
     <>
       <Head>
         <title>
-          Browse: Quick Stats | Material Kit Pro
+          Dashboard: Cáritas
         </title>
       </Head>
       <Box
@@ -36,10 +37,6 @@ const BrowseQuickStats = () => {
         }}
       >
         <Container maxWidth="lg">
-          {/*<WidgetPreviewer
-            element={<QuickStats1 />}
-            name="Stat card with donut chart"
-          />*/}
           <WidgetPreviewer
             element={<StatusBeneficiary />}
             name="Beneficiarios"
@@ -47,6 +44,10 @@ const BrowseQuickStats = () => {
           <WidgetPreviewer
             element={<StatusProducts />}
             name="Estado de la semana en curso"
+          />
+          <WidgetPreviewer
+            element={<ParishOrdersWeek />}
+            name="Ventas de la semana"
           />
           {/*<WidgetPreviewer
             element={<QuickStats3 />}

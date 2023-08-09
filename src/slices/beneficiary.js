@@ -17,7 +17,8 @@ const initialState = {
     total: 0,
     expired: 0,
     beneficiaries: [],
-  }
+  },
+  BeneficiariesAgeReport: null,
 };
 
 const slice = createSlice({
@@ -69,6 +70,10 @@ const slice = createSlice({
     getBeneficiaryNeedsPrintSuccess(state, action) {
       state.isLoading = false;
       state.BeneficiaryNeedsPrintList = action.payload;
+    },
+    getBeneficiariesAgeReportSuccess(state, action) {
+      state.isLoading = false;
+      state.BeneficiariesAgeReport = action.payload;
     },
   }
 });
@@ -204,6 +209,19 @@ export function updateBeneficiariesPrinted() {
       await axios.put(`/api/v1/beneficiaries-printed`)
 
       dispatch(slice.actions.getBeneficiaryNeedsPrintSuccess([]));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getBeneficiariesAgeReport() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/report/beneficiaries-age-report`)
+
+      dispatch(slice.actions.getBeneficiariesAgeReportSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

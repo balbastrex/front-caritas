@@ -32,13 +32,13 @@ export const WidgetPreviewer = (props) => {
       sx={{ mb: 8 }}
       {...other}>
       <CardHeader
-        action={(
+        /*action={(
           <IconButton onClick={handleSwitch}>
             {selectedTheme === 'light'
               ? <MoonIcon fontSize="small" />
               : <SunIcon fontSize="small" />}
           </IconButton>
-        )}
+        )}*/
         title={name}
       />
       <Divider />

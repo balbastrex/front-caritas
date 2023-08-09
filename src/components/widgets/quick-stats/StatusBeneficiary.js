@@ -2,10 +2,12 @@ import {Box, Card, Grid, LinearProgress, Typography} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {getTurnsForMarket} from '../../../slices/turn';
 import {useDispatch, useSelector} from '../../../store';
+import {getBeneficiariesAgeReport} from "../../../slices/beneficiary";
 
 export const StatusBeneficiary = () => {
   const dispatch = useDispatch();
   const { turnList } = useSelector((state) => state.turn);
+  const { BeneficiariesAgeReport } = useSelector((state) => state.beneficiary);
   const { BeneficiaryNeedsPrintList } = useSelector((state) => state.beneficiary);
   const [activeBeneficiaries, setActiveBeneficiaries] = useState(0);
 
@@ -18,6 +20,7 @@ export const StatusBeneficiary = () => {
 
   useEffect(() => {
     dispatch(getTurnsForMarket());
+    dispatch(getBeneficiariesAgeReport());
   }, [dispatch]);
 
   useEffect(() => {
@@ -115,6 +118,38 @@ export const StatusBeneficiary = () => {
           </Box>
         </Card>
       </Grid>
+
+      <Grid
+        item
+        xs={12}
+        md={6}
+        lg={3}
+      >
+        <Card sx={{p: 3, height: 110 }}>
+          <Typography
+            // color="textSecondary"
+            gutterBottom
+            variant="h5"
+          >
+            Adultos {BeneficiariesAgeReport?.adults}
+          </Typography>
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}
+          >
+            <Typography
+              sx={{mr: 1}}
+              variant="h5"
+            >
+              Menores {BeneficiariesAgeReport?.minors}
+            </Typography>
+          </Box>
+        </Card>
+      </Grid>
+
     </Grid>
   </Box>)
 };
