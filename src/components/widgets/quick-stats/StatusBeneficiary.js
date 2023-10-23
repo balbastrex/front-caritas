@@ -93,7 +93,7 @@ export const StatusBeneficiary = () => {
             gutterBottom
             variant="overline"
           >
-            Beneficiarios Activos
+            Familias Activas
           </Typography>
           <Box
             sx={{
@@ -106,12 +106,12 @@ export const StatusBeneficiary = () => {
               sx={{mr: 1}}
               variant="h5"
             >
-              {activeBeneficiaries}%
+              {BeneficiariesAgeReport?.activePercentage}%
             </Typography>
             <Box sx={{flexGrow: 1}}>
               <LinearProgress
                 color="primary"
-                value={activeBeneficiaries}
+                value={BeneficiariesAgeReport?.activePercentage}
                 variant="determinate"
               />
             </Box>

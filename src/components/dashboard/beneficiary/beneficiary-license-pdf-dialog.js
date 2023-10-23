@@ -45,7 +45,7 @@ export const BeneficiaryLicensePdfDialog = ({ viewBeneficiaryLicensePDF, setView
             }}
           >
             <Typography variant="h4">
-              Carnet {viewBeneficiaryLicensePDF?.name} {viewBeneficiaryLicensePDF?.lastname1}
+              Carnet {viewBeneficiaryLicensePDF?.name}
             </Typography>
           </Box>
         </Box>
