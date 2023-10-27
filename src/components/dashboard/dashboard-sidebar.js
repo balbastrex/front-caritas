@@ -332,7 +332,6 @@ export const DashboardSidebar = (props) => {
   };
 
   const renderSectionWithProfileID = (section) => {
-
     return isAllowedSectionForProfile(user?.profileId, section.title) && (
       <DashboardSidebarSection
         key={section.title}
