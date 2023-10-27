@@ -9,8 +9,8 @@ const generalSection = {
 }
 
 const permissions = {
-  "/": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
-  "/dashboard": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
+  "/": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
+  "/dashboard": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
   "/dashboard/reports": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO, UserProfiles.GESTOR_PARROQUIA],
   "/dashboard/markets": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
   "/dashboard/markets/new": [UserProfiles.ADMINISTRADOR, UserProfiles.DIRECTOR_ECONOMATO],
@@ -55,5 +55,5 @@ export const defaultURLProfile = {
   2: "/dashboard",
   3: "/dashboard/products",
   4: "/dashboard/orders",
-  5: "/dashboard/beneficiaries",
+  5: "/dashboard",
 }
