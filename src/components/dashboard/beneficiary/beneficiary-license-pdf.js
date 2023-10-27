@@ -82,7 +82,7 @@ export const BeneficiaryLicensePDF = (props) => {
             <Text style={styles.normalText}>Carnet: { beneficiary.license }</Text>
           </View>
           <View style={styles.rowData}>
-            <Text style={styles.normalText}>Nombre: { beneficiary.name } { beneficiary.lastname1 } { beneficiary.lastname2 }</Text>
+            <Text style={styles.normalText}>Nombre: { beneficiary.name }</Text>
           </View>
           <View style={styles.rowData}>
             <Text style={styles.normalText}>DNI: { beneficiary.cif }</Text>
