@@ -136,6 +136,7 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
         if (isEdit) {
           dispatch(updateBeneficiary({...formik.values}));
           toast.success('Beneficiario actualizado!');
+          router.push('/dashboard/beneficiaries').catch(console.error);
         } else {
             // dispatch(createBeneficiary({...formik.values}));
             axios.post('/api/v1/beneficiary', {
@@ -143,8 +144,18 @@ export const BeneficiaryCreateForm = ({isEdit = false, beneficiary}) => {
             }).then((response) => {
               setNewLicense(response.data.license);
               setShowBeneficiaryLicenseModal(true);
+              toast.success('Beneficiario creado!');
+            }).catch((err) => {
+              toast.error(err.message, {
+                duration: 10000,
+                position: 'top-center',
+                style: {
+                  // width: '1000px',
+                  height: '200px'
+                }
+              });
+              setIsSubmitting(false);
             })
-            toast.success('Beneficiario Creado.');
         }
       } catch (err) {
         setIsSubmitting(false);
